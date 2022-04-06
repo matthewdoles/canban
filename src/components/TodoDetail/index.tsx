@@ -1,19 +1,34 @@
 import React, { useRef } from 'react';
-import Draggable from 'react-draggable';
+import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 
 type Props = {
   color: string;
   description: string;
   disabled: boolean;
+  dragging: (_e: DraggableEvent, position: DraggableData) => void;
   dragStart: () => void;
   dragStop: () => void;
   title: string;
 };
 
-const Todo = ({ color, description, disabled, dragStart, dragStop, title }: Props) => {
+const TodoDetail = ({
+  color,
+  description,
+  disabled,
+  dragging,
+  dragStart,
+  dragStop,
+  title
+}: Props) => {
   const nodeRef = useRef<HTMLDivElement>(null);
   return (
-    <Draggable nodeRef={nodeRef} disabled={disabled} onStart={dragStart} onStop={dragStop}>
+    <Draggable
+      nodeRef={nodeRef}
+      disabled={disabled}
+      onDrag={dragging}
+      onStart={dragStart}
+      onStop={dragStop}
+      position={{ x: 0, y: 0 }}>
       <div
         className="min-h-[100px] bg-white m-3 drop-shadow-lg rounded-lg"
         ref={nodeRef}
@@ -29,4 +44,4 @@ const Todo = ({ color, description, disabled, dragStart, dragStop, title }: Prop
   );
 };
 
-export default Todo;
+export default TodoDetail;
