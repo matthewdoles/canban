@@ -25,15 +25,17 @@ const TodoDetail = ({
     <Draggable
       nodeRef={nodeRef}
       disabled={disabled}
+      handle=".header"
       onDrag={dragging}
       onStart={dragStart}
       onStop={dragStop}
       position={{ x: 0, y: 0 }}>
       <div className="min-h-[100px] bg-white m-3 drop-shadow-lg rounded-lg" ref={nodeRef}>
-        <div className={`${color} p-1 rounded-t-lg`}>
+        <div className={`flex flex-row ${color} p-1 rounded-t-lg cursor-grab header`}>
           <p className="text-md text-white font-bold ml-2">{title}</p>
+          <p className="text-md text-white font-bold ml-auto mr-2 ">&equiv;</p>
         </div>
-        <div className="mx-4 py-2">
+        <div className="mx-4 py-2 cursor-pointer">
           <p className="font-medium">{description}</p>
         </div>
       </div>

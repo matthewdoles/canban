@@ -27,40 +27,41 @@ const Column = ({
   updateBoardTodos
 }: Props) => {
   return (
-    <div className="static w-1/4 m-2 shadow-lg">
+    <div
+      className={`static w-1/4 m-2 shadow-lg ${
+        activeDrag.stage !== stage && activeDrag.id !== 0
+          ? `bg-green-50 ${
+              activeHoverColumn === stageNumber ? 'border-green-300 border-4' : 'border-none'
+            }`
+          : 'bg-gray-100 border-transparent border-none'
+      }`}>
       <div className={`${color} p-2`}>
         <p className="text-lg text-white font-bold ml-2">
           <span className="badge mr-2">{todos.length}</span>
           {stage}
         </p>
       </div>
-      <div
-        className={`min-h-[600px] ${
-          activeDrag.stage !== stage && activeDrag.id !== 0
-            ? `bg-green-50 ${
-                activeHoverColumn === stageNumber ? 'border-green-300' : 'border-transparent'
-              } border-4`
-            : 'bg-gray-100 border-transparent border-4'
-        }`}>
+      <div className="min-h-[600px]">
         {todos.map((todo) => (
           <>
-            {(activeDrag.id === 0 || activeDrag.id === todo.id) && (
+            {(activeDrag.id === 0 || activeDrag.id === todo.id || activeDrag.stage === stage) && (
               <TodoDetail
                 key={todo.title}
                 title={todo.title}
                 description={todo.description}
                 dragging={(_e: DraggableEvent, position: DraggableData) => {
                   const { x } = position;
-                  const columnWidth = window.innerWidth / 4 - 30;
+                  const columnWidth = window.innerWidth / 4 - 50;
+                  const offset = columnWidth * (stageNumber - 1) + (x + columnWidth / 2);
                   const column =
-                    columnWidth > x
+                    columnWidth > offset
                       ? 1
-                      : columnWidth * 2 > x && columnWidth < x
+                      : columnWidth * 2 > offset && columnWidth < offset
                       ? 2
-                      : columnWidth * 3 > x && columnWidth * 2 < x
+                      : columnWidth * 3 > offset && columnWidth * 2 < offset
                       ? 3
                       : 4;
-                  console.log(column);
+                  console.log(column, offset);
                   updateActiveHoverColumn(Math.floor(column));
                 }}
                 dragStart={() => {
