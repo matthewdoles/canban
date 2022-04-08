@@ -1,6 +1,7 @@
+import { BoardSettings } from '../models/BoardSettings';
 import { Todo } from '../models/Todo.model';
 
-export const todos: Todo[] = [
+export const sampleTodos: Todo[] = [
   {
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
@@ -23,3 +24,13 @@ export const todos: Todo[] = [
     title: 'Todo 3'
   }
 ];
+
+export const sampleBoardSettings: BoardSettings = {
+  boardName: 'My Board',
+  stages: [
+    { title: 'Todo', color: 'bg-blue-500', stageOrder: 1 },
+    { title: 'In Progress', color: 'bg-yellow-300', stageOrder: 2 },
+    { title: 'In Review', color: 'bg-purple-500', stageOrder: 3 },
+    { title: 'Done', color: 'bg-green-500', stageOrder: 4 }
+  ]
+};

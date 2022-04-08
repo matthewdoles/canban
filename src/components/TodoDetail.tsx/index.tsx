@@ -1,15 +1,20 @@
 import React from 'react';
+import { sampleBoardSettings } from '../../const/sampleData';
 import { Todo } from '../../models/Todo.model';
 
 type Props = {
-  color: string;
   todo: Todo;
 };
 
-const TodoDetail = ({ color, todo }: Props) => {
+const TodoDetail = ({ todo }: Props) => {
   return (
-    <div className="w-1/4 bg-white">
-      <div className={`h-12 flex flex-row ${color} p-1`}></div>
+    <div className="w-1/4 bg-white text-lg">
+      <div
+        className={`h-12 flex flex-row ${
+          sampleBoardSettings.stages.find((stage) => {
+            return stage.title === todo.stage;
+          })?.color
+        } p-1`}></div>
       <div className="m-4">
         <p className="font-bold">Title</p>
         <p>{todo.title}</p>

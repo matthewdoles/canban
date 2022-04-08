@@ -30,7 +30,7 @@ const TodoCard = ({ color, disabled, clicked, dragging, dragStart, dragStop, tod
         </div>
         <label htmlFor="todo-detail-drawer" onClick={() => clicked(todo)}>
           <div className="mx-4 py-2 cursor-pointer">
-            <p className="font-medium">{todo.description}</p>
+            <p>{todo.description}</p>
           </div>
         </label>
       </div>
