@@ -1,35 +1,39 @@
 import React from 'react';
 import { DraggableData, DraggableEvent } from 'react-draggable';
 import { Todo } from '../../models/Todo.model';
-import TodoDetail from '../TodoDetail';
+import TodoCard from '../TodoCard';
 
 type Props = {
-  activeDrag: Todo;
+  activeTodo: Todo;
   activeHoverColumn: number;
   color: string;
+  isDragging: boolean;
   stage: string;
   stageNumber: number;
   todos: Todo[];
   updateActiveDrag: (todo: Todo) => void;
   updateActiveHoverColumn: (column: number) => void;
   updateBoardTodos: (todo: Todo) => void;
+  updateIsDragging: (dragging: boolean) => void;
 };
 
 const Column = ({
-  activeDrag,
+  activeTodo,
   activeHoverColumn,
   color,
+  isDragging,
   stage,
   stageNumber,
   todos,
   updateActiveDrag,
   updateActiveHoverColumn,
-  updateBoardTodos
+  updateBoardTodos,
+  updateIsDragging
 }: Props) => {
   return (
     <div
       className={`static w-1/4 m-2 shadow-lg ${
-        activeDrag.stage !== stage && activeDrag.id !== 0
+        activeTodo.stage !== stage && activeTodo.id !== 0 && isDragging
           ? `bg-green-50 ${
               activeHoverColumn === stageNumber ? 'border-green-300 border-4' : 'border-none'
             }`
@@ -44,11 +48,14 @@ const Column = ({
       <div className="min-h-[600px]">
         {todos.map((todo) => (
           <>
-            {(activeDrag.id === 0 || activeDrag.id === todo.id || activeDrag.stage === stage) && (
-              <TodoDetail
+            {(activeTodo.id === 0 ||
+              activeTodo.id === todo.id ||
+              activeTodo.stage === stage ||
+              !isDragging) && (
+              <TodoCard
                 key={todo.title}
-                title={todo.title}
-                description={todo.description}
+                todo={todo}
+                clicked={(todo: Todo) => updateActiveDrag(todo)}
                 dragging={(_e: DraggableEvent, position: DraggableData) => {
                   const { x } = position;
                   const columnWidth = window.innerWidth / 4 - 50;
@@ -63,6 +70,7 @@ const Column = ({
                       : 4;
                   console.log(column, offset);
                   updateActiveHoverColumn(Math.floor(column));
+                  if (!isDragging) updateIsDragging(true);
                 }}
                 dragStart={() => {
                   updateActiveDrag(todo);
@@ -80,6 +88,7 @@ const Column = ({
                         : 'Done'
                   });
                   updateActiveDrag({ id: 0, stage: 'None', description: '', title: '' });
+                  updateIsDragging(false);
                 }}
                 color={color}
                 disabled={false}
