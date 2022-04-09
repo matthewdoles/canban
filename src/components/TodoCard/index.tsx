@@ -28,11 +28,18 @@ const TodoCard = ({ color, disabled, clicked, dragging, dragStart, dragStop, tod
           <p className="text-md text-white font-bold ml-2">{todo.title}</p>
           <p className="text-md text-white font-bold ml-auto mr-2 ">&equiv;</p>
         </div>
-        <label htmlFor="todo-detail-drawer" onClick={() => clicked(todo)}>
-          <div className="mx-4 py-2 cursor-pointer">
-            <p>{todo.description}</p>
+        <div className=" flex flex-row">
+          <label htmlFor="todo-detail-drawer" onClick={() => clicked(todo)}>
+            <div className="mx-4 py-2 cursor-pointer">
+              <p>{todo.description}</p>
+            </div>
+          </label>
+          <div className="avatar m-2">
+            <div className="w-10 h-10 rounded-full">
+              <img src="https://avatars.githubusercontent.com/u/38084552?s=48&v=4" />
+            </div>
           </div>
-        </label>
+        </div>
       </div>
     </Draggable>
   );
