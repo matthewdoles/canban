@@ -2,6 +2,7 @@ import React from 'react';
 import { DraggableData, DraggableEvent } from 'react-draggable';
 import { Todo } from '../../models/Todo.model';
 import TodoCard from '../TodoCard';
+import { sampleBoardSettings2 } from '../../const/sampleData';
 
 type Props = {
   activeTodo: Todo;
@@ -32,7 +33,9 @@ const Column = ({
 }: Props) => {
   return (
     <div
-      className={`static w-1/4 m-2 shadow-lg ${
+      className={`static ${
+        sampleBoardSettings2.stages.length === 3 ? 'w-1/3' : 'w-1/4'
+      } m-2 shadow-lg ${
         activeTodo.stage !== stage && activeTodo.id !== 0 && isDragging
           ? `bg-green-50 ${
               activeHoverColumn === stageNumber ? 'border-green-300 border-4' : 'border-none'
@@ -60,7 +63,7 @@ const Column = ({
                   const { x } = position;
                   const columnWidth = window.innerWidth / 4 - 50;
                   const offset = columnWidth * (stageNumber - 1) + (x + columnWidth / 2);
-                  const column =
+                  let column =
                     columnWidth > offset
                       ? 1
                       : columnWidth * 2 > offset && columnWidth < offset
@@ -68,7 +71,8 @@ const Column = ({
                       : columnWidth * 3 > offset && columnWidth * 2 < offset
                       ? 3
                       : 4;
-                  console.log(column, offset);
+                  if (column > sampleBoardSettings2.stages.length)
+                    column = sampleBoardSettings2.stages.length;
                   updateActiveHoverColumn(Math.floor(column));
                   if (!isDragging) updateIsDragging(true);
                 }}
@@ -79,13 +83,9 @@ const Column = ({
                   updateBoardTodos({
                     ...todo,
                     stage:
-                      activeHoverColumn === 1
-                        ? 'Todo'
-                        : activeHoverColumn === 2
-                        ? 'In Progress'
-                        : activeHoverColumn === 3
-                        ? 'In Review'
-                        : 'Done'
+                      sampleBoardSettings2.stages.find(
+                        (stage) => stage.stageOrder === activeHoverColumn
+                      )?.title || ''
                   });
                   updateActiveDrag({ id: 0, stage: 'None', description: '', title: '' });
                   updateIsDragging(false);

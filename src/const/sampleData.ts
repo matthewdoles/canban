@@ -34,3 +34,12 @@ export const sampleBoardSettings: BoardSettings = {
     { title: 'Done', color: 'bg-green-500', stageOrder: 4 }
   ]
 };
+
+export const sampleBoardSettings2: BoardSettings = {
+  boardName: 'My Board',
+  stages: [
+    { title: 'Todo', color: 'bg-blue-500', stageOrder: 1 },
+    { title: 'In Progress', color: 'bg-yellow-300', stageOrder: 2 },
+    { title: 'Done', color: 'bg-green-500', stageOrder: 3 }
+  ]
+};
