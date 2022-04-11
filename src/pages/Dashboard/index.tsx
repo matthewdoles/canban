@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import BoardCard from '../../components/BoardCard';
 import BoardForm from '../../components/BoardForm';
+import { sampleBoardSettings } from '../../const/sampleData';
+import { BoardSettings } from '../../models/BoardSettings';
 
 const Dashboard = () => {
+  const [boards, setBoards] = useState<BoardSettings[]>([sampleBoardSettings]);
   return (
     <>
       <div className="md:w-1/3 sm:w-4/5 flex flex-col mx-auto bg-gray-100 shadow-lg items-center rounded-lg">
@@ -15,10 +18,20 @@ const Dashboard = () => {
           </label>
         </div>
         <div className="w-full p-4">
-          <BoardCard />
+          {boards.map((board) => (
+            <div key={board.boardName} className="m-4">
+              <BoardCard board={board} />
+            </div>
+          ))}
         </div>
       </div>
-      <BoardForm />
+      <BoardForm
+        addNewBoard={(board) => {
+          console.log(board);
+          setBoards((currBoards) => [...currBoards, board]);
+          console.log(boards);
+        }}
+      />
     </>
   );
 };
