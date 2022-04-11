@@ -1,7 +1,7 @@
 import React from 'react';
 const BoardCard = () => {
   return (
-    <div className="bg-white m-3 drop-shadow-lg rounded-lg">
+    <div className="bg-white drop-shadow-lg rounded-lg">
       <div className="bg-blue-500 p-1 rounded-t-lg">
         <p className="text-md text-white font-bold ml-2">My Sample Board 1</p>
       </div>
