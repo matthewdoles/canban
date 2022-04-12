@@ -1,5 +1,5 @@
-import { doc, getDoc, getDocs, setDoc } from '@firebase/firestore';
-import { boardsCol } from '../firebase';
+import { collection, doc, getDoc, getDocs, addDoc } from '@firebase/firestore';
+import { boardsCol, firestore } from '../firebase';
 import { BoardSettings } from '../models/BoardSettings';
 
 export const getBoards = async () => {
@@ -25,8 +25,13 @@ export const getBoard = async (id: string) => {
 };
 
 export const createBoard = async (board: BoardSettings) => {
-  const boardRef = doc(boardsCol);
-  setDoc(boardRef, board)
-    .then(() => console.log('Success'))
-    .catch((err) => console.log(err));
+  let result;
+  addDoc(collection(firestore, 'boards'), { boardName: board.boardName, stages: board.stages })
+    .then((docRef) => {
+      result = docRef.id;
+    })
+    .catch((err) => {
+      throw err;
+    });
+  return result;
 };

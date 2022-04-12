@@ -108,7 +108,7 @@ const BoardForm = ({ addNewBoard }: Props) => {
 
   const onSaveClick = () => {
     if (boardName.length === 0) return setError('Please enter a board name.');
-    addNewBoard({ boardName, id: Math.random().toString(), stages });
+    addNewBoard({ boardName, id: 'tempId', stages });
   };
 
   return (
