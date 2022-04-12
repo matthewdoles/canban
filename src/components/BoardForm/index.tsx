@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { MdDelete, MdOutlineAddCircle } from 'react-icons/md';
 
@@ -8,9 +8,11 @@ import { Stage } from '../../models/Stage';
 
 type Props = {
   addNewBoard: (board: BoardSettings) => void;
+  onBoardUpdate: (board: BoardSettings) => void;
+  selectedBoard: BoardSettings;
 };
 
-const BoardForm = ({ addNewBoard }: Props) => {
+const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
   const [boardName, setBoardName] = useState<string>('');
   const [stages, setStages] = useState<Stage[]>([
     { title: 'Todo', color: 'bg-blue-500', stageOrder: 1 },
@@ -18,6 +20,11 @@ const BoardForm = ({ addNewBoard }: Props) => {
     { title: 'Done', color: 'bg-green-500', stageOrder: 3 }
   ]);
   const [error, setError] = useState<string>('');
+
+  useEffect(() => {
+    setBoardName(selectedBoard.boardName);
+    setStages(selectedBoard.stages);
+  }, [selectedBoard]);
 
   const inputStyles =
     'input !outline-0 text-xl w-full max-w-sm my-4 border-x-transparent ' +
@@ -107,6 +114,9 @@ const BoardForm = ({ addNewBoard }: Props) => {
   };
 
   const onSaveClick = () => {
+    if (selectedBoard.id) {
+      return onBoardUpdate({ id: selectedBoard.id, boardName, stages });
+    }
     if (boardName.length === 0) return setError('Please enter a board name.');
     addNewBoard({ boardName, id: 'tempId', stages });
   };

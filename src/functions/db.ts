@@ -1,12 +1,12 @@
-import { collection, doc, getDoc, getDocs, addDoc } from '@firebase/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, updateDoc } from '@firebase/firestore';
 import { boardsCol, firestore } from '../firebase';
 import { BoardSettings } from '../models/BoardSettings';
 
 export const getBoards = async () => {
   const boardDocs = await getDocs(boardsCol);
   const boardData: BoardSettings[] = [];
-  boardDocs.docs.forEach((bookDoc) => {
-    boardData.push({ ...bookDoc.data(), id: bookDoc.id });
+  boardDocs.docs.forEach((boardDoc) => {
+    boardData.push({ ...boardDoc.data(), id: boardDoc.id });
   });
   return boardData;
 };
@@ -34,4 +34,12 @@ export const createBoard = async (board: BoardSettings) => {
       throw err;
     });
   return result;
+};
+
+export const updateBoard = async (board: BoardSettings) => {
+  const bookDocRef = doc(boardsCol, board.id);
+  await updateDoc(bookDocRef, {
+    boardName: board.boardName,
+    stages: board.stages
+  });
 };

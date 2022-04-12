@@ -7,9 +7,10 @@ import { BoardSettings } from '../../models/BoardSettings';
 
 type Props = {
   board: BoardSettings;
+  updateSelectedBoard: (board: BoardSettings) => void;
 };
 
-const BoardCard = ({ board }: Props) => {
+const BoardCard = ({ board, updateSelectedBoard }: Props) => {
   return (
     <div className="bg-white drop-shadow-lg rounded-lg">
       <div className="bg-blue-500 p-1 rounded-t-lg">
@@ -35,7 +36,13 @@ const BoardCard = ({ board }: Props) => {
               <MdDelete size={24} className="mr-2 cursor-pointer text-red-500" />
             </div>
             <div className="tooltip" data-tip="Edit">
-              <MdOutlineModeEditOutline size={24} className="mx-2 cursor-pointer text-green-500" />
+              <label htmlFor="board-form">
+                <MdOutlineModeEditOutline
+                  size={24}
+                  className="mx-2 cursor-pointer text-green-500"
+                  onClick={() => updateSelectedBoard(board)}
+                />
+              </label>
             </div>
             <Link key={board.id} to={`/board/${board.id}`}>
               <div className="tooltip" data-tip="Open">
