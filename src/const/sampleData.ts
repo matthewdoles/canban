@@ -27,6 +27,7 @@ export const sampleTodos: Todo[] = [
 
 export const sampleBoardSettings: BoardSettings = {
   boardName: 'My Board',
+  id: '1',
   stages: [
     { title: 'Todo', color: 'bg-blue-500', stageOrder: 1 },
     { title: 'In Progress', color: 'bg-yellow-300', stageOrder: 2 },
@@ -37,6 +38,7 @@ export const sampleBoardSettings: BoardSettings = {
 
 export const sampleBoardSettings2: BoardSettings = {
   boardName: 'My Board',
+  id: '2',
   stages: [
     { title: 'Todo', color: 'bg-blue-500', stageOrder: 1 },
     { title: 'In Progress', color: 'bg-yellow-300', stageOrder: 2 },

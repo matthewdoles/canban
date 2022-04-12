@@ -77,7 +77,7 @@ const BoardForm = ({ addNewBoard }: Props) => {
               <label
                 htmlFor="board-form"
                 className="btn bg-green-500 w-20 border-none"
-                onClick={() => addNewBoard({ boardName, stages })}>
+                onClick={() => addNewBoard({ boardName, id: Math.random().toString(), stages })}>
                 Save
               </label>
             </div>

@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
 import BoardCard from '../../components/BoardCard';
 import BoardForm from '../../components/BoardForm';
-import { sampleBoardSettings } from '../../const/sampleData';
 import { BoardSettings } from '../../models/BoardSettings';
+import { getBoards } from '../../functions/db';
 
 const Dashboard = () => {
-  const [boards, setBoards] = useState<BoardSettings[]>([sampleBoardSettings]);
+  const [boards, setBoards] = useState<BoardSettings[]>([]);
+
+  useEffect(() => {
+    fetchBoards();
+  }, []);
+
+  const fetchBoards = async () => setBoards(await getBoards());
+
   return (
     <>
       <div className="md:w-1/3 sm:w-4/5 flex flex-col mx-auto bg-gray-100 shadow-lg items-center rounded-lg">
@@ -19,9 +28,9 @@ const Dashboard = () => {
         </div>
         <div className="w-full p-4">
           {boards.map((board) => (
-            <div key={board.boardName} className="m-4">
+            <Link key={board.id} to={`/board/${board.id}`} className="m-4">
               <BoardCard board={board} />
-            </div>
+            </Link>
           ))}
         </div>
       </div>

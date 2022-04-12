@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="min-h-screen min-w-screen bg-zinc-300 p-8" style={{ fontFamily: 'Roboto' }}>
       <Routes>
-        <Route path="/" element={<Board />} />
+        <Route path="/board/:id" element={<Board />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </div>
