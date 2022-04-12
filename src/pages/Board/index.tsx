@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Column from '../../components/Column';
 import TodoDetail from '../../components/TodoDetail.tsx';
-import { sampleBoardSettings2, sampleTodos } from '../../const/sampleData';
+import { sampleTodos } from '../../const/sampleData';
+import { getBoard } from '../../functions/db';
 import { BoardSettings } from '../../models/BoardSettings';
 import { Todo } from '../../models/Todo.model';
 
@@ -15,13 +17,21 @@ const Board = () => {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [activeHoverColumn, setActiveHoverColumn] = useState<number>(0);
   const [todos, setTodos] = useState<Todo[]>(sampleTodos);
-  const [boardSettings] = useState<BoardSettings>(sampleBoardSettings2);
+  const [boardSettings, setBoardSettings] = useState<BoardSettings>();
+  const { id } = useParams();
+
+  useEffect(() => {
+    fetchBoard();
+  }, []);
+
+  const fetchBoard = async () => setBoardSettings(await getBoard(id || '0'));
+
   return (
     <div className="drawer drawer-end">
       <input id="todo-detail-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
         <div className="flex flex-row w-full">
-          {boardSettings.stages.map((stage) => (
+          {boardSettings?.stages.map((stage) => (
             <Column
               key={stage.title}
               activeTodo={activeTodo}

@@ -8,7 +8,7 @@ type Props = {
 
 const ColorPicker = ({ color, updateColor }: Props) => {
   return (
-    <div className="dropdown dropdown-left dropdown-end">
+    <div className="dropdown dropdown-right dropdown-end">
       <label tabIndex={0} className={`btn m-1 ${color} border-none`}>
         Color
       </label>

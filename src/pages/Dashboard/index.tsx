@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import BoardCard from '../../components/BoardCard';
 import BoardForm from '../../components/BoardForm';
 import { BoardSettings } from '../../models/BoardSettings';
-import { getBoards } from '../../functions/db';
+import { createBoard, getBoards } from '../../functions/db';
 
 const Dashboard = () => {
   const [boards, setBoards] = useState<BoardSettings[]>([]);
@@ -36,9 +36,8 @@ const Dashboard = () => {
       </div>
       <BoardForm
         addNewBoard={(board) => {
-          console.log(board);
+          createBoard(board);
           setBoards((currBoards) => [...currBoards, board]);
-          console.log(boards);
         }}
       />
     </>
