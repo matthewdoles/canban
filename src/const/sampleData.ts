@@ -25,26 +25,6 @@ export const sampleTodos: Todo[] = [
   }
 ];
 
-export const sampleBoardSettings: BoardSettings = {
-  boardName: 'My Board',
-  id: '1',
-  stages: [
-    { title: 'Todo', color: 'bg-blue-500', stageOrder: 1 },
-    { title: 'In Progress', color: 'bg-yellow-300', stageOrder: 2 },
-    { title: 'In Review', color: 'bg-purple-500', stageOrder: 3 },
-    { title: 'Done', color: 'bg-green-500', stageOrder: 4 }
-  ]
-};
-
-export const sampleBoardSettings2: BoardSettings = {
-  boardName: 'My Board',
-  id: '2',
-  stages: [
-    { title: 'Todo', color: 'bg-blue-500', stageOrder: 1 },
-    { title: 'In Progress', color: 'bg-yellow-300', stageOrder: 2 },
-    { title: 'Done', color: 'bg-green-500', stageOrder: 3 }
-  ]
-};
 export const stageColors = [
   'bg-red-500',
   'bg-green-500',

@@ -36,6 +36,7 @@ const Board = () => {
               key={stage.title}
               activeTodo={activeTodo}
               activeHoverColumn={activeHoverColumn}
+              allStages={boardSettings.stages}
               color={stage.color}
               isDragging={isDragging}
               stage={stage.title}
@@ -58,7 +59,7 @@ const Board = () => {
       </div>
       <div className="drawer-side">
         <label htmlFor="todo-detail-drawer" className="drawer-overlay"></label>
-        <TodoDetail todo={activeTodo} />
+        {boardSettings && <TodoDetail allStages={boardSettings.stages} todo={activeTodo} />}
       </div>
     </div>
   );

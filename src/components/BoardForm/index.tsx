@@ -24,6 +24,7 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
   useEffect(() => {
     setBoardName(selectedBoard.boardName);
     setStages(selectedBoard.stages);
+    setError('');
   }, [selectedBoard]);
 
   const inputStyles =

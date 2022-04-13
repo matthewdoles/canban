@@ -14,7 +14,9 @@ const BoardCard = ({ board, updateSelectedBoard }: Props) => {
   return (
     <div className="bg-white drop-shadow-lg rounded-lg">
       <div className="bg-blue-500 p-1 rounded-t-lg">
-        <p className="text-md text-white font-bold ml-2">{board.boardName}</p>
+        <p className="text-lg text-white ml-2" style={{ fontFamily: 'Noto Sans' }}>
+          {board.boardName}
+        </p>
       </div>
       <div className=" flex flex-row justify-between p-2 text-lg">
         <div>

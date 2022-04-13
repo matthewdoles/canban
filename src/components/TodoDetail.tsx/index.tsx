@@ -1,17 +1,18 @@
 import React from 'react';
-import { sampleBoardSettings2 } from '../../const/sampleData';
+import { Stage } from '../../models/Stage';
 import { Todo } from '../../models/Todo.model';
 
 type Props = {
+  allStages: Stage[];
   todo: Todo;
 };
 
-const TodoDetail = ({ todo }: Props) => {
+const TodoDetail = ({ allStages, todo }: Props) => {
   return (
     <div className="w-1/4 bg-white text-lg">
       <div
         className={`h-12 flex flex-row ${
-          sampleBoardSettings2.stages.find((stage) => {
+          allStages.find((stage) => {
             return stage.title === todo.stage;
           })?.color
         } p-1`}></div>

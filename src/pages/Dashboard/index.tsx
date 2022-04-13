@@ -61,7 +61,11 @@ const Dashboard = () => {
     <div className="p-8 ">
       <div className="lg:w-1/2 md:3/4 sm:w-4/5 flex flex-col mx-auto bg-gray-100 shadow-lg items-center rounded-lg">
         <div className="w-full relative justify-center bg-blue-500 p-1 rounded-t-lg">
-          <p className="text-lg text-white text-center font-bold uppercase">My Boards</p>
+          <p
+            className="text-lg text-white text-center font-bold"
+            style={{ fontFamily: 'Noto Sans' }}>
+            My Boards
+          </p>
           <label
             className="absolute right-3 top-1 text-3xl text-white font-bold cursor-pointer"
             htmlFor="board-form"
