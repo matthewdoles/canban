@@ -9,6 +9,7 @@ import { Todo } from '../../models/Todo.model';
 
 const Board = () => {
   const [activeTodo, setActiveTodo] = useState<Todo>({
+    boardId: '',
     id: 0,
     stage: 'None',
     description: '',
@@ -37,6 +38,7 @@ const Board = () => {
               activeTodo={activeTodo}
               activeHoverColumn={activeHoverColumn}
               allStages={boardSettings.stages}
+              boardId={boardSettings.id || ''}
               color={stage.color}
               isDragging={isDragging}
               stage={stage.title}
@@ -49,7 +51,6 @@ const Board = () => {
                 setTodos((prevTodos: Todo[]) => {
                   const newTodos = [...prevTodos.filter((t) => t.id !== updatedTodo.id)];
                   newTodos.push(updatedTodo);
-                  newTodos.sort((a, b) => a.id - b.id);
                   return newTodos;
                 });
               }}

@@ -1,13 +1,18 @@
 import React from 'react';
 import { DraggableData, DraggableEvent } from 'react-draggable';
+import { MdAdd } from 'react-icons/md';
+
 import { Todo } from '../../models/Todo.model';
-import TodoCard from '../TodoCard';
 import { Stage } from '../../models/Stage';
+import { createTodo } from '../../functions/db';
+import TodoCard from '../TodoCard';
+import TodoForm from '../TodoForm';
 
 type Props = {
   activeTodo: Todo;
   activeHoverColumn: number;
   allStages: Stage[];
+  boardId: string;
   color: string;
   isDragging: boolean;
   stage: string;
@@ -23,6 +28,7 @@ const Column = ({
   activeTodo,
   activeHoverColumn,
   allStages,
+  boardId,
   color,
   isDragging,
   stage,
@@ -33,6 +39,18 @@ const Column = ({
   updateBoardTodos,
   updateIsDragging
 }: Props) => {
+  const addTodo = async (todo: Todo) => {
+    try {
+      const todoId = await createTodo(todo);
+      updateBoardTodos({
+        ...todo,
+        id: todoId
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div
       className={`static ${allStages.length === 3 ? 'w-1/3' : 'w-1/4'} m-2 shadow-lg ${
@@ -42,11 +60,16 @@ const Column = ({
             }`
           : 'bg-gray-100 border-transparent border-none'
       }`}>
-      <div className={`${color} p-2`}>
+      <div className={`${color} p-2 relative justify-center`}>
         <p className="text-lg text-white font-bold ml-2">
           <span className="badge mr-2">{todos.length}</span>
           {stage}
         </p>
+        <label
+          className="absolute right-3 top-2 text-3xl text-white font-bold cursor-pointer"
+          htmlFor={`todo-form-${stage}`}>
+          <MdAdd size={28} />
+        </label>
       </div>
       <div className="min-h-[600px]">
         {todos.map((todo) => (
@@ -86,7 +109,13 @@ const Column = ({
                     stage:
                       allStages.find((stage) => stage.stageOrder === activeHoverColumn)?.title || ''
                   });
-                  updateActiveDrag({ id: 0, stage: 'None', description: '', title: '' });
+                  updateActiveDrag({
+                    id: 0,
+                    stage: 'None',
+                    description: '',
+                    title: '',
+                    boardId: ''
+                  });
                   updateIsDragging(false);
                 }}
                 color={color}
@@ -96,6 +125,7 @@ const Column = ({
           </>
         ))}
       </div>
+      <TodoForm addNewTodo={addTodo} allStages={allStages} autoPopStage={stage} boardId={boardId} />
     </div>
   );
 };

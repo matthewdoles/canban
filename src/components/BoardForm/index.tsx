@@ -128,7 +128,9 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
       <div className="modal">
         <div className="modal-box p-0 !min-w-[650px]">
           <div className="w-full relative justify-center bg-blue-500 p-1 rounded-t-lg">
-            <p className="text-xl text-white text-center font-bold uppercase">New Board</p>
+            <p className="text-xl text-white text-center font-bold uppercase">
+              {selectedBoard.id ? 'Edit Board' : 'New Board'}
+            </p>
           </div>
           <div className="flex flex-col w-full items-center p-4">
             <input

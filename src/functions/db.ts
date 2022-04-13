@@ -7,8 +7,10 @@ import {
   getDocs,
   updateDoc
 } from '@firebase/firestore';
+
 import { boardsCol, firestore } from '../firebase';
 import { BoardSettings } from '../models/BoardSettings';
+import { Todo } from '../models/Todo.model';
 
 export const getBoards = async () => {
   const boardDocs = await getDocs(boardsCol);
@@ -55,4 +57,21 @@ export const updateBoard = async (board: BoardSettings) => {
 export const deleteBoard = async (board: BoardSettings) => {
   const boardDocRef = doc(boardsCol, board.id);
   await deleteDoc(boardDocRef);
+};
+
+export const createTodo = async (todo: Todo) => {
+  let result;
+  addDoc(collection(firestore, 'todos'), {
+    boardId: todo.boardId,
+    title: todo.title,
+    stage: todo.stage,
+    descrption: todo.description
+  })
+    .then((docRef) => {
+      result = docRef.id;
+    })
+    .catch((err) => {
+      throw err;
+    });
+  return result;
 };
