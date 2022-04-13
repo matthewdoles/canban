@@ -4,7 +4,8 @@ import { MdAdd } from 'react-icons/md';
 import BoardCard from '../../components/BoardCard';
 import BoardForm from '../../components/BoardForm';
 import { BoardSettings } from '../../models/BoardSettings';
-import { createBoard, getBoards, updateBoard } from '../../functions/db';
+import { createBoard, deleteBoard, getBoards, updateBoard } from '../../functions/db';
+import Modal from '../../components/Modal';
 
 const newBoard = {
   boardName: '',
@@ -45,8 +46,19 @@ const Dashboard = () => {
     }
   };
 
+  const onBoardDelete = async (board: BoardSettings) => {
+    try {
+      if (board.id) {
+        await deleteBoard(board);
+        setBoards((currBoards) => [...currBoards.filter((b) => b.id !== board.id)]);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
-    <>
+    <div className="p-8 ">
       <div className="lg:w-1/2 md:3/4 sm:w-4/5 flex flex-col mx-auto bg-gray-100 shadow-lg items-center rounded-lg">
         <div className="w-full relative justify-center bg-blue-500 p-1 rounded-t-lg">
           <p className="text-lg text-white text-center font-bold uppercase">My Boards</p>
@@ -73,7 +85,29 @@ const Dashboard = () => {
         onBoardUpdate={onBoardUpdate}
         selectedBoard={selectedBoard}
       />
-    </>
+      <Modal>
+        <div
+          className={`flex flex-row justify-center bg-red-500 p-1 rounded-t-lg cursor-grab header`}>
+          <h3 className="text-lg text-white font-bold uppercase">Delete Board</h3>
+        </div>
+        <div className="mt-4 text-center">
+          <p className="text-lg">Are you sure you want to delete this board?</p>
+          <p className="text-2xl font-bold my-2">
+            <b>{selectedBoard.boardName}</b>
+          </p>
+        </div>
+        <div className="modal-action p-4">
+          <label htmlFor="modal" className="btn border-none bg-red-500">
+            Cancel
+          </label>
+          <label
+            className="btn border-none bg-green-500"
+            onClick={() => onBoardDelete(selectedBoard)}>
+            Confirm
+          </label>
+        </div>
+      </Modal>
+    </div>
   );
 };
 

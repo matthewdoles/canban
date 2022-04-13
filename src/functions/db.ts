@@ -1,4 +1,12 @@
-import { addDoc, collection, doc, getDoc, getDocs, updateDoc } from '@firebase/firestore';
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc
+} from '@firebase/firestore';
 import { boardsCol, firestore } from '../firebase';
 import { BoardSettings } from '../models/BoardSettings';
 
@@ -37,9 +45,14 @@ export const createBoard = async (board: BoardSettings) => {
 };
 
 export const updateBoard = async (board: BoardSettings) => {
-  const bookDocRef = doc(boardsCol, board.id);
-  await updateDoc(bookDocRef, {
+  const boardDocRef = doc(boardsCol, board.id);
+  await updateDoc(boardDocRef, {
     boardName: board.boardName,
     stages: board.stages
   });
+};
+
+export const deleteBoard = async (board: BoardSettings) => {
+  const boardDocRef = doc(boardsCol, board.id);
+  await deleteDoc(boardDocRef);
 };

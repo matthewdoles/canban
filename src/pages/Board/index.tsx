@@ -29,7 +29,7 @@ const Board = () => {
   return (
     <div className="drawer drawer-end">
       <input id="todo-detail-drawer" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content">
+      <div className="drawer-content p-8">
         <div className="flex flex-row w-full">
           {boardSettings?.stages.map((stage) => (
             <Column

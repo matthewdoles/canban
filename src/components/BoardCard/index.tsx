@@ -33,7 +33,13 @@ const BoardCard = ({ board, updateSelectedBoard }: Props) => {
           </div>
           <div>
             <div className="tooltip" data-tip="Delete">
-              <MdDelete size={24} className="mr-2 cursor-pointer text-red-500" />
+              <label htmlFor="modal">
+                <MdDelete
+                  size={24}
+                  className="mr-2 cursor-pointer text-red-500"
+                  onClick={() => updateSelectedBoard(board)}
+                />
+              </label>
             </div>
             <div className="tooltip" data-tip="Edit">
               <label htmlFor="board-form">
