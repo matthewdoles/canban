@@ -2,30 +2,32 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Column from '../../components/Column';
 import TodoDetail from '../../components/TodoDetail.tsx';
-import { sampleTodos } from '../../const/sampleData';
-import { getBoard } from '../../functions/db';
+import { getBoard, getTodos } from '../../functions/db';
 import { BoardSettings } from '../../models/BoardSettings';
 import { Todo } from '../../models/Todo.model';
 
 const Board = () => {
   const [activeTodo, setActiveTodo] = useState<Todo>({
     boardId: '',
-    id: 0,
+    id: '0',
     stage: 'None',
     description: '',
     title: ''
   });
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [activeHoverColumn, setActiveHoverColumn] = useState<number>(0);
-  const [todos, setTodos] = useState<Todo[]>(sampleTodos);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [boardSettings, setBoardSettings] = useState<BoardSettings>();
   const { id } = useParams();
 
   useEffect(() => {
-    fetchBoard();
+    fetchBoardData();
   }, []);
 
-  const fetchBoard = async () => setBoardSettings(await getBoard(id || '0'));
+  const fetchBoardData = async () => {
+    setBoardSettings(await getBoard(id || '0'));
+    setTodos(await getTodos(id || '0'));
+  };
 
   return (
     <div className="drawer drawer-end">

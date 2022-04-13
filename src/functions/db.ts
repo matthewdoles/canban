@@ -5,7 +5,9 @@ import {
   doc,
   getDoc,
   getDocs,
-  updateDoc
+  query,
+  updateDoc,
+  where
 } from '@firebase/firestore';
 
 import { boardsCol, firestore } from '../firebase';
@@ -59,13 +61,31 @@ export const deleteBoard = async (board: BoardSettings) => {
   await deleteDoc(boardDocRef);
 };
 
+export const getTodos = async (boardId: string) => {
+  const q = query(collection(firestore, 'todos'), where('boardId', '==', boardId));
+
+  const todoDocs = await getDocs(q);
+  const todoData: Todo[] = [];
+  todoDocs.forEach((todoDoc) => {
+    const t = todoDoc.data();
+    todoData.push({
+      boardId: t.boardId,
+      title: t.title,
+      description: t.description,
+      id: todoDoc.id,
+      stage: t.stage
+    });
+  });
+  return todoData;
+};
+
 export const createTodo = async (todo: Todo) => {
   let result;
   addDoc(collection(firestore, 'todos'), {
     boardId: todo.boardId,
     title: todo.title,
     stage: todo.stage,
-    descrption: todo.description
+    description: todo.description
   })
     .then((docRef) => {
       result = docRef.id;

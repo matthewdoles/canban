@@ -54,7 +54,7 @@ const Column = ({
   return (
     <div
       className={`static ${allStages.length === 3 ? 'w-1/3' : 'w-1/4'} m-2 shadow-lg ${
-        activeTodo.stage !== stage && activeTodo.id !== 0 && isDragging
+        activeTodo.stage !== stage && activeTodo.id !== '0' && isDragging
           ? `bg-green-50 ${
               activeHoverColumn === stageNumber ? 'border-green-300 border-4' : 'border-none'
             }`
@@ -74,7 +74,7 @@ const Column = ({
       <div className="min-h-[600px]">
         {todos.map((todo) => (
           <>
-            {(activeTodo.id === 0 ||
+            {(activeTodo.id === '0' ||
               activeTodo.id === todo.id ||
               activeTodo.stage === stage ||
               !isDragging) && (
@@ -110,7 +110,7 @@ const Column = ({
                       allStages.find((stage) => stage.stageOrder === activeHoverColumn)?.title || ''
                   });
                   updateActiveDrag({
-                    id: 0,
+                    id: '0',
                     stage: 'None',
                     description: '',
                     title: '',

@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, CollectionReference, collection, DocumentData } from 'firebase/firestore';
 
 import { BoardSettings } from './models/BoardSettings';
+import { Todo } from './models/Todo.model';
 
 export const firebaseApp = initializeApp({
   apiKey: 'AIzaSyA1jeIw0sjswanLHTK3q1riIGBXuufXBlM',
@@ -21,3 +22,4 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 
 // export all your collections
 export const boardsCol = createCollection<BoardSettings>('boards');
+export const todosCol = createCollection<Todo>('todos');
