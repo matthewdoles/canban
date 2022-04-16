@@ -23,7 +23,13 @@ const TodoForm = ({ addNewTodo, allStages, autoPopStage, boardId }: Props) => {
 
   const onSaveClick = () => {
     if (todoName.length === 0) return setError('Please enter a task name.');
-    addNewTodo({ title: todoName, description: description, stage: selectedStage, boardId });
+    addNewTodo({
+      title: todoName,
+      description: description,
+      stage: selectedStage,
+      boardId,
+      comments: []
+    });
   };
 
   return (

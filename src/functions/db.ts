@@ -70,6 +70,7 @@ export const getTodos = async (boardId: string) => {
     const t = todoDoc.data();
     todoData.push({
       boardId: t.boardId,
+      comments: t.comments,
       title: t.title,
       description: t.description,
       id: todoDoc.id,
@@ -83,6 +84,7 @@ export const createTodo = async (todo: Todo) => {
   let result;
   addDoc(collection(firestore, 'todos'), {
     boardId: todo.boardId,
+    comments: [],
     title: todo.title,
     stage: todo.stage,
     description: todo.description
@@ -99,6 +101,7 @@ export const createTodo = async (todo: Todo) => {
 export const updateTodo = async (todo: Todo) => {
   const todoDocRef = doc(todosCol, todo.id);
   await updateDoc(todoDocRef, {
+    comments: todo.comments,
     description: todo.description,
     stage: todo.stage,
     title: todo.title

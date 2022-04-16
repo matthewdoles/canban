@@ -117,6 +117,7 @@ const Column = ({
                       id: '0',
                       stage: 'None',
                       description: '',
+                      comments: [],
                       title: '',
                       boardId: ''
                     });

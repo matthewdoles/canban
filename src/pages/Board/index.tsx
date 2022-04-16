@@ -9,6 +9,7 @@ import { Todo } from '../../models/Todo.model';
 const Board = () => {
   const [activeTodo, setActiveTodo] = useState<Todo>({
     boardId: '',
+    comments: [],
     id: '0',
     stage: 'None',
     description: '',
