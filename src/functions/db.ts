@@ -107,3 +107,8 @@ export const updateTodo = async (todo: Todo) => {
     title: todo.title
   });
 };
+
+export const deleteTodo = async (todo: Todo) => {
+  const todoDocRef = doc(todosCol, todo.id);
+  await deleteDoc(todoDocRef);
+};
