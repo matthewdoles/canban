@@ -10,7 +10,7 @@ import {
   where
 } from '@firebase/firestore';
 
-import { boardsCol, firestore } from '../firebase';
+import { boardsCol, firestore, todosCol } from '../firebase';
 import { BoardSettings } from '../models/BoardSettings';
 import { Todo } from '../models/Todo.model';
 
@@ -94,4 +94,13 @@ export const createTodo = async (todo: Todo) => {
       throw err;
     });
   return result;
+};
+
+export const updateTodo = async (todo: Todo) => {
+  const todoDocRef = doc(todosCol, todo.id);
+  await updateDoc(todoDocRef, {
+    description: todo.description,
+    stage: todo.stage,
+    title: todo.title
+  });
 };

@@ -4,7 +4,7 @@ import { MdAdd } from 'react-icons/md';
 
 import { Todo } from '../../models/Todo.model';
 import { Stage } from '../../models/Stage';
-import { createTodo } from '../../functions/db';
+import { createTodo, updateTodo } from '../../functions/db';
 import TodoCard from '../TodoCard';
 import TodoForm from '../TodoForm';
 
@@ -103,20 +103,27 @@ const Column = ({
                 dragStart={() => {
                   updateActiveDrag(todo);
                 }}
-                dragStop={() => {
-                  updateBoardTodos({
-                    ...todo,
-                    stage:
-                      allStages.find((stage) => stage.stageOrder === activeHoverColumn)?.title || ''
-                  });
-                  updateActiveDrag({
-                    id: '0',
-                    stage: 'None',
-                    description: '',
-                    title: '',
-                    boardId: ''
-                  });
-                  updateIsDragging(false);
+                dragStop={async () => {
+                  try {
+                    const updatedTodo = {
+                      ...todo,
+                      stage:
+                        allStages.find((stage) => stage.stageOrder === activeHoverColumn)?.title ||
+                        ''
+                    };
+                    await updateTodo(updatedTodo);
+                    updateBoardTodos(updatedTodo);
+                    updateActiveDrag({
+                      id: '0',
+                      stage: 'None',
+                      description: '',
+                      title: '',
+                      boardId: ''
+                    });
+                    updateIsDragging(false);
+                  } catch (err) {
+                    console.log(err);
+                  }
                 }}
                 color={color}
                 disabled={false}

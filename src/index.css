@@ -10,6 +10,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+.steps .step-filled + .step-filled:before, .steps .step-filled:after {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(59 130 246 ) !important;
+  --tw-text-opacity: 1 !important;
+  color: white !important;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
