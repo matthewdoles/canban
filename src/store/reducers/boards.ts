@@ -1,39 +1,153 @@
 import { AnyAction } from 'redux';
-import { BoardSettings } from '../../models/BoardSettings';
-import { getBoards } from '../../functions/db';
+import { FirebaseError } from 'firebase/app';
+import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore';
+
 import { AppThunk } from '../configureReducer';
 import { fetchTodos } from './todos';
+import { boardsCol, firestore } from '../../firebase';
+import { BoardSettings } from '../../models/BoardSettings';
 
+export const ACTION_START = 'ACTION_START';
+export const ADD_BOARD = 'ADD_BOARD';
+export const DELETE_BOARD = 'DELETE_BOARD';
 export const FETCH_BOARDS = 'FETCH_BOARDS';
+export const SET_ERROR = 'SET_ERROR';
+export const SET_IS_LOADING = 'SET_IS_LOADING';
+export const UPDATE_BOARD = 'UPDATE_BOARD';
 
 type BoardState = {
   boards: BoardSettings[];
+  loading: boolean;
+  error: string;
 };
 
 const initialState: BoardState = {
-  boards: []
+  boards: [],
+  loading: false,
+  error: ''
 };
 
 export default function boardReducer(state = initialState, action: AnyAction) {
   switch (action.type) {
+    case ACTION_START:
+      return {
+        ...state,
+        error: action.start.error,
+        loading: action.start.loading
+      };
+    case ADD_BOARD:
+      return {
+        ...state,
+        boards: [...state.boards, action.board]
+      };
+    case DELETE_BOARD:
+      return {
+        ...state,
+        boards: [...state.boards.filter((b) => b.id !== action.boardId)]
+      };
     case FETCH_BOARDS:
       return {
         ...state,
         boards: [...action.boards]
       };
+    case SET_ERROR:
+      return {
+        ...state,
+        error: action.error
+      };
+    case SET_IS_LOADING:
+      return {
+        ...state,
+        loading: action.loading
+      };
+    case UPDATE_BOARD: {
+      return {
+        ...state,
+        boards: [...state.boards.filter((b) => b.id !== action.board.id), action.board]
+      };
+    }
     default:
       return { ...state };
   }
 }
 
+export function createBoard(board: BoardSettings): AppThunk {
+  return async (dispatch) => {
+    dispatch({ type: ACTION_START, start: { loading: true, error: '' } });
+    addDoc(collection(firestore, 'boards'), {
+      boardName: board.boardName,
+      stages: board.stages
+    })
+      .then((docRef) => {
+        dispatch({ type: ADD_BOARD, board: { ...board, id: docRef.id } });
+      })
+      .catch((err: FirebaseError) => {
+        dispatch({ type: SET_ERROR, error: err.message });
+      })
+      .finally(() => {
+        dispatch({ type: SET_IS_LOADING, loading: false });
+      });
+  };
+}
+
+export function deleteBoard(board: BoardSettings): AppThunk {
+  return async (dispatch) => {
+    dispatch({ type: ACTION_START, start: { loading: true, error: '' } });
+    const boardDocRef = doc(boardsCol, board.id);
+    deleteDoc(boardDocRef)
+      .then(() => {
+        dispatch({ type: DELETE_BOARD, boardId: board.id });
+      })
+      .catch((err: FirebaseError) => {
+        dispatch({ type: SET_ERROR, error: err.message });
+      })
+      .finally(() => {
+        dispatch({ type: SET_IS_LOADING, loading: false });
+      });
+  };
+}
+
 export function fetchBoards(): AppThunk {
   return async (dispatch) => {
-    const boards: BoardSettings[] = await getBoards();
-    const boardIds = boards.map((board) => {
-      if (board.id) return board.id;
-      return '';
-    });
-    dispatch(fetchTodos(boardIds));
-    dispatch({ type: FETCH_BOARDS, boards });
+    dispatch({ type: ACTION_START, start: { loading: true, error: '' } });
+    getDocs(boardsCol)
+      .then((boardDocs) => {
+        const boardData: BoardSettings[] = [];
+        boardDocs.docs.forEach((boardDoc) => {
+          boardData.push({ ...boardDoc.data(), id: boardDoc.id });
+        });
+        const boardIds = boardData.map((board) => {
+          if (board.id) return board.id;
+          return '';
+        });
+        dispatch(fetchTodos(boardIds));
+        dispatch({ type: FETCH_BOARDS, boards: boardData });
+      })
+      .catch((err: FirebaseError) => {
+        dispatch({ type: SET_ERROR, error: err.message });
+      })
+      .finally(() => {
+        dispatch({ type: SET_IS_LOADING, loading: false });
+      });
+  };
+}
+
+export function updateBoard(board: BoardSettings): AppThunk {
+  return async (dispatch) => {
+    dispatch({ type: ACTION_START, start: { loading: true, error: '' } });
+    const boardDocRef = doc(boardsCol, board.id);
+    updateDoc(boardDocRef, {
+      boardName: board.boardName,
+      stages: board.stages
+    })
+      .then(() => {
+        dispatch({ type: UPDATE_BOARD, board });
+      })
+      .catch((err: FirebaseError) => {
+        dispatch({ type: SET_ERROR, error: err.message });
+      })
+      .finally(() => {
+        dispatch({ type: SET_IS_LOADING, loading: false });
+      });
   };
 }

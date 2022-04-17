@@ -200,7 +200,10 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
               <label htmlFor="board-form" className="btn bg-red-500 w-20 border-none">
                 Cancel
               </label>
-              <label className="btn bg-green-500 w-20 border-none" onClick={onSaveClick}>
+              <label
+                htmlFor="board-form"
+                className="btn bg-green-500 w-20 border-none"
+                onClick={onSaveClick}>
                 Save
               </label>
             </div>

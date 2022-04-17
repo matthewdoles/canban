@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { MdAdd } from 'react-icons/md';
 
+import { createBoard, deleteBoard, fetchBoards, updateBoard } from '../../store/reducers/boards';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { BoardSettings } from '../../models/BoardSettings';
 import BoardCard from '../../components/BoardCard';
 import BoardForm from '../../components/BoardForm';
-import { BoardSettings } from '../../models/BoardSettings';
-// import { createBoard, deleteBoard, updateBoard } from '../../functions/db';
 import Modal from '../../components/Modal';
-
-import { fetchBoards } from '../../store/reducers/boards';
-import { useAppDispatch, useAppSelector } from '../../hooks';
 
 const newBoard = {
   boardName: '',
@@ -22,6 +20,7 @@ const newBoard = {
 const Dashboard = () => {
   const [selectedBoard, setSelectedBoard] = useState<BoardSettings>(newBoard);
   const boards = useAppSelector((state) => state.boards.boards);
+  const error = useAppSelector((state) => state.boards.error);
   const todos = useAppSelector((state) => state.todos.todos);
   const dispatch = useAppDispatch();
 
@@ -31,39 +30,11 @@ const Dashboard = () => {
 
   const getBoards = async () => dispatch(fetchBoards());
 
-  const addBoard = async (board: BoardSettings) => {
-    try {
-      console.log(board);
-      // const boardId = await createBoard(board);
-      // setBoards((currBoards) => [...currBoards, { ...board, id: boardId }]);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const onBoardAdd = async (board: BoardSettings) => dispatch(createBoard(board));
 
-  const onBoardUpdate = async (board: BoardSettings) => {
-    try {
-      console.log(board);
-      // if (board.id) {
-      //   await updateBoard(board);
-      //   setBoards((currBoards) => [...currBoards.filter((b) => b.id !== board.id), board]);
-      // }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const onBoardUpdate = async (board: BoardSettings) => dispatch(updateBoard(board));
 
-  const onBoardDelete = async (board: BoardSettings) => {
-    try {
-      console.log(board);
-      // if (board.id) {
-      //   await deleteBoard(board);
-      //   setBoards((currBoards) => [...currBoards.filter((b) => b.id !== board.id)]);
-      // }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const onBoardDelete = async (board: BoardSettings) => dispatch(deleteBoard(board));
 
   return (
     <div className="p-8 ">
@@ -82,10 +53,12 @@ const Dashboard = () => {
           </label>
         </div>
         <div className="w-full p-4">
+          {error.length > 0 && <p>{error}</p>}
           {boards.map((board) => (
             <div key={board.id} className="m-4">
               <BoardCard
                 board={board}
+                selectedBoard={selectedBoard}
                 todos={todos.filter((todo) => todo.boardId === board.id)}
                 updateSelectedBoard={(board: BoardSettings) => setSelectedBoard(board)}
               />
@@ -94,7 +67,7 @@ const Dashboard = () => {
         </div>
       </div>
       <BoardForm
-        addNewBoard={addBoard}
+        addNewBoard={onBoardAdd}
         onBoardUpdate={onBoardUpdate}
         selectedBoard={selectedBoard}
       />
@@ -114,6 +87,7 @@ const Dashboard = () => {
             Cancel
           </label>
           <label
+            htmlFor="modal"
             className="btn border-none bg-green-500"
             onClick={() => onBoardDelete(selectedBoard)}>
             Confirm
