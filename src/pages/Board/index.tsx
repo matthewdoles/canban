@@ -28,7 +28,8 @@ const Board = () => {
 
   const fetchBoardData = async () => {
     setBoardSettings(await getBoard(id || '0'));
-    setTodos(await getTodos(id || '0'));
+    const ids = [id || '0'];
+    setTodos(await getTodos(ids));
   };
 
   const onConfirmDelete = async () => {

@@ -4,13 +4,15 @@ import { AiFillEye } from 'react-icons/ai';
 import { MdDelete, MdOutlineModeEditOutline } from 'react-icons/md';
 
 import { BoardSettings } from '../../models/BoardSettings';
+import { Todo } from '../../models/Todo.model';
 
 type Props = {
   board: BoardSettings;
+  todos: Todo[];
   updateSelectedBoard: (board: BoardSettings) => void;
 };
 
-const BoardCard = ({ board, updateSelectedBoard }: Props) => {
+const BoardCard = ({ board, todos, updateSelectedBoard }: Props) => {
   return (
     <div className="bg-white drop-shadow-lg rounded-lg">
       <div className="bg-blue-500 p-1 rounded-t-lg">
@@ -23,7 +25,9 @@ const BoardCard = ({ board, updateSelectedBoard }: Props) => {
           {board.stages.map((stage) => (
             <div key={stage.stageOrder} className="flex flex-row m-2 items-center">
               <div className={`${stage.color} h-4 w-4 mr-2 rounded-full`}></div>
-              <p>2 {stage.title}</p>
+              <p>
+                {todos.filter((todo) => todo.stage === stage.title).length} {stage.title}
+              </p>
             </div>
           ))}
         </div>

@@ -109,7 +109,7 @@ const Column = ({
                       ...todo,
                       stage:
                         allStages.find((stage) => stage.stageOrder === activeHoverColumn)?.title ||
-                        ''
+                        todo.stage
                     };
                     await updateTodo(updatedTodo);
                     updateBoardTodos(updatedTodo);

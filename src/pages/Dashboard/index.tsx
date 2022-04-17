@@ -4,8 +4,11 @@ import { MdAdd } from 'react-icons/md';
 import BoardCard from '../../components/BoardCard';
 import BoardForm from '../../components/BoardForm';
 import { BoardSettings } from '../../models/BoardSettings';
-import { createBoard, deleteBoard, getBoards, updateBoard } from '../../functions/db';
+// import { createBoard, deleteBoard, updateBoard } from '../../functions/db';
 import Modal from '../../components/Modal';
+
+import { fetchBoards } from '../../store/reducers/boards';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 
 const newBoard = {
   boardName: '',
@@ -17,19 +20,22 @@ const newBoard = {
 };
 
 const Dashboard = () => {
-  const [boards, setBoards] = useState<BoardSettings[]>([]);
   const [selectedBoard, setSelectedBoard] = useState<BoardSettings>(newBoard);
+  const boards = useAppSelector((state) => state.boards.boards);
+  const todos = useAppSelector((state) => state.todos.todos);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    fetchBoards();
+    getBoards();
   }, []);
 
-  const fetchBoards = async () => setBoards(await getBoards());
+  const getBoards = async () => dispatch(fetchBoards());
 
   const addBoard = async (board: BoardSettings) => {
     try {
-      const boardId = await createBoard(board);
-      setBoards((currBoards) => [...currBoards, { ...board, id: boardId }]);
+      console.log(board);
+      // const boardId = await createBoard(board);
+      // setBoards((currBoards) => [...currBoards, { ...board, id: boardId }]);
     } catch (err) {
       console.log(err);
     }
@@ -37,10 +43,11 @@ const Dashboard = () => {
 
   const onBoardUpdate = async (board: BoardSettings) => {
     try {
-      if (board.id) {
-        await updateBoard(board);
-        setBoards((currBoards) => [...currBoards.filter((b) => b.id !== board.id), board]);
-      }
+      console.log(board);
+      // if (board.id) {
+      //   await updateBoard(board);
+      //   setBoards((currBoards) => [...currBoards.filter((b) => b.id !== board.id), board]);
+      // }
     } catch (err) {
       console.log(err);
     }
@@ -48,10 +55,11 @@ const Dashboard = () => {
 
   const onBoardDelete = async (board: BoardSettings) => {
     try {
-      if (board.id) {
-        await deleteBoard(board);
-        setBoards((currBoards) => [...currBoards.filter((b) => b.id !== board.id)]);
-      }
+      console.log(board);
+      // if (board.id) {
+      //   await deleteBoard(board);
+      //   setBoards((currBoards) => [...currBoards.filter((b) => b.id !== board.id)]);
+      // }
     } catch (err) {
       console.log(err);
     }
@@ -78,6 +86,7 @@ const Dashboard = () => {
             <div key={board.id} className="m-4">
               <BoardCard
                 board={board}
+                todos={todos.filter((todo) => todo.boardId === board.id)}
                 updateSelectedBoard={(board: BoardSettings) => setSelectedBoard(board)}
               />
             </div>

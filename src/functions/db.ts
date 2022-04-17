@@ -61,8 +61,8 @@ export const deleteBoard = async (board: BoardSettings) => {
   await deleteDoc(boardDocRef);
 };
 
-export const getTodos = async (boardId: string) => {
-  const q = query(collection(firestore, 'todos'), where('boardId', '==', boardId));
+export const getTodos = async (boardIds: string[]) => {
+  const q = query(collection(firestore, 'todos'), where('boardId', 'in', boardIds));
 
   const todoDocs = await getDocs(q);
   const todoData: Todo[] = [];

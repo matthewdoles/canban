@@ -124,8 +124,13 @@ const TodoDetail = ({ allStages, todo }: Props) => {
         </ul>
       </div>
       {editMode && (
-        <div className="flex justify-center">
-          <button className="btn bg-green-500 w-30 border-none" onClick={onSaveSubmit}>
+        <div className="flex flex-row justify-center">
+          <button
+            className="btn bg-red-500 w-30 border-none mx-2"
+            onClick={() => setEditMode(false)}>
+            Cancel
+          </button>
+          <button className="btn bg-green-500 w-30 border-none mx-2" onClick={onSaveSubmit}>
             Save
           </button>
           <div className="divider mt-4" />
