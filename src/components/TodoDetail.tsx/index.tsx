@@ -21,10 +21,31 @@ const TodoDetail = ({ allStages, todo }: Props) => {
   const dispatch = useAppDispatch();
 
   const inputStyles =
-    'input !outline-0 text-xl w-full max-w-sm my-2 border-x-transparent ' +
+    '!outline-0 text-xl w-full my-2 border-x-transparent ' +
     'border-t-transparent rounded-none border-b-2 mr-2 border-gray-200';
 
   useEffect(() => {
+    setFormData();
+  }, [todo]);
+
+  const onSaveSubmit = async () => {
+    dispatch(
+      updateTodo({
+        ...todo,
+        description: description,
+        title: title,
+        stage: stageTitle
+      })
+    );
+    setEditMode(false);
+  };
+
+  const onCancelClick = () => {
+    setFormData();
+    setEditMode(false);
+  };
+
+  const setFormData = () => {
     const stage = allStages.filter((stage) => stage.title === todo.stage);
     if (stage.length > 0) {
       setTodoStageNumber(stage[0].stageOrder);
@@ -32,7 +53,7 @@ const TodoDetail = ({ allStages, todo }: Props) => {
     setDescription(todo.description);
     setTitle(todo.title);
     setStageTitle(todo.stage);
-  }, [todo]);
+  };
 
   const onCommentSubmit = async () => {
     dispatch(
@@ -47,24 +68,8 @@ const TodoDetail = ({ allStages, todo }: Props) => {
     setNewComment('');
   };
 
-  const onSaveSubmit = async () => {
-    try {
-      dispatch(
-        updateTodo({
-          ...todo,
-          description: description,
-          title: title,
-          stage: stageTitle
-        })
-      );
-      setEditMode(false);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   return (
-    <div className="w-1/2 lg:w-1/3 xl:w-1/4 bg-white text-lg">
+    <div className="w-1/2 lg:w-1/3 bg-white text-lg">
       <div
         className={`h-12 flex flex-row ${
           allStages.find((stage) => {
@@ -88,7 +93,11 @@ const TodoDetail = ({ allStages, todo }: Props) => {
       <div className="m-4">
         <p className="font-bold">Title</p>
         {editMode ? (
-          <input className={inputStyles} value={title} onChange={(e) => setTitle(e.target.value)} />
+          <input
+            className={`input ${inputStyles}`}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
         ) : (
           <p className="text-xl">{title}</p>
         )}
@@ -96,9 +105,10 @@ const TodoDetail = ({ allStages, todo }: Props) => {
       <div className="m-4">
         <p className="font-bold">Description</p>
         {editMode ? (
-          <input
-            className={inputStyles}
+          <textarea
+            className={`textarea ${inputStyles}`}
             value={description}
+            rows={5}
             onChange={(e) => setDescription(e.target.value)}
           />
         ) : (
@@ -130,9 +140,7 @@ const TodoDetail = ({ allStages, todo }: Props) => {
       </div>
       {editMode && (
         <div className="flex flex-row justify-center">
-          <button
-            className="btn bg-red-500 w-30 border-none mx-2"
-            onClick={() => setEditMode(false)}>
+          <button className="btn bg-red-500 w-30 border-none mx-2" onClick={onCancelClick}>
             Cancel
           </button>
           <button className="btn bg-green-500 w-30 border-none mx-2" onClick={onSaveSubmit}>

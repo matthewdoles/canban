@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DraggableData, DraggableEvent } from 'react-draggable';
 import { MdAdd } from 'react-icons/md';
 
 import { Todo } from '../../models/Todo.model';
 import { Stage } from '../../models/Stage';
-import { createTodo, updateTodo } from '../../functions/db';
 import TodoCard from '../TodoCard';
 import TodoForm from '../TodoForm';
+import { createTodo } from '../../store/reducers/boards';
+import { useAppDispatch } from '../../hooks';
 
 type Props = {
   activeTodo: Todo;
@@ -39,17 +40,8 @@ const Column = ({
   updateBoardTodos,
   updateIsDragging
 }: Props) => {
-  const addTodo = async (todo: Todo) => {
-    try {
-      const todoId = await createTodo(todo);
-      updateBoardTodos({
-        ...todo,
-        id: todoId
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const [createFormOpen, setCreateFormOpen] = useState(false);
+  const dispatch = useAppDispatch();
 
   return (
     <div
@@ -67,7 +59,8 @@ const Column = ({
         </p>
         <label
           className="absolute right-3 top-2 text-3xl text-white font-bold cursor-pointer"
-          htmlFor={`todo-form-${stage}`}>
+          htmlFor={`todo-form-${stage}`}
+          onClick={() => setCreateFormOpen(true)}>
           <MdAdd size={28} />
         </label>
       </div>
@@ -111,7 +104,6 @@ const Column = ({
                         allStages.find((stage) => stage.stageOrder === activeHoverColumn)?.title ||
                         todo.stage
                     };
-                    await updateTodo(updatedTodo);
                     updateBoardTodos(updatedTodo);
                     updateActiveDrag({
                       id: '0',
@@ -133,7 +125,17 @@ const Column = ({
           </>
         ))}
       </div>
-      <TodoForm addNewTodo={addTodo} allStages={allStages} autoPopStage={stage} boardId={boardId} />
+      {createFormOpen && (
+        <TodoForm
+          addNewTodo={(todo) => {
+            dispatch(createTodo(todo));
+            setCreateFormOpen(false);
+          }}
+          allStages={allStages}
+          autoPopStage={stage}
+          boardId={boardId}
+        />
+      )}
     </div>
   );
 };

@@ -171,6 +171,26 @@ export function updateBoard(board: BoardSettings): AppThunk {
   };
 }
 
+export function createTodo(todo: Todo): AppThunk {
+  return async (dispatch, getState) => {
+    const { boards } = getState();
+    dispatch({ type: ACTION_START, start: { loading: true, error: '' } });
+    addDoc(collection(firestore, 'todos'), todo)
+      .then((docRef) => {
+        const udpatedBoards = JSON.parse(JSON.stringify([...boards.boards]));
+        const boardIndex = udpatedBoards.findIndex((b: BoardSettings) => b.id === todo.boardId);
+        udpatedBoards[boardIndex].todos.push({ id: docRef.id, ...todo });
+        dispatch({ type: UPDATE_BOARD, board: udpatedBoards[boardIndex] });
+      })
+      .catch((err: FirebaseError) => {
+        dispatch({ type: SET_ERROR, error: err.message });
+      })
+      .finally(() => {
+        dispatch({ type: SET_IS_LOADING, loading: false });
+      });
+  };
+}
+
 export function fetchTodos(boards: BoardSettings[]): AppThunk {
   return async (dispatch) => {
     const boardIds = boards.map((board) => {
@@ -198,6 +218,28 @@ export function fetchTodos(boards: BoardSettings[]): AppThunk {
           board.todos = [...todoData.filter((t: Todo) => t.boardId === board.id)];
         });
         dispatch({ type: FETCH_BOARDS, boards: updatedBoards });
+      })
+      .catch((err: FirebaseError) => {
+        dispatch({ type: SET_ERROR, error: err.message });
+      })
+      .finally(() => {
+        dispatch({ type: SET_IS_LOADING, loading: false });
+      });
+  };
+}
+
+export function deleteTodo(todo: Todo): AppThunk {
+  return async (dispatch, getState) => {
+    const { boards } = getState();
+    dispatch({ type: ACTION_START, start: { loading: true, error: '' } });
+    const todoDocRef = doc(todosCol, todo.id);
+    deleteDoc(todoDocRef)
+      .then(() => {
+        const udpatedBoards = JSON.parse(JSON.stringify([...boards.boards]));
+        const boardIndex = udpatedBoards.findIndex((b: BoardSettings) => b.id === todo.boardId);
+        const todoIndex = udpatedBoards[boardIndex].todos.findIndex((t: Todo) => t.id === todo.id);
+        udpatedBoards[boardIndex].todos.splice(todoIndex, 1);
+        dispatch({ type: UPDATE_BOARD, board: udpatedBoards[boardIndex] });
       })
       .catch((err: FirebaseError) => {
         dispatch({ type: SET_ERROR, error: err.message });
