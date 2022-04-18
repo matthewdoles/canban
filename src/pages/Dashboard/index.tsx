@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { BounceLoader } from 'react-spinners';
 import { MdAdd } from 'react-icons/md';
 
 import { createBoard, deleteBoard, fetchBoards, updateBoard } from '../../store/reducers/boards';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { BoardSettings } from '../../models/BoardSettings';
+import { Todo } from '../../models/Todo.model';
 import BoardCard from '../../components/BoardCard';
 import BoardForm from '../../components/BoardForm';
 import Modal from '../../components/Modal';
@@ -19,16 +21,16 @@ const newBoard = {
 
 const Dashboard = () => {
   const [selectedBoard, setSelectedBoard] = useState<BoardSettings>(newBoard);
-  const boards = useAppSelector((state) => state.boards.boards);
-  const error = useAppSelector((state) => state.boards.error);
-  const todos = useAppSelector((state) => state.todos.todos);
+  const boardData = useAppSelector((state) => state.boards);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     getBoards();
   }, []);
 
-  const getBoards = async () => dispatch(fetchBoards());
+  const getBoards = async () => {
+    if (boardData.boards.length === 0) dispatch(fetchBoards());
+  };
 
   const onBoardAdd = async (board: BoardSettings) => dispatch(createBoard(board));
 
@@ -53,13 +55,18 @@ const Dashboard = () => {
           </label>
         </div>
         <div className="w-full p-4">
-          {error.length > 0 && <p>{error}</p>}
-          {boards.map((board) => (
+          {boardData.loading && boardData.boards.length === 0 && (
+            <div className="flex flex-row justify-center p-4">
+              <BounceLoader size={75} color="#3B82F6 " />
+            </div>
+          )}
+          {boardData.error.length > 0 && <p>{boardData.error}</p>}
+          {boardData.boards.map((board) => (
             <div key={board.id} className="m-4">
               <BoardCard
                 board={board}
                 selectedBoard={selectedBoard}
-                todos={todos.filter((todo) => todo.boardId === board.id)}
+                todos={board.todos.filter((todo: Todo) => todo.boardId === board.id)}
                 updateSelectedBoard={(board: BoardSettings) => setSelectedBoard(board)}
               />
             </div>
@@ -74,7 +81,7 @@ const Dashboard = () => {
       <Modal>
         <div
           className={`flex flex-row justify-center bg-red-500 p-1 rounded-t-lg cursor-grab header`}>
-          <h3 className="text-lg text-white font-bold uppercase">Delete Board</h3>
+          <h3 className="text-2xl text-white font-bold">Delete Board</h3>
         </div>
         <div className="mt-4 text-center">
           <p className="text-lg">Are you sure you want to delete this board?</p>

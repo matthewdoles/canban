@@ -3,9 +3,11 @@ import { useParams } from 'react-router-dom';
 import Column from '../../components/Column';
 import Modal from '../../components/Modal';
 import TodoDetail from '../../components/TodoDetail.tsx';
-import { deleteTodo, getBoard, getTodos } from '../../functions/db';
-import { BoardSettings } from '../../models/BoardSettings';
+import { deleteTodo } from '../../functions/db';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { Stage } from '../../models/Stage';
 import { Todo } from '../../models/Todo.model';
+import { fetchBoards } from '../../store/reducers/boards';
 
 const Board = () => {
   const [activeTodo, setActiveTodo] = useState<Todo>({
@@ -18,25 +20,29 @@ const Board = () => {
   });
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [activeHoverColumn, setActiveHoverColumn] = useState<number>(0);
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [boardSettings, setBoardSettings] = useState<BoardSettings>();
+  const boardData = useAppSelector((state) => state.boards.boards);
+  const activeBoard = useAppSelector((state) => state.boards.activeBoard);
+  const dispatch = useAppDispatch();
   const { id } = useParams();
 
   useEffect(() => {
     fetchBoardData();
-  }, []);
+    if (activeTodo.id !== '0') {
+      setActiveTodo(activeBoard.todos.find((t: Todo) => t.id === activeTodo.id));
+    }
+  }, [activeBoard]);
 
   const fetchBoardData = async () => {
-    setBoardSettings(await getBoard(id || '0'));
-    const ids = [id || '0'];
-    setTodos(await getTodos(ids));
+    console.log(id);
+    if (boardData.length === 0) {
+      dispatch(fetchBoards());
+    }
   };
 
   const onConfirmDelete = async () => {
     try {
       if (activeTodo.id) {
         await deleteTodo(activeTodo);
-        setTodos((currTodos) => [...currTodos.filter((t) => t.id !== activeTodo.id)]);
         setActiveTodo({
           boardId: '',
           comments: [],
@@ -56,36 +62,30 @@ const Board = () => {
       <input id="todo-detail-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content p-8">
         <div className="flex flex-row w-full">
-          {boardSettings?.stages.map((stage) => (
+          {activeBoard?.stages.map((stage: Stage) => (
             <Column
               key={stage.title}
               activeTodo={activeTodo}
               activeHoverColumn={activeHoverColumn}
-              allStages={boardSettings.stages}
-              boardId={boardSettings.id || ''}
+              allStages={activeBoard.stages}
+              boardId={activeBoard.id || ''}
               color={stage.color}
               isDragging={isDragging}
               stage={stage.title}
               stageNumber={stage.stageOrder}
-              todos={todos.filter((todo) => todo.stage === stage.title)}
+              todos={activeBoard.todos.filter((todo: Todo) => todo.stage === stage.title)}
               updateActiveDrag={(todo: Todo) => setActiveTodo(todo)}
               updateActiveHoverColumn={(column: number) => setActiveHoverColumn(column)}
               updateIsDragging={(dragging: boolean) => setIsDragging(dragging)}
-              updateBoardTodos={(updatedTodo: Todo) => {
-                setTodos((prevTodos: Todo[]) => {
-                  const newTodos = [...prevTodos.filter((t) => t.id !== updatedTodo.id)];
-                  newTodos.push(updatedTodo);
-                  return newTodos;
-                });
-              }}
+              updateBoardTodos={(updatedTodo: Todo) => console.log(updatedTodo)}
             />
           ))}
         </div>
       </div>
       <div className="drawer-side">
         <label htmlFor="todo-detail-drawer" className="drawer-overlay"></label>
-        {boardSettings && activeTodo.id !== '0' && (
-          <TodoDetail allStages={boardSettings.stages} todo={activeTodo} />
+        {activeBoard && activeTodo.id !== '0' && (
+          <TodoDetail allStages={activeBoard.stages} todo={activeTodo} />
         )}
       </div>
       <Modal>

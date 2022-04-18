@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { MdDelete, MdOutlineModeEditOutline } from 'react-icons/md';
-import { updateTodo } from '../../functions/db';
+import { useAppDispatch } from '../../hooks';
 import { Stage } from '../../models/Stage';
 import { Todo } from '../../models/Todo.model';
+import { updateTodo } from '../../store/reducers/boards';
 import TodoComment from '../TodoComment';
 
 type Props = {
@@ -17,6 +18,7 @@ const TodoDetail = ({ allStages, todo }: Props) => {
   const [stageTitle, setStageTitle] = useState<string>('');
   const [editMode, setEditMode] = useState<boolean>(false);
   const [newComment, setNewComment] = useState<string>('');
+  const dispatch = useAppDispatch();
 
   const inputStyles =
     'input !outline-0 text-xl w-full max-w-sm my-2 border-x-transparent ' +
@@ -33,29 +35,28 @@ const TodoDetail = ({ allStages, todo }: Props) => {
   }, [todo]);
 
   const onCommentSubmit = async () => {
-    try {
-      await updateTodo({
+    dispatch(
+      updateTodo({
         ...todo,
         comments: [
           ...todo.comments,
           { authorId: '12345', description: newComment, date: Date.now() }
         ]
-      });
-      setNewComment('');
-    } catch (err) {
-      console.log(err);
-    }
+      })
+    );
+    setNewComment('');
   };
 
   const onSaveSubmit = async () => {
     try {
-      await updateTodo({
-        ...todo,
-        description: description,
-        title: title,
-        stage: stageTitle
-      });
-      setNewComment('');
+      dispatch(
+        updateTodo({
+          ...todo,
+          description: description,
+          title: title,
+          stage: stageTitle
+        })
+      );
       setEditMode(false);
     } catch (err) {
       console.log(err);
@@ -87,7 +88,7 @@ const TodoDetail = ({ allStages, todo }: Props) => {
       <div className="m-4">
         <p className="font-bold">Title</p>
         {editMode ? (
-          <input className={inputStyles} value={title} />
+          <input className={inputStyles} value={title} onChange={(e) => setTitle(e.target.value)} />
         ) : (
           <p className="text-xl">{title}</p>
         )}
@@ -95,7 +96,11 @@ const TodoDetail = ({ allStages, todo }: Props) => {
       <div className="m-4">
         <p className="font-bold">Description</p>
         {editMode ? (
-          <input className={inputStyles} value={description} />
+          <input
+            className={inputStyles}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         ) : (
           <p className="text-xl">{description}</p>
         )}

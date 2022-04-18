@@ -1,27 +1,45 @@
 import { AnyAction } from 'redux';
 import { FirebaseError } from 'firebase/app';
-import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where
+} from 'firebase/firestore';
 
 import { AppThunk } from '../configureReducer';
-import { fetchTodos } from './todos';
-import { boardsCol, firestore } from '../../firebase';
+import { boardsCol, firestore, todosCol } from '../../firebase';
 import { BoardSettings } from '../../models/BoardSettings';
+import { Todo } from '../../models/Todo.model';
 
 export const ACTION_START = 'ACTION_START';
 export const ADD_BOARD = 'ADD_BOARD';
 export const DELETE_BOARD = 'DELETE_BOARD';
 export const FETCH_BOARDS = 'FETCH_BOARDS';
+export const FETCH_TODOS = 'FETCH_TODOS';
+export const SET_ACTIVE_BOARD = 'SET_ACTIVE_BOARD';
 export const SET_ERROR = 'SET_ERROR';
 export const SET_IS_LOADING = 'SET_IS_LOADING';
 export const UPDATE_BOARD = 'UPDATE_BOARD';
 
 type BoardState = {
+  activeBoard: BoardSettings;
   boards: BoardSettings[];
   loading: boolean;
   error: string;
 };
 
 const initialState: BoardState = {
+  activeBoard: {
+    boardName: '',
+    id: '',
+    stages: [],
+    todos: []
+  },
   boards: [],
   loading: false,
   error: ''
@@ -50,6 +68,11 @@ export default function boardReducer(state = initialState, action: AnyAction) {
         ...state,
         boards: [...action.boards]
       };
+    case SET_ACTIVE_BOARD:
+      return {
+        ...state,
+        activeBoard: action.board
+      };
     case SET_ERROR:
       return {
         ...state,
@@ -63,7 +86,8 @@ export default function boardReducer(state = initialState, action: AnyAction) {
     case UPDATE_BOARD: {
       return {
         ...state,
-        boards: [...state.boards.filter((b) => b.id !== action.board.id), action.board]
+        boards: [...state.boards.filter((b) => b.id !== action.board.id), action.board],
+        activeBoard: action.board
       };
     }
     default:
@@ -79,7 +103,7 @@ export function createBoard(board: BoardSettings): AppThunk {
       stages: board.stages
     })
       .then((docRef) => {
-        dispatch({ type: ADD_BOARD, board: { ...board, id: docRef.id } });
+        dispatch({ type: ADD_BOARD, board: { ...board, todos: [], id: docRef.id } });
       })
       .catch((err: FirebaseError) => {
         dispatch({ type: SET_ERROR, error: err.message });
@@ -116,12 +140,7 @@ export function fetchBoards(): AppThunk {
         boardDocs.docs.forEach((boardDoc) => {
           boardData.push({ ...boardDoc.data(), id: boardDoc.id });
         });
-        const boardIds = boardData.map((board) => {
-          if (board.id) return board.id;
-          return '';
-        });
-        dispatch(fetchTodos(boardIds));
-        dispatch({ type: FETCH_BOARDS, boards: boardData });
+        dispatch(fetchTodos(boardData));
       })
       .catch((err: FirebaseError) => {
         dispatch({ type: SET_ERROR, error: err.message });
@@ -142,6 +161,77 @@ export function updateBoard(board: BoardSettings): AppThunk {
     })
       .then(() => {
         dispatch({ type: UPDATE_BOARD, board });
+      })
+      .catch((err: FirebaseError) => {
+        dispatch({ type: SET_ERROR, error: err.message });
+      })
+      .finally(() => {
+        dispatch({ type: SET_IS_LOADING, loading: false });
+      });
+  };
+}
+
+export function fetchTodos(boards: BoardSettings[]): AppThunk {
+  return async (dispatch) => {
+    const boardIds = boards.map((board) => {
+      if (board.id) return board.id;
+      return '';
+    });
+
+    const q = query(collection(firestore, 'todos'), where('boardId', 'in', boardIds));
+    getDocs(q)
+      .then((todoDocs) => {
+        const todoData: Todo[] = [];
+        todoDocs.forEach((todoDoc) => {
+          const t = todoDoc.data();
+          todoData.push({
+            boardId: t.boardId,
+            comments: t.comments,
+            title: t.title,
+            description: t.description,
+            id: todoDoc.id,
+            stage: t.stage
+          });
+        });
+        const updatedBoards = [...boards];
+        updatedBoards.forEach((board) => {
+          board.todos = [...todoData.filter((t: Todo) => t.boardId === board.id)];
+        });
+        dispatch({ type: FETCH_BOARDS, boards: updatedBoards });
+      })
+      .catch((err: FirebaseError) => {
+        dispatch({ type: SET_ERROR, error: err.message });
+      })
+      .finally(() => {
+        dispatch({ type: SET_IS_LOADING, loading: false });
+      });
+  };
+}
+
+export function updateTodo(todo: Todo): AppThunk {
+  return async (dispatch, getState) => {
+    const { boards } = getState();
+    dispatch({ type: ACTION_START, start: { loading: true, error: '' } });
+    const updatedTodo = {
+      comments: todo.comments,
+      title: todo.title,
+      description: todo.description,
+      stage: todo.stage
+    };
+
+    const todoDocRef = doc(todosCol, todo.id);
+    updateDoc(todoDocRef, {
+      ...updatedTodo
+    })
+      .then(() => {
+        const udpatedBoards = JSON.parse(JSON.stringify([...boards.boards]));
+        const boardIndex = udpatedBoards.findIndex((b: BoardSettings) => b.id === todo.boardId);
+        const todoIndex = udpatedBoards[boardIndex].todos.findIndex((t: Todo) => t.id === todo.id);
+        udpatedBoards[boardIndex].todos[todoIndex] = {
+          ...udpatedBoards[boardIndex].todos[todoIndex],
+          ...updatedTodo
+        };
+        dispatch({ type: UPDATE_BOARD, board: udpatedBoards[boardIndex] });
       })
       .catch((err: FirebaseError) => {
         dispatch({ type: SET_ERROR, error: err.message });

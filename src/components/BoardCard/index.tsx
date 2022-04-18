@@ -6,7 +6,8 @@ import { BounceLoader } from 'react-spinners';
 
 import { BoardSettings } from '../../models/BoardSettings';
 import { Todo } from '../../models/Todo.model';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { SET_ACTIVE_BOARD } from '../../store/reducers/boards';
 
 type Props = {
   board: BoardSettings;
@@ -17,6 +18,8 @@ type Props = {
 
 const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) => {
   const boards = useAppSelector((state) => state.boards);
+  const dispatch = useAppDispatch();
+
   return (
     <div className="bg-white drop-shadow-lg rounded-lg">
       <div className="bg-blue-500 p-1 rounded-t-lg">
@@ -66,7 +69,10 @@ const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) 
                   />
                 </label>
               </div>
-              <Link key={board.id} to={`/board/${board.id}`}>
+              <Link
+                key={board.id}
+                to={`/board/${board.id}`}
+                onClick={() => dispatch({ type: SET_ACTIVE_BOARD, board })}>
                 <div className="tooltip" data-tip="Open">
                   <AiFillEye size={24} className="ml-2 cursor-pointer text-blue-500" />
                 </div>
