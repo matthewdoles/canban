@@ -3,8 +3,8 @@ import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { MdDelete, MdOutlineAddCircle } from 'react-icons/md';
 
 import ColorPicker from '../ColorPicker';
-import { BoardSettings } from '../../models/BoardSettings';
-import { Stage } from '../../models/Stage';
+import { BoardSettings } from '../../models/BoardSettings.model';
+import { Stage } from '../../models/Stage.model';
 
 type Props = {
   addNewBoard: (board: BoardSettings) => void;

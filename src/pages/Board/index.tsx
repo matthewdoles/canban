@@ -6,7 +6,7 @@ import DeleteTodo from '../../components/Modals/DeleteTodo';
 import TodoDetail from '../../components/TodoDetail.tsx';
 import { initTodo } from '../../const/initData';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { Stage } from '../../models/Stage';
+import { Stage } from '../../models/Stage.model';
 import { Todo } from '../../models/Todo.model';
 import { deleteTodo, fetchBoards, SET_ACTIVE_BOARD, updateTodo } from '../../store/reducers/boards';
 

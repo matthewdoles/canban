@@ -1,4 +1,4 @@
-import { Stage } from './Stage';
+import { Stage } from './Stage.model';
 import { Todo } from './Todo.model';
 
 export type BoardSettings = {

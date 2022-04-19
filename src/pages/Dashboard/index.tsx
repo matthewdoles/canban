@@ -4,7 +4,7 @@ import { MdAdd } from 'react-icons/md';
 
 import { createBoard, deleteBoard, fetchBoards, updateBoard } from '../../store/reducers/boards';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { BoardSettings } from '../../models/BoardSettings';
+import { BoardSettings } from '../../models/BoardSettings.model';
 import { Todo } from '../../models/Todo.model';
 import BoardCard from '../../components/BoardCard';
 import BoardForm from '../../components/BoardForm';

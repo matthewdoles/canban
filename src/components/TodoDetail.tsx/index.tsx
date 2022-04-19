@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MdDelete, MdOutlineModeEditOutline } from 'react-icons/md';
 import { useAppDispatch } from '../../hooks';
-import { Stage } from '../../models/Stage';
+import { Stage } from '../../models/Stage.model';
 import { Todo } from '../../models/Todo.model';
 import { updateTodo } from '../../store/reducers/boards';
 import TodoComment from '../TodoComment';

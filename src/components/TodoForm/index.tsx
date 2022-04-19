@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Stage } from '../../models/Stage';
+import { Stage } from '../../models/Stage.model';
 import { Todo } from '../../models/Todo.model';
 
 type Props = {

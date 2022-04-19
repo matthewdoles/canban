@@ -13,7 +13,7 @@ import {
 
 import { AppThunk } from '../configureReducer';
 import { boardsCol, firestore, todosCol } from '../../firebase';
-import { BoardSettings } from '../../models/BoardSettings';
+import { BoardSettings } from '../../models/BoardSettings.model';
 import { Todo } from '../../models/Todo.model';
 
 export const ACTION_START = 'ACTION_START';

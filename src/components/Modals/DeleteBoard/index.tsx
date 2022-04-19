@@ -1,5 +1,5 @@
 import React from 'react';
-import { BoardSettings } from '../../../models/BoardSettings';
+import { BoardSettings } from '../../../models/BoardSettings.model';
 
 type Props = {
   board: BoardSettings;

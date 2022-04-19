@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, CollectionReference, collection, DocumentData } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
-import { BoardSettings } from './models/BoardSettings';
+import { BoardSettings } from './models/BoardSettings.model';
 import { Todo } from './models/Todo.model';
 
 export const firebaseApp = initializeApp({

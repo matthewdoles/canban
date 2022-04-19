@@ -4,7 +4,7 @@ import { AiFillEye } from 'react-icons/ai';
 import { MdDelete, MdOutlineModeEditOutline } from 'react-icons/md';
 import { BounceLoader } from 'react-spinners';
 
-import { BoardSettings } from '../../models/BoardSettings';
+import { BoardSettings } from '../../models/BoardSettings.model';
 import { Todo } from '../../models/Todo.model';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { SET_ACTIVE_BOARD } from '../../store/reducers/boards';

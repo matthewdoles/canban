@@ -3,7 +3,7 @@ import { DraggableData, DraggableEvent } from 'react-draggable';
 import { MdAdd } from 'react-icons/md';
 
 import { Todo } from '../../models/Todo.model';
-import { Stage } from '../../models/Stage';
+import { Stage } from '../../models/Stage.model';
 import TodoCard from '../TodoCard';
 import TodoForm from '../TodoForm';
 import { createTodo } from '../../store/reducers/boards';
