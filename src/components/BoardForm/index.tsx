@@ -35,7 +35,7 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
     setError('');
     setStages((prevStages) => {
       const stageIndex = prevStages.findIndex((s) => s.stageOrder == stage.stageOrder);
-      const updatedStage = prevStages[stageIndex];
+      const updatedStage = { ...prevStages[stageIndex] };
       if (field === 'color') updatedStage.color = value;
       if (field === 'title') updatedStage.title = value;
       const newStageInfo = [
@@ -70,11 +70,11 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
   const addStage = (stage: Stage) => {
     setError('');
     setStages((currStages) => {
-      const currStageIndex = currStages.findIndex((s) => s.stageOrder === stage.stageOrder);
       if (currStages.length === 5) {
         setError('Maximum number of stages reached.');
         return currStages;
       }
+      const currStageIndex = currStages.findIndex((s) => s.stageOrder === stage.stageOrder);
       if (currStageIndex + 1 === currStages.length)
         return [
           ...currStages,
@@ -110,7 +110,20 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
         setError('Must have a minimum of 2 stages.');
         return currStages;
       }
-      return [...currStages.filter((s) => s.stageOrder !== stage.stageOrder)];
+      const currStageIndex = currStages.findIndex((s) => s.stageOrder === stage.stageOrder);
+      if (currStageIndex + 1 === currStages.length)
+        return [...currStages.filter((s) => s.stageOrder !== stage.stageOrder)];
+      const newStageInfo = [
+        ...currStages.filter((s) => s.stageOrder < currStages[currStageIndex].stageOrder)
+      ];
+      let stageIndex = currStageIndex + 1;
+      while (stageIndex < currStages.length) {
+        const updatedStage = { ...currStages[stageIndex] };
+        updatedStage.stageOrder = updatedStage.stageOrder - 1;
+        newStageInfo.push(updatedStage);
+        stageIndex++;
+      }
+      return newStageInfo.sort((a, b) => a.stageOrder - b.stageOrder);
     });
   };
 
@@ -120,6 +133,12 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
     }
     if (boardName.length === 0) return setError('Please enter a board name.');
     addNewBoard({ boardName, id: 'tempId', stages });
+  };
+
+  const onCancelClick = () => {
+    setBoardName(selectedBoard.boardName);
+    setStages(selectedBoard.stages);
+    setError('');
   };
 
   return (
@@ -197,7 +216,10 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
               </div>
             )}
             <div className="modal-action">
-              <label htmlFor="board-form" className="btn bg-red-500 w-20 border-none">
+              <label
+                htmlFor="board-form"
+                className="btn bg-red-500 w-20 border-none"
+                onClick={onCancelClick}>
                 Cancel
               </label>
               <label

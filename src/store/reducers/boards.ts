@@ -86,7 +86,10 @@ export default function boardReducer(state = initialState, action: AnyAction) {
     case UPDATE_BOARD: {
       return {
         ...state,
-        boards: [...state.boards.filter((b) => b.id !== action.board.id), action.board],
+        boards: [
+          ...state.boards.filter((b) => b.id !== action.board.id),
+          { ...state.boards.find((b) => b.id === action.board.id), ...action.board }
+        ],
         activeBoard: action.board
       };
     }

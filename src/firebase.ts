@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, CollectionReference, collection, DocumentData } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 import { BoardSettings } from './models/BoardSettings';
 import { Todo } from './models/Todo.model';
@@ -15,6 +16,7 @@ export const firebaseApp = initializeApp({
 });
 
 export const firestore = getFirestore();
+export const auth = getAuth();
 
 const createCollection = <T = DocumentData>(collectionName: string) => {
   return collection(firestore, collectionName) as CollectionReference<T>;
