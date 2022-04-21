@@ -129,10 +129,10 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
 
   const onSaveClick = () => {
     if (selectedBoard.id) {
-      return onBoardUpdate({ id: selectedBoard.id, boardName, stages });
+      return onBoardUpdate({ id: selectedBoard.id, boardName, stages, uid: '' });
     }
     if (boardName.length === 0) return setError('Please enter a board name.');
-    addNewBoard({ boardName, id: 'tempId', stages });
+    addNewBoard({ boardName, id: 'tempId', stages, uid: '' });
   };
 
   const onCancelClick = () => {

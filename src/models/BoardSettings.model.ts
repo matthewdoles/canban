@@ -6,4 +6,5 @@ export type BoardSettings = {
   id?: string;
   stages: Stage[];
   todos?: Todo[];
+  uid: string;
 };

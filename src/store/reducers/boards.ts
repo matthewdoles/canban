@@ -38,7 +38,8 @@ const initialState: BoardState = {
     boardName: '',
     id: '',
     stages: [],
-    todos: []
+    todos: [],
+    uid: ''
   },
   boards: [],
   loading: false,
@@ -99,11 +100,13 @@ export default function boardReducer(state = initialState, action: AnyAction) {
 }
 
 export function createBoard(board: BoardSettings): AppThunk {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const { user } = getState();
     dispatch({ type: ACTION_START, start: { loading: true, error: '' } });
     addDoc(collection(firestore, 'boards'), {
       boardName: board.boardName,
-      stages: board.stages
+      stages: board.stages,
+      uid: user.firebaseUser.uid
     })
       .then((docRef) => {
         dispatch({ type: ADD_BOARD, board: { ...board, todos: [], id: docRef.id } });
@@ -135,22 +138,32 @@ export function deleteBoard(board: BoardSettings): AppThunk {
 }
 
 export function fetchBoards(): AppThunk {
-  return async (dispatch) => {
-    dispatch({ type: ACTION_START, start: { loading: true, error: '' } });
-    getDocs(boardsCol)
-      .then((boardDocs) => {
-        const boardData: BoardSettings[] = [];
-        boardDocs.docs.forEach((boardDoc) => {
-          boardData.push({ ...boardDoc.data(), id: boardDoc.id });
+  return async (dispatch, getState) => {
+    const { user } = getState();
+    if (user.firebaseUser) {
+      dispatch({ type: ACTION_START, start: { loading: true, error: '' } });
+      const q = query(collection(firestore, 'boards'), where('uid', '==', user.firebaseUser.uid));
+      getDocs(q)
+        .then((boardDocs) => {
+          const boardData: BoardSettings[] = [];
+          boardDocs.forEach((boardDoc) => {
+            const b = boardDoc.data();
+            boardData.push({
+              boardName: b.boardName,
+              stages: b.stages,
+              id: boardDoc.id,
+              uid: b.uid
+            });
+          });
+          dispatch(fetchTodos(boardData));
+        })
+        .catch((err: FirebaseError) => {
+          dispatch({ type: SET_ERROR, error: err.message });
+        })
+        .finally(() => {
+          dispatch({ type: SET_IS_LOADING, loading: false });
         });
-        dispatch(fetchTodos(boardData));
-      })
-      .catch((err: FirebaseError) => {
-        dispatch({ type: SET_ERROR, error: err.message });
-      })
-      .finally(() => {
-        dispatch({ type: SET_IS_LOADING, loading: false });
-      });
+    }
   };
 }
 
