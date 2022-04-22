@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
+import { useAppSelector } from '../../hooks';
 import { Todo } from '../../models/Todo.model';
 
 type Props = {
@@ -14,6 +15,8 @@ type Props = {
 
 const TodoCard = ({ color, disabled, clicked, dragging, dragStart, dragStop, todo }: Props) => {
   const nodeRef = useRef<HTMLDivElement>(null);
+  const user = useAppSelector((state) => state.user.firebaseUser);
+
   return (
     <Draggable
       nodeRef={nodeRef}
@@ -33,9 +36,19 @@ const TodoCard = ({ color, disabled, clicked, dragging, dragStart, dragStop, tod
             <div className="mx-4 py-2">
               <p>{todo.description}</p>
             </div>
-            <div className="avatar m-2">
-              <div className="w-10 h-10 rounded-full">
-                <img src="https://avatars.githubusercontent.com/u/38084552?s=48&v=4" />
+            <div className="avatar placeholder m-2">
+              <div className="w-10 h-10 rounded-full bg-blue-500">
+                {user !== null && (
+                  <>
+                    {user.photoURL === null || user.photoURL.length === 0 ? (
+                      <span className="text-xl text-white font-bold">
+                        {user.displayName.charAt(0)}
+                      </span>
+                    ) : (
+                      <img src={user.photoURL} />
+                    )}
+                  </>
+                )}
               </div>
             </div>
           </div>

@@ -27,13 +27,13 @@ const newBoard = {
 const Dashboard = () => {
   const [selectedBoard, setSelectedBoard] = useState<BoardSettings>(newBoard);
   const boardData = useAppSelector((state) => state.boards);
-  const user = useAppSelector((state) => state.user);
+  const user = useAppSelector((state) => state.user.firebaseUser);
   const dispatch = useAppDispatch();
   const navigation = useNavigate();
 
   useEffect(() => {
     getBoards();
-  }, [user.firebaseUser]);
+  }, [user]);
 
   const getBoards = async () => {
     if (boardData.boards.length === 0) dispatch(fetchBoards());
@@ -54,21 +54,33 @@ const Dashboard = () => {
     <>
       <div className="p-8 flex flex-col items-center">
         <div className="dropdown dropdown-end mb-8">
-          <label
-            tabIndex={0}
-            className="btn btn-circle avatar w-16 h-16 border-4 border-white bg-white">
-            <div className="rounded-full border-white">
-              <img src="https://api.lorem.space/image/face?hash=33791" />
+          <label tabIndex={0} className="avatar placeholder justify-center">
+            <div className="w-20 h-20 rounded-full bg-blue-500 border-4 border-white hover:border-black">
+              {user !== null && (
+                <>
+                  {user.photoURL === null || user.photoURL.length === 0 ? (
+                    <span className="text-3xl text-white font-bold">
+                      {user.displayName.charAt(0)}
+                    </span>
+                  ) : (
+                    <img src={user.photoURL} />
+                  )}
+                </>
+              )}
             </div>
           </label>
           <ul
             tabIndex={0}
             className="mt-1 mr-4 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
             <li>
-              <label htmlFor="profile-modal">Profile</label>
+              <label htmlFor="profile-modal" className="text-xl">
+                Profile
+              </label>
             </li>
             <li>
-              <a onClick={signOut}>Logout</a>
+              <a onClick={signOut} className="text-xl">
+                Logout
+              </a>
             </li>
           </ul>
         </div>
@@ -114,7 +126,7 @@ const Dashboard = () => {
         <Modal id="delete-board-modal">
           <DeleteBoard board={selectedBoard} confirm={() => onBoardDelete(selectedBoard)} />
         </Modal>
-        {user.firebaseUser !== null && (
+        {user !== null && (
           <Modal id="profile-modal">
             <Profile />
           </Modal>

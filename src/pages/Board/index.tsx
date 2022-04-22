@@ -23,6 +23,7 @@ const Board = () => {
   const [activeHoverColumn, setActiveHoverColumn] = useState<number>(0);
   const boardData = useAppSelector((state) => state.boards.boards);
   const activeBoard = useAppSelector((state) => state.boards.activeBoard);
+  const user = useAppSelector((state) => state.user.firebaseUser);
   const dispatch = useAppDispatch();
   const { id } = useParams();
 
@@ -32,7 +33,7 @@ const Board = () => {
       const board = boardData.find((b) => b.id === id);
       if (board) dispatch({ type: SET_ACTIVE_BOARD, board });
     }
-  }, [boardData]);
+  }, [boardData, user]);
 
   useEffect(() => {
     if (activeTodo.id !== '0') {

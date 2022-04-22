@@ -18,6 +18,7 @@ type Props = {
 
 const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) => {
   const boards = useAppSelector((state) => state.boards);
+  const user = useAppSelector((state) => state.user.firebaseUser);
   const dispatch = useAppDispatch();
 
   return (
@@ -45,9 +46,19 @@ const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) 
             ))}
           </div>
           <div className="flex flex-col justify-between mt-2 mr-2">
-            <div className="avatar justify-end">
-              <div className="w-10 h-10 rounded-full">
-                <img src="https://avatars.githubusercontent.com/u/38084552?s=48&v=4" />
+            <div className="avatar placeholder justify-end">
+              <div className="w-10 h-10 rounded-full bg-blue-500">
+                {user !== null && (
+                  <>
+                    {user.photoURL === null || user.photoURL.length === 0 ? (
+                      <span className="text-xl text-white font-bold">
+                        {user.displayName.charAt(0)}
+                      </span>
+                    ) : (
+                      <img src={user.photoURL} />
+                    )}
+                  </>
+                )}
               </div>
             </div>
             <div>
