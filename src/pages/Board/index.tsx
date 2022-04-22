@@ -76,7 +76,7 @@ const Board = () => {
           <TodoDetail allStages={activeBoard.stages} todo={activeTodo} />
         )}
       </div>
-      <Modal>
+      <Modal id="delete-todo-modal">
         <DeleteTodo confirm={onConfirmDelete} title={activeTodo.title} />
       </Modal>
     </div>

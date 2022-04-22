@@ -12,6 +12,7 @@ import Modal from '../../components/Modals';
 import DeleteBoard from '../../components/Modals/DeleteBoard';
 import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
+import Profile from '../../components/Modals/Profile';
 
 const newBoard = {
   boardName: '',
@@ -51,26 +52,26 @@ const Dashboard = () => {
 
   return (
     <>
-      <div className="dropdown dropdown-end absolute right-4 top-4">
-        <label
-          tabIndex={0}
-          className="btn btn-circle avatar w-16 h-16 border-4 border-white bg-white">
-          <div className="rounded-full border-white">
-            <img src="https://api.lorem.space/image/face?hash=33791" />
-          </div>
-        </label>
-        <ul
-          tabIndex={0}
-          className="mt-1 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
-          <li>
-            <a>Profile</a>
-          </li>
-          <li>
-            <a onClick={signOut}>Logout</a>
-          </li>
-        </ul>
-      </div>
-      <div className="p-8 ">
+      <div className="p-8 flex flex-col items-center">
+        <div className="dropdown dropdown-end mb-8">
+          <label
+            tabIndex={0}
+            className="btn btn-circle avatar w-16 h-16 border-4 border-white bg-white">
+            <div className="rounded-full border-white">
+              <img src="https://api.lorem.space/image/face?hash=33791" />
+            </div>
+          </label>
+          <ul
+            tabIndex={0}
+            className="mt-1 mr-4 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
+            <li>
+              <label htmlFor="profile-modal">Profile</label>
+            </li>
+            <li>
+              <a onClick={signOut}>Logout</a>
+            </li>
+          </ul>
+        </div>
         <div className="lg:w-1/2 md:3/4 sm:w-4/5 flex flex-col mx-auto bg-gray-100 shadow-lg items-center rounded-lg">
           <div className="w-full relative justify-center bg-blue-500 p-1 rounded-t-lg">
             <p
@@ -104,14 +105,20 @@ const Dashboard = () => {
             ))}
           </div>
         </div>
+
         <BoardForm
           addNewBoard={onBoardAdd}
           onBoardUpdate={onBoardUpdate}
           selectedBoard={selectedBoard}
         />
-        <Modal>
+        <Modal id="delete-board-modal">
           <DeleteBoard board={selectedBoard} confirm={() => onBoardDelete(selectedBoard)} />
         </Modal>
+        {user.firebaseUser !== null && (
+          <Modal id="profile-modal">
+            <Profile />
+          </Modal>
+        )}
       </div>
     </>
   );

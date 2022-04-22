@@ -19,10 +19,13 @@ const DeleteTodo = ({ title, confirm }: Props) => {
         </p>
       </div>
       <div className="modal-action p-4">
-        <label htmlFor="modal" className="btn border-none bg-red-500">
+        <label htmlFor="delete-todo-modal" className="btn border-none bg-red-500">
           Cancel
         </label>
-        <label htmlFor="modal" className="btn border-none bg-green-500" onClick={confirm}>
+        <label
+          htmlFor="delete-todo-modal"
+          className="btn border-none bg-green-500"
+          onClick={confirm}>
           Confirm
         </label>
       </div>

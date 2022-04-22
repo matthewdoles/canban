@@ -19,6 +19,7 @@ export default function AuthProvider({ children }: Props) {
           user: {
             displayName: loggedInUser.displayName,
             email: loggedInUser.email,
+            photoURL: loggedInUser.photoURL,
             uid: loggedInUser.uid
           }
         });

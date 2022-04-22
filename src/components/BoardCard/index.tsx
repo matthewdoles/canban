@@ -52,7 +52,7 @@ const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) 
             </div>
             <div>
               <div className="tooltip" data-tip="Delete">
-                <label htmlFor="modal">
+                <label htmlFor="delete-board-modal">
                   <MdDelete
                     size={24}
                     className="mr-2 cursor-pointer text-red-500"

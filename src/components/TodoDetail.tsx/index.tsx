@@ -85,7 +85,7 @@ const TodoDetail = ({ allStages, todo }: Props) => {
           />
         </div>
         <div className="tooltip tooltip-bottom" data-tip="Delete">
-          <label htmlFor="modal">
+          <label htmlFor="delete-todo-modal">
             <MdDelete size={28} className="mx-2 cursor-pointer text-red-500" />
           </label>
         </div>

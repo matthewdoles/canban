@@ -2,12 +2,13 @@ import React from 'react';
 
 type Props = {
   children: React.ReactNode;
+  id: string;
 };
 
-const Modal = ({ children }: Props) => {
+const Modal = ({ children, id }: Props) => {
   return (
     <>
-      <input type="checkbox" id="modal" className="modal-toggle" />
+      <input type="checkbox" id={id} className="modal-toggle" />
       <div className="modal">
         <div className="modal-box p-0">{children}</div>
       </div>
