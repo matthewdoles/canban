@@ -42,7 +42,7 @@ const TodoCard = ({ color, disabled, clicked, dragging, dragStart, dragStop, tod
                   <>
                     {user.photoURL === null || user.photoURL.length === 0 ? (
                       <span className="text-xl text-white font-bold">
-                        {user.displayName.charAt(0)}
+                        {user.displayName ? user.displayName.charAt(0) : user.email.charAt(0)}
                       </span>
                     ) : (
                       <img src={user.photoURL} />

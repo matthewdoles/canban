@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { AiFillEye } from 'react-icons/ai';
-import { MdDelete, MdOutlineModeEditOutline } from 'react-icons/md';
+import { MdDelete, MdOutlineModeEditOutline, MdShare } from 'react-icons/md';
 import { BounceLoader } from 'react-spinners';
 
 import { BoardSettings } from '../../models/BoardSettings.model';
@@ -52,7 +52,7 @@ const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) 
                   <>
                     {user.photoURL === null || user.photoURL.length === 0 ? (
                       <span className="text-xl text-white font-bold">
-                        {user.displayName.charAt(0)}
+                        {user.displayName ? user.displayName.charAt(0) : user.email.charAt(0)}
                       </span>
                     ) : (
                       <img src={user.photoURL} />
@@ -76,6 +76,15 @@ const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) 
                   <MdOutlineModeEditOutline
                     size={24}
                     className="mx-2 cursor-pointer text-green-500"
+                    onClick={() => updateSelectedBoard(board)}
+                  />
+                </label>
+              </div>
+              <div className="tooltip" data-tip="Share">
+                <label htmlFor="share-form">
+                  <MdShare
+                    size={24}
+                    className="mx-2 cursor-pointer text-purple-500"
                     onClick={() => updateSelectedBoard(board)}
                   />
                 </label>

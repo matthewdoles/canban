@@ -22,3 +22,4 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 };
 
 export const boardsCol = createCollection<BoardSettings>('boards');
+export const userCol = createCollection<BoardSettings>('users');

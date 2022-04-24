@@ -146,7 +146,7 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
       <input type="checkbox" id="board-form" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box p-0 !min-w-[650px]">
-          <div className="w-full relative justify-center bg-blue-500 p-1 rounded-t-lg">
+          <div className="w-full relative justify-center bg-green-500 p-1 rounded-t-lg">
             <p className="text-2xl text-white text-center font-bold">
               {selectedBoard.id ? 'Edit Board' : 'New Board'}
             </p>

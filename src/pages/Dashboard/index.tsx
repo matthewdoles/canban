@@ -18,6 +18,7 @@ import DeleteBoard from '../../components/Modals/DeleteBoard';
 import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import Profile from '../../components/Modals/Profile';
+import SharingForm from '../../components/SharingForm';
 
 const newBoard = {
   boardName: '',
@@ -65,7 +66,7 @@ const Dashboard = () => {
                 <>
                   {user.photoURL === null || user.photoURL.length === 0 ? (
                     <span className="text-3xl text-white font-bold">
-                      {user.displayName.charAt(0)}
+                      {user.displayName ? user.displayName.charAt(0) : user.email.charAt(0)}
                     </span>
                   ) : (
                     <img src={user.photoURL} />
@@ -128,6 +129,7 @@ const Dashboard = () => {
           onBoardUpdate={onBoardUpdate}
           selectedBoard={selectedBoard}
         />
+        <SharingForm />
         <Modal id="delete-board-modal">
           <DeleteBoard board={selectedBoard} confirm={() => onBoardDelete(selectedBoard)} />
         </Modal>

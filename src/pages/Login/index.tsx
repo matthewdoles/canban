@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../firebase';
+import { auth, firestore } from '../../firebase';
 import { useAppSelector } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
+import { addDoc, collection } from 'firebase/firestore';
 
 function Login() {
   const [email, setEmail] = useState<string>('');
@@ -25,7 +26,20 @@ function Login() {
     try {
       if (isCreate) {
         if (email.length > 0 && password.length > 0) {
-          await createUserWithEmailAndPassword(auth, email, password);
+          createUserWithEmailAndPassword(auth, email, password)
+            .then(async (user) => {
+              await addDoc(collection(firestore, 'users'), {
+                email: user.user.email,
+                emailVerified: user.user.emailVerified,
+                creationTime: user.user.metadata.creationTime,
+                photoURL: user.user.photoURL,
+                uid: user.user.uid,
+                displayName: user.user.email
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
           setEmail('');
           setPassword('');
         }
