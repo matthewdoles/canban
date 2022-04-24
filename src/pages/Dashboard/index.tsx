@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { BounceLoader } from 'react-spinners';
 import { MdAdd } from 'react-icons/md';
 
-import { createBoard, deleteBoard, fetchBoards, updateBoard } from '../../store/reducers/boards';
+import {
+  createBoard,
+  deleteBoard,
+  fetchBoards,
+  updateBoardSettings
+} from '../../store/reducers/boards';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { BoardSettings } from '../../models/BoardSettings.model';
 import { Todo } from '../../models/Todo.model';
@@ -41,7 +46,7 @@ const Dashboard = () => {
 
   const onBoardAdd = async (board: BoardSettings) => dispatch(createBoard(board));
 
-  const onBoardUpdate = async (board: BoardSettings) => dispatch(updateBoard(board));
+  const onBoardUpdate = async (board: BoardSettings) => dispatch(updateBoardSettings(board));
 
   const onBoardDelete = async (board: BoardSettings) => dispatch(deleteBoard(board));
 
@@ -73,12 +78,12 @@ const Dashboard = () => {
             tabIndex={0}
             className="mt-1 mr-4 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
             <li>
-              <label htmlFor="profile-modal" className="text-xl">
+              <label htmlFor="profile-modal" className="text-xl active:bg-blue-500">
                 Profile
               </label>
             </li>
             <li>
-              <a onClick={signOut} className="text-xl">
+              <a onClick={signOut} className="text-xl active:bg-blue-500">
                 Logout
               </a>
             </li>
