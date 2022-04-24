@@ -1,8 +1,8 @@
+import { doc, updateDoc } from 'firebase/firestore';
 import { AnyAction } from 'redux';
-import { updateProfile } from 'firebase/auth';
-import { User } from 'firebase/auth';
+import { userCol } from '../../firebase';
+import { User } from '../../models/User.model';
 import { AppThunk } from '../configureReducer';
-import { auth } from '../../firebase';
 
 export const SET_USER = 'SET_USER';
 
@@ -26,20 +26,14 @@ export default function userReducer(state = initialState, action: AnyAction) {
   }
 }
 
-export function updateUser(updatedUser: object): AppThunk {
-  return async (dispatch, getState) => {
-    const { user } = getState();
-    if (auth.currentUser) {
-      updateProfile(auth.currentUser, {
-        ...updatedUser
-      }).then(
-        function () {
-          dispatch({ type: SET_USER, user: { ...user, ...updatedUser } });
-        },
-        function (error: string) {
-          console.log(error);
-        }
-      );
-    }
+export function updateUser(user: User): AppThunk {
+  return async (dispatch) => {
+    const userDocRef = doc(userCol, user.recordId);
+    updateDoc(userDocRef, {
+      displayName: user.displayName,
+      photoURL: user.photoURL
+    }).then(() => {
+      dispatch({ type: SET_USER, user });
+    });
   };
 }

@@ -16,7 +16,7 @@ const Profile = () => {
     '!outline-0 text-xl w-full my-2 border-x-transparent ' +
     'border-t-transparent rounded-none border-b-2 border-gray-200';
 
-  const onSaveClick = () => dispatch(updateUser({ displayName, photoURL }));
+  const onSaveClick = () => dispatch(updateUser({ ...user, displayName, photoURL }));
 
   const resetForm = () => {
     setDisplayName(user.displayName || user.email);

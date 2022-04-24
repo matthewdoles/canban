@@ -3,6 +3,7 @@ import { getFirestore, CollectionReference, collection, DocumentData } from 'fir
 import { getAuth } from 'firebase/auth';
 
 import { BoardSettings } from './models/BoardSettings.model';
+import { User } from './models/User.model';
 
 export const firebaseApp = initializeApp({
   apiKey: 'AIzaSyA1jeIw0sjswanLHTK3q1riIGBXuufXBlM',
@@ -22,4 +23,4 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 };
 
 export const boardsCol = createCollection<BoardSettings>('boards');
-export const userCol = createCollection<BoardSettings>('users');
+export const userCol = createCollection<User>('users');
