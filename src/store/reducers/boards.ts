@@ -15,6 +15,7 @@ import { AppThunk } from '../configureReducer';
 import { boardsCol, firestore } from '../../firebase';
 import { BoardSettings } from '../../models/BoardSettings.model';
 import { Todo } from '../../models/Todo.model';
+import { BoardSharing } from '../../models/BoardSharing.model';
 
 export const ACTION_START = 'ACTION_START';
 export const ADD_BOARD = 'ADD_BOARD';
@@ -36,6 +37,7 @@ const initialState: BoardState = {
   activeBoard: {
     boardName: '',
     id: '',
+    sharing: [],
     stages: [],
     todos: [],
     uid: ''
@@ -105,7 +107,9 @@ export function createBoard(board: BoardSettings): AppThunk {
     addDoc(collection(firestore, 'boards'), {
       boardName: board.boardName,
       stages: board.stages,
-      uid: user.firebaseUser.uid
+      uid: user.firebaseUser.uid,
+      todos: [],
+      sharing: []
     })
       .then((docRef) => {
         dispatch({ type: ADD_BOARD, board: { ...board, todos: [], id: docRef.id } });
@@ -152,7 +156,8 @@ export function fetchBoards(): AppThunk {
               stages: b.stages,
               id: boardDoc.id,
               uid: b.uid,
-              todos: b.todos
+              todos: b.todos,
+              sharing: b.sharing
             });
           });
           dispatch({ type: FETCH_BOARDS, boards: boardData });
@@ -206,6 +211,25 @@ export function updateBoardTodos(board: BoardSettings): AppThunk {
   };
 }
 
+export function updateBoardSharing(board: BoardSettings): AppThunk {
+  return async (dispatch) => {
+    dispatch({ type: ACTION_START, start: { loading: true, error: '' } });
+    const boardDocRef = doc(boardsCol, board.id);
+    updateDoc(boardDocRef, {
+      sharing: board.sharing
+    })
+      .then(() => {
+        dispatch({ type: UPDATE_BOARD, board });
+      })
+      .catch((err: FirebaseError) => {
+        dispatch({ type: SET_ERROR, error: err.message });
+      })
+      .finally(() => {
+        dispatch({ type: SET_IS_LOADING, loading: false });
+      });
+  };
+}
+
 export function createTodo(todo: Todo): AppThunk {
   return async (dispatch, getState) => {
     const { boards } = getState();
@@ -244,5 +268,22 @@ export function updateTodo(todo: Todo): AppThunk {
       ...updatedTodo
     };
     dispatch(updateBoardTodos(udpatedBoards[boardIndex]));
+  };
+}
+
+export function addSharing(share: BoardSharing, boardId: string): AppThunk {
+  return async (dispatch, getState) => {
+    const { boards } = getState();
+    const udpatedBoards = JSON.parse(JSON.stringify([...boards.boards]));
+    const boardIndex = udpatedBoards.findIndex((b: BoardSettings) => b.id === boardId);
+    if (
+      udpatedBoards[boardIndex].sharing.filter((s: BoardSharing) => s.uid !== share.uid).length ===
+      0
+    ) {
+      udpatedBoards[boardIndex].sharing.push(share);
+      dispatch(updateBoardSharing(udpatedBoards[boardIndex]));
+    } else {
+      dispatch({ type: SET_ERROR, error: 'User already has access.' });
+    }
   };
 }

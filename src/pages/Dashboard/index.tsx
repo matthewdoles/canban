@@ -129,7 +129,7 @@ const Dashboard = () => {
           onBoardUpdate={onBoardUpdate}
           selectedBoard={selectedBoard}
         />
-        <SharingForm />
+        <SharingForm selectedBoard={selectedBoard} />
         <Modal id="delete-board-modal">
           <DeleteBoard board={selectedBoard} confirm={() => onBoardDelete(selectedBoard)} />
         </Modal>
