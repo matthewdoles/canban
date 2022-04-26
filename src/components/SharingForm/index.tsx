@@ -28,7 +28,9 @@ const SharingForm = ({ selectedBoard }: Props) => {
           </div>
           <div className="flex flex-col w-full items-center p-4">
             <SharingSearch selectedBoard={selectedBoard} />
-            {selectedBoard.sharing && <SharingTable boardSharing={selectedBoard.sharing} />}
+            {selectedBoard.sharing && selectedBoard.id && (
+              <SharingTable boardSharing={selectedBoard.sharing} boardId={selectedBoard.id} />
+            )}
           </div>
           <div className="modal-action pb-4 pr-4">
             <label htmlFor="share-form" className="btn bg-red-500 w-20 border-none">

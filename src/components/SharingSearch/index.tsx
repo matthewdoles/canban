@@ -40,8 +40,11 @@ const SharingSearch = ({ selectedBoard }: Props) => {
   };
 
   const handleBoardSharing = () => {
-    if (selectedBoard.id && user !== null)
+    if (selectedBoard.id && user !== null) {
       dispatch(addSharing({ uid: user.uid, access: 'Read' }, selectedBoard.id));
+      setEmail('');
+      setUser(null);
+    }
   };
 
   return (

@@ -41,6 +41,12 @@ const Dashboard = () => {
     getBoards();
   }, [user]);
 
+  useEffect(() => {
+    if (selectedBoard.uid !== '') {
+      setSelectedBoard(boardData.activeBoard);
+    }
+  }, [boardData.activeBoard]);
+
   const getBoards = async () => {
     if (boardData.boards.length === 0) dispatch(fetchBoards());
   };

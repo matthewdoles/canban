@@ -287,3 +287,20 @@ export function addSharing(share: BoardSharing, boardId: string): AppThunk {
     }
   };
 }
+
+export function deleteSharing(uid: string, boardId: string): AppThunk {
+  return async (dispatch, getState) => {
+    const { boards } = getState();
+    const udpatedBoards = JSON.parse(JSON.stringify([...boards.boards]));
+    const boardIndex = udpatedBoards.findIndex((b: BoardSettings) => b.id === boardId);
+    if (udpatedBoards[boardIndex].sharing.filter((s: BoardSharing) => s.uid === uid).length === 1) {
+      const shareIndex = udpatedBoards[boardIndex].sharing.findIndex(
+        (s: BoardSharing) => s.uid === uid
+      );
+      udpatedBoards[boardIndex].sharing.splice(shareIndex, 1);
+      dispatch(updateBoardSharing(udpatedBoards[boardIndex]));
+    } else {
+      dispatch({ type: SET_ERROR, error: 'User already has access.' });
+    }
+  };
+}
