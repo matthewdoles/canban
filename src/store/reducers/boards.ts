@@ -277,7 +277,7 @@ export function addSharing(share: BoardSharing, boardId: string): AppThunk {
     const udpatedBoards = JSON.parse(JSON.stringify([...boards.boards]));
     const boardIndex = udpatedBoards.findIndex((b: BoardSettings) => b.id === boardId);
     if (
-      udpatedBoards[boardIndex].sharing.filter((s: BoardSharing) => s.uid !== share.uid).length ===
+      udpatedBoards[boardIndex].sharing.filter((s: BoardSharing) => s.uid === share.uid).length ===
       0
     ) {
       udpatedBoards[boardIndex].sharing.push(share);
