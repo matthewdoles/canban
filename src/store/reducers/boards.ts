@@ -15,7 +15,6 @@ import { AppThunk } from '../configureReducer';
 import { boardsCol, firestore } from '../../firebase';
 import { BoardSettings } from '../../models/BoardSettings.model';
 import { Todo } from '../../models/Todo.model';
-import { BoardSharing } from '../../models/BoardSharing.model';
 
 export const ACTION_START = 'ACTION_START';
 export const ADD_BOARD = 'ADD_BOARD';
@@ -271,16 +270,13 @@ export function updateTodo(todo: Todo): AppThunk {
   };
 }
 
-export function addSharing(share: BoardSharing, boardId: string): AppThunk {
+export function addSharing(uid: string, boardId: string): AppThunk {
   return async (dispatch, getState) => {
     const { boards } = getState();
     const udpatedBoards = JSON.parse(JSON.stringify([...boards.boards]));
     const boardIndex = udpatedBoards.findIndex((b: BoardSettings) => b.id === boardId);
-    if (
-      udpatedBoards[boardIndex].sharing.filter((s: BoardSharing) => s.uid === share.uid).length ===
-      0
-    ) {
-      udpatedBoards[boardIndex].sharing.push(share);
+    if (udpatedBoards[boardIndex].sharing.filter((userId: string) => userId === uid).length === 0) {
+      udpatedBoards[boardIndex].sharing.push(uid);
       dispatch(updateBoardSharing(udpatedBoards[boardIndex]));
     } else {
       dispatch({ type: SET_ERROR, error: 'User already has access.' });
@@ -293,9 +289,9 @@ export function deleteSharing(uid: string, boardId: string): AppThunk {
     const { boards } = getState();
     const udpatedBoards = JSON.parse(JSON.stringify([...boards.boards]));
     const boardIndex = udpatedBoards.findIndex((b: BoardSettings) => b.id === boardId);
-    if (udpatedBoards[boardIndex].sharing.filter((s: BoardSharing) => s.uid === uid).length === 1) {
+    if (udpatedBoards[boardIndex].sharing.filter((userId: string) => userId === uid).length === 1) {
       const shareIndex = udpatedBoards[boardIndex].sharing.findIndex(
-        (s: BoardSharing) => s.uid === uid
+        (userId: string) => userId === uid
       );
       udpatedBoards[boardIndex].sharing.splice(shareIndex, 1);
       dispatch(updateBoardSharing(udpatedBoards[boardIndex]));

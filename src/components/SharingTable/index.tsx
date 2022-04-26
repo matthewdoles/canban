@@ -1,11 +1,10 @@
 import React from 'react';
 import { MdDelete } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { BoardSharing } from '../../models/BoardSharing.model';
 import { deleteSharing } from '../../store/reducers/boards';
 
 type Props = {
-  boardSharing: BoardSharing[];
+  boardSharing: string[];
   boardId: string;
 };
 
@@ -27,15 +26,14 @@ const SharingTable = ({ boardSharing, boardId }: Props) => {
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th className="text-center">Access</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
-                {boardSharing.map((share) => {
-                  const u = allUsers.find((u) => u.uid === share.uid);
+                {boardSharing.map((uid: string) => {
+                  const u = allUsers.find((u) => u.uid === uid);
                   if (u) {
-                    if (u.uid === share.uid) {
+                    if (u.uid === uid) {
                       return (
                         <tr key={u.recordId}>
                           <td className="w-1/2">
@@ -57,13 +55,12 @@ const SharingTable = ({ boardSharing, boardId }: Props) => {
                               </div>
                             </div>
                           </td>
-                          <td className="w-1/4 text-center">{share.access}</td>
                           <th className="w-1/4">
                             <div className="flex justify-center space-x-3">
                               <MdDelete
                                 size={32}
                                 className="cursor-pointer text-red-500"
-                                onClick={() => handleDeleteShare(share.uid)}
+                                onClick={() => handleDeleteShare(uid)}
                               />
                             </div>
                           </th>

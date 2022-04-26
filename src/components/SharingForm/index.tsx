@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { BoardSettings } from '../../models/BoardSettings.model';
-import { BoardSharing } from '../../models/BoardSharing.model';
 import { getUsers } from '../../store/reducers/user';
 import SharingSearch from '../SharingSearch';
 import SharingTable from '../SharingTable';
@@ -14,8 +13,7 @@ const SharingForm = ({ selectedBoard }: Props) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (selectedBoard.sharing)
-      dispatch(getUsers(selectedBoard.sharing.map((s: BoardSharing) => s.uid)));
+    if (selectedBoard.sharing) dispatch(getUsers(selectedBoard.sharing));
   }, [selectedBoard]);
 
   return (

@@ -41,7 +41,7 @@ const SharingSearch = ({ selectedBoard }: Props) => {
 
   const handleBoardSharing = () => {
     if (selectedBoard.id && user !== null) {
-      dispatch(addSharing({ uid: user.uid, access: 'Read' }, selectedBoard.id));
+      dispatch(addSharing(user.uid, selectedBoard.id));
       setEmail('');
       setUser(null);
     }
@@ -81,10 +81,6 @@ const SharingSearch = ({ selectedBoard }: Props) => {
             </div>
           </div>
           <div className="flex flex-row items-center">
-            <select className={`select w-48 ${inputStyles}`}>
-              <option>Read</option>
-              <option>Read/Write</option>
-            </select>
             <button className="btn bg-green-500 w-20 border-none" onClick={handleBoardSharing}>
               Add
             </button>
