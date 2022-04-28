@@ -6,6 +6,7 @@ import {
   createBoard,
   deleteBoard,
   fetchBoards,
+  RESET_BOARDS,
   updateBoardSettings
 } from '../../store/reducers/boards';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -19,6 +20,7 @@ import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import Profile from '../../components/Modals/Profile';
 import SharingForm from '../../components/SharingForm';
+import { SET_USER } from '../../store/reducers/user';
 
 const newBoard = {
   boardName: '',
@@ -59,6 +61,8 @@ const Dashboard = () => {
 
   const signOut = async () => {
     await auth.signOut();
+    dispatch({ type: RESET_BOARDS });
+    dispatch({ type: SET_USER, user: null });
     navigation('/');
   };
 

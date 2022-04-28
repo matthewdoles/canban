@@ -23,6 +23,7 @@ export const FETCH_BOARDS = 'FETCH_BOARDS';
 export const SET_ACTIVE_BOARD = 'SET_ACTIVE_BOARD';
 export const SET_ERROR = 'SET_ERROR';
 export const SET_IS_LOADING = 'SET_IS_LOADING';
+export const RESET_BOARDS = 'RESET_BOARDS';
 export const UPDATE_BOARD = 'UPDATE_BOARD';
 
 type BoardState = {
@@ -74,6 +75,8 @@ export default function boardReducer(state = initialState, action: AnyAction) {
         ...state,
         activeBoard: action.board
       };
+    case RESET_BOARDS:
+      return initialState;
     case SET_ERROR:
       return {
         ...state,
