@@ -66,13 +66,12 @@ const Column = ({
       </div>
       <div className="min-h-[600px]">
         {todos.map((todo) => (
-          <>
+          <div key={todo.id}>
             {(activeTodo.id === '0' ||
               activeTodo.id === todo.id ||
               activeTodo.stage === stage ||
               !isDragging) && (
               <TodoCard
-                key={todo.title}
                 todo={todo}
                 clicked={(todo: Todo) => updateActiveDrag(todo)}
                 dragging={(_e: DraggableEvent, position: DraggableData) => {
@@ -124,7 +123,7 @@ const Column = ({
                 disabled={false}
               />
             )}
-          </>
+          </div>
         ))}
       </div>
       {createFormOpen && (

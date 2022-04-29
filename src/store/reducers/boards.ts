@@ -58,7 +58,9 @@ export default function boardReducer(state = initialState, action: AnyAction) {
     case ADD_BOARD:
       return {
         ...state,
-        boards: [...state.boards, action.board]
+        boards: [...state.boards, action.board].sort((a, b) =>
+          a.boardName.localeCompare(b.boardName)
+        )
       };
     case DELETE_BOARD:
       return {
@@ -68,7 +70,7 @@ export default function boardReducer(state = initialState, action: AnyAction) {
     case FETCH_BOARDS:
       return {
         ...state,
-        boards: [...action.boards]
+        boards: [...action.boards].sort((a, b) => a.boardName.localeCompare(b.boardName))
       };
     case SET_ACTIVE_BOARD:
       return {
@@ -93,7 +95,7 @@ export default function boardReducer(state = initialState, action: AnyAction) {
         boards: [
           ...state.boards.filter((b) => b.id !== action.board.id),
           { ...state.boards.find((b) => b.id === action.board.id), ...action.board }
-        ],
+        ].sort((a, b) => a.boardName.localeCompare(b.boardName)),
         activeBoard: action.board
       };
     }
