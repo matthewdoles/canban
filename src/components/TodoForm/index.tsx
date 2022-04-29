@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { useAppSelector } from '../../hooks';
 
 import { Stage } from '../../models/Stage.model';
 import { Todo } from '../../models/Todo.model';
@@ -17,6 +18,7 @@ const TodoForm = ({ addNewTodo, allStages, autoPopStage, boardId }: Props) => {
   const [stages] = useState<Stage[]>(allStages);
   const [description, setDescription] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const user = useAppSelector((state) => state.user.firebaseUser);
 
   const inputStyles =
     '!outline-0 text-xl w-full max-w-sm my-4 border-x-transparent ' +
@@ -30,7 +32,9 @@ const TodoForm = ({ addNewTodo, allStages, autoPopStage, boardId }: Props) => {
       stage: selectedStage,
       boardId,
       comments: [],
-      id: uuidv4()
+      id: uuidv4(),
+      due: Date.now(),
+      assignee: user.uid
     });
   };
 

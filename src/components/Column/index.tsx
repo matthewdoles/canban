@@ -111,7 +111,9 @@ const Column = ({
                       description: '',
                       comments: [],
                       title: '',
-                      boardId: ''
+                      boardId: '',
+                      due: Date.now(),
+                      assignee: ''
                     });
                     updateIsDragging(false);
                   } catch (err) {

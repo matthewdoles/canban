@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MdDelete, MdOutlineModeEditOutline } from 'react-icons/md';
+import Moment from 'react-moment';
 import { useAppDispatch } from '../../hooks';
 import { Stage } from '../../models/Stage.model';
 import { Todo } from '../../models/Todo.model';
@@ -114,6 +115,12 @@ const TodoDetail = ({ allStages, todo }: Props) => {
         ) : (
           <p className="text-xl">{description}</p>
         )}
+      </div>
+      <div className="m-4">
+        <p className="font-bold">Due</p>
+        <Moment className="text-xl" format="MM/DD/YY, h:mm a">
+          {todo.due}
+        </Moment>
       </div>
       <div className="m-4">
         <p className="font-bold">Stage</p>

@@ -4,5 +4,8 @@ export const initTodo = {
   id: '0',
   stage: 'None',
   description: '',
-  title: ''
+  title: '',
+  created: Date.now(),
+  due: Date.now(),
+  assignee: ''
 };

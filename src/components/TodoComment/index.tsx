@@ -1,4 +1,5 @@
 import React from 'react';
+import Moment from 'react-moment';
 
 type Props = {
   author: string;
@@ -22,7 +23,7 @@ const TodoComment = ({ author, comment, date, profilePic }: Props) => {
       <div className="flex flex-col mx-4">
         <div className="flex flex-row">
           <p className="font-bold mr-4">{author}</p>
-          <p className="text-gray-400">{date}</p>
+          <Moment format="MM/DD/YY, h:mm a">{date}</Moment>
         </div>
         <p>{comment}</p>
       </div>

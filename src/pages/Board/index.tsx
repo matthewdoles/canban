@@ -17,7 +17,9 @@ const Board = () => {
     id: '0',
     stage: 'None',
     description: '',
-    title: ''
+    title: '',
+    due: Date.now(),
+    assignee: ''
   });
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [activeHoverColumn, setActiveHoverColumn] = useState<number>(0);
