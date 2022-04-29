@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Stage } from '../../models/Stage.model';
 import { Todo } from '../../models/Todo.model';
@@ -28,7 +29,8 @@ const TodoForm = ({ addNewTodo, allStages, autoPopStage, boardId }: Props) => {
       description: description,
       stage: selectedStage,
       boardId,
-      comments: []
+      comments: [],
+      id: uuidv4()
     });
   };
 

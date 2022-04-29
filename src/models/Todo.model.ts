@@ -5,6 +5,6 @@ export type Todo = {
   comments: Comment[];
   description: string;
   stage: string;
-  id?: string;
+  id: string;
   title: string;
 };
