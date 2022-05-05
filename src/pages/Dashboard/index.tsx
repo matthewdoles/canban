@@ -120,7 +120,9 @@ const Dashboard = () => {
                 <BounceLoader size={75} color="#3B82F6 " />
               </div>
             )}
-            {boardData.error.length > 0 && <p>{boardData.error}</p>}
+            {boardData.error.length > 0 && (
+              <p className="text-red-500 text-center font-bold">{boardData.error}</p>
+            )}
             {boardData.boards.map((board) => (
               <div key={board.id} className="m-4">
                 <BoardCard

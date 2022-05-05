@@ -123,7 +123,7 @@ const TodoDetail = ({ allStages, todo }: Props) => {
         )}
       </div>
       <div className="m-4">
-        <p className="font-bold">Due</p>
+        <p className="font-bold">Created</p>
         <Moment className="text-xl" format="MM/DD/YY, h:mm a">
           {todo.created}
         </Moment>

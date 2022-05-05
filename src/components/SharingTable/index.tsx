@@ -1,5 +1,6 @@
 import React from 'react';
 import { MdDelete } from 'react-icons/md';
+import { BounceLoader } from 'react-spinners';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { deleteSharing } from '../../store/reducers/boards';
 
@@ -10,6 +11,7 @@ type Props = {
 
 const SharingTable = ({ boardSharing, boardId }: Props) => {
   const allUsers = useAppSelector((state) => state.user.allUsers);
+  const loading = useAppSelector((state) => state.boards.loading);
   const dispatch = useAppDispatch();
 
   const handleDeleteShare = (uid: string) => {
@@ -57,11 +59,14 @@ const SharingTable = ({ boardSharing, boardId }: Props) => {
                           </td>
                           <th className="w-1/4">
                             <div className="flex justify-center space-x-3">
-                              <MdDelete
-                                size={32}
-                                className="cursor-pointer text-red-500"
-                                onClick={() => handleDeleteShare(uid)}
-                              />
+                              {loading && <BounceLoader size={24} color="#3B82F6 " />}
+                              {!loading && (
+                                <MdDelete
+                                  size={32}
+                                  className="cursor-pointer text-red-500"
+                                  onClick={() => handleDeleteShare(uid)}
+                                />
+                              )}
                             </div>
                           </th>
                         </tr>

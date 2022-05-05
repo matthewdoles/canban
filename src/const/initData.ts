@@ -6,6 +6,5 @@ export const initTodo = {
   description: '',
   title: '',
   created: Date.now(),
-  due: Date.now(),
   assignee: ''
 };

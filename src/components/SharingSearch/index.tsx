@@ -1,10 +1,11 @@
 import { collection, getDocs, limit, query, where } from 'firebase/firestore';
 import React, { useState } from 'react';
+import { BounceLoader } from 'react-spinners';
 import { firestore } from '../../firebase';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { BoardSettings } from '../../models/BoardSettings.model';
 import { User } from '../../models/User.model';
-import { addSharing } from '../../store/reducers/boards';
+import { addSharing, SET_ERROR } from '../../store/reducers/boards';
 
 type Props = {
   selectedBoard: BoardSettings;
@@ -13,6 +14,9 @@ type Props = {
 const SharingSearch = ({ selectedBoard }: Props) => {
   const [email, setEmail] = useState<string>('');
   const [user, setUser] = useState<User | null>(null);
+  const [noUser, setNoUser] = useState(false);
+  const loading = useAppSelector((state) => state.boards.loading);
+  const viewingUser = useAppSelector((state) => state.user.firebaseUser);
   const dispatch = useAppDispatch();
 
   const inputStyles =
@@ -22,6 +26,7 @@ const SharingSearch = ({ selectedBoard }: Props) => {
   const searchForUser = () => {
     const q = query(collection(firestore, 'users'), where('email', '==', email), limit(1));
     getDocs(q).then((userDocs) => {
+      setNoUser(true);
       userDocs.forEach((userDoc) => {
         const user = { ...userDoc.data() };
         if (userDoc.exists()) {
@@ -34,6 +39,9 @@ const SharingSearch = ({ selectedBoard }: Props) => {
             uid: user.uid,
             displayName: user.displayName
           });
+          setNoUser(false);
+        } else {
+          setNoUser(true);
         }
       });
     });
@@ -41,9 +49,13 @@ const SharingSearch = ({ selectedBoard }: Props) => {
 
   const handleBoardSharing = () => {
     if (selectedBoard.id && user !== null) {
-      dispatch(addSharing(user.uid, selectedBoard.id));
-      setEmail('');
-      setUser(null);
+      if (viewingUser.uid === user.uid) {
+        dispatch({ type: SET_ERROR, error: 'Cannot add yourself.' });
+      } else {
+        dispatch(addSharing(user.uid, selectedBoard.id));
+        setEmail('');
+        setUser(null);
+      }
     }
   };
 
@@ -61,6 +73,7 @@ const SharingSearch = ({ selectedBoard }: Props) => {
           Search
         </button>
       </div>
+      {noUser && <p className="text-red-500 font-bold">No user found with that email.</p>}
       {user !== null && (
         <div className="flex flex-row items-center w-full justify-evenly my-4">
           <div className="flex flex-row items-center">
@@ -81,9 +94,12 @@ const SharingSearch = ({ selectedBoard }: Props) => {
             </div>
           </div>
           <div className="flex flex-row items-center">
-            <button className="btn bg-green-500 w-20 border-none" onClick={handleBoardSharing}>
-              Add
-            </button>
+            {loading && <BounceLoader size={24} color="#3B82F6 " />}
+            {!loading && (
+              <button className="btn bg-green-500 w-20 border-none" onClick={handleBoardSharing}>
+                Add
+              </button>
+            )}
           </div>
         </div>
       )}
