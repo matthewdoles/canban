@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { AiFillEye } from 'react-icons/ai';
-import { MdDelete, MdOutlineModeEditOutline, MdShare } from 'react-icons/md';
+import { MdDelete, MdShare } from 'react-icons/md';
 import { BounceLoader } from 'react-spinners';
 
 import { BoardSettings } from '../../models/BoardSettings.model';
@@ -67,15 +67,6 @@ const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) 
                   <MdDelete
                     size={24}
                     className="mr-2 cursor-pointer text-red-500"
-                    onClick={() => updateSelectedBoard(board)}
-                  />
-                </label>
-              </div>
-              <div className="tooltip" data-tip="Edit">
-                <label htmlFor="board-form">
-                  <MdOutlineModeEditOutline
-                    size={24}
-                    className="mx-2 cursor-pointer text-green-500"
                     onClick={() => updateSelectedBoard(board)}
                   />
                 </label>

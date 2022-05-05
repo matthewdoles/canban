@@ -210,6 +210,9 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
                 </div>
               </div>
             ))}
+            <p className="text-center mt-4">
+              Please be mindful that at this time stage settings cannot be altered after creation.
+            </p>
             {error.length > 0 && (
               <div className="mt-4">
                 <p className="text-xl text-red-500 font-bold">{error}</p>

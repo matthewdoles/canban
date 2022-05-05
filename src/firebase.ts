@@ -22,5 +22,6 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
   return collection(firestore, collectionName) as CollectionReference<T>;
 };
 
+export const archiveCol = createCollection<BoardSettings>('archive');
 export const boardsCol = createCollection<BoardSettings>('boards');
 export const userCol = createCollection<User>('users');

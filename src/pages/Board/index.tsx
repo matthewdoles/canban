@@ -8,7 +8,14 @@ import { initTodo } from '../../const/initData';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { Stage } from '../../models/Stage.model';
 import { Todo } from '../../models/Todo.model';
-import { deleteTodo, fetchBoards, SET_ACTIVE_BOARD, updateTodo } from '../../store/reducers/boards';
+import {
+  archiveTodo,
+  deleteTodo,
+  fetchArchivedTodos,
+  fetchBoards,
+  SET_ACTIVE_BOARD,
+  updateTodo
+} from '../../store/reducers/boards';
 
 const Board = () => {
   const [activeTodo, setActiveTodo] = useState<Todo>({
@@ -23,6 +30,7 @@ const Board = () => {
   });
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [activeHoverColumn, setActiveHoverColumn] = useState<number>(0);
+  const [showDetail, setShowDetail] = useState<boolean>(false);
   const boardData = useAppSelector((state) => state.boards.boards);
   const activeBoard = useAppSelector((state) => state.boards.activeBoard);
   const user = useAppSelector((state) => state.user.firebaseUser);
@@ -33,7 +41,10 @@ const Board = () => {
     if (boardData.length === 0) dispatch(fetchBoards());
     else {
       const board = boardData.find((b) => b.id === id);
-      if (board) dispatch({ type: SET_ACTIVE_BOARD, board });
+      if (board) {
+        dispatch({ type: SET_ACTIVE_BOARD, board });
+        dispatch(fetchArchivedTodos(board.id));
+      }
     }
   }, [boardData, user]);
 
@@ -46,11 +57,18 @@ const Board = () => {
   const onConfirmDelete = async () => {
     dispatch(deleteTodo(activeTodo));
     setActiveTodo(initTodo);
+    setShowDetail(false);
+  };
+
+  const handleArchive = async () => {
+    dispatch(archiveTodo(activeTodo));
+    setActiveTodo(initTodo);
+    setShowDetail(false);
   };
 
   return (
     <div className="drawer drawer-end">
-      <input id="todo-detail-drawer" type="checkbox" className="drawer-toggle" />
+      <input type="checkbox" checked={showDetail} className="drawer-toggle" />
       <div className="drawer-content p-8">
         <div className="flex flex-row w-full">
           {activeBoard?.stages.map((stage: Stage) => (
@@ -65,7 +83,10 @@ const Board = () => {
               stage={stage.title}
               stageNumber={stage.stageOrder}
               todos={activeBoard.todos.filter((todo: Todo) => todo.stage === stage.title)}
-              updateActiveDrag={(todo: Todo) => setActiveTodo(todo)}
+              updateActiveDrag={(todo: Todo) => {
+                setActiveTodo(todo);
+                setShowDetail(true);
+              }}
               updateActiveHoverColumn={(column: number) => setActiveHoverColumn(column)}
               updateIsDragging={(dragging: boolean) => setIsDragging(dragging)}
               updateBoardTodos={(updatedTodo: Todo) => dispatch(updateTodo(updatedTodo))}
@@ -74,9 +95,9 @@ const Board = () => {
         </div>
       </div>
       <div className="drawer-side">
-        <label htmlFor="todo-detail-drawer" className="drawer-overlay"></label>
+        <div className="drawer-overlay" onClick={() => setShowDetail(false)}></div>
         {activeBoard && activeTodo.id !== '0' && (
-          <TodoDetail allStages={activeBoard.stages} todo={activeTodo} />
+          <TodoDetail allStages={activeBoard.stages} todo={activeTodo} onArchive={handleArchive} />
         )}
       </div>
       <Modal id="delete-todo-modal">

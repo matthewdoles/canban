@@ -12,22 +12,26 @@ import {
 } from 'firebase/firestore';
 
 import { AppThunk } from '../configureReducer';
-import { boardsCol, firestore } from '../../firebase';
+import { archiveCol, boardsCol, firestore } from '../../firebase';
 import { BoardSettings } from '../../models/BoardSettings.model';
 import { Todo } from '../../models/Todo.model';
+import { Archive } from '../../models/Archive.model';
 
 export const ACTION_START = 'ACTION_START';
 export const ADD_BOARD = 'ADD_BOARD';
 export const DELETE_BOARD = 'DELETE_BOARD';
+export const FETCH_ARCHIVE = 'FETCH_ARCHIVE';
 export const FETCH_BOARDS = 'FETCH_BOARDS';
 export const SET_ACTIVE_BOARD = 'SET_ACTIVE_BOARD';
 export const SET_ERROR = 'SET_ERROR';
 export const SET_IS_LOADING = 'SET_IS_LOADING';
 export const RESET_BOARDS = 'RESET_BOARDS';
+export const UPDATE_ARCHIVE = 'UPDATE_ARCHIVE';
 export const UPDATE_BOARD = 'UPDATE_BOARD';
 
 type BoardState = {
   activeBoard: BoardSettings;
+  activeBoardArchive: Archive[];
   boards: BoardSettings[];
   loading: boolean;
   error: string;
@@ -42,6 +46,7 @@ const initialState: BoardState = {
     todos: [],
     uid: ''
   },
+  activeBoardArchive: [],
   boards: [],
   loading: false,
   error: ''
@@ -67,6 +72,11 @@ export default function boardReducer(state = initialState, action: AnyAction) {
         ...state,
         boards: [...state.boards.filter((b) => b.id !== action.boardId)]
       };
+    case FETCH_ARCHIVE:
+      return {
+        ...state,
+        activeBoardArchive: [...action.archive]
+      };
     case FETCH_BOARDS:
       return {
         ...state,
@@ -89,6 +99,15 @@ export default function boardReducer(state = initialState, action: AnyAction) {
         ...state,
         loading: action.loading
       };
+    case UPDATE_ARCHIVE: {
+      return {
+        ...state,
+        activeBoardArchive: [
+          ...state.activeBoardArchive.filter((a) => a.id !== action.archive.id),
+          { ...state.activeBoardArchive.find((a) => a.id === action.archive.id), ...action.archive }
+        ]
+      };
+    }
     case UPDATE_BOARD: {
       return {
         ...state,
@@ -165,6 +184,35 @@ export function fetchBoards(): AppThunk {
             });
           });
           dispatch({ type: FETCH_BOARDS, boards: boardData });
+        })
+        .catch((err: FirebaseError) => {
+          dispatch({ type: SET_ERROR, error: err.message });
+        })
+        .finally(() => {
+          dispatch({ type: SET_IS_LOADING, loading: false });
+        });
+    }
+  };
+}
+
+export function fetchArchivedTodos(boardId: string): AppThunk {
+  return async (dispatch, getState) => {
+    const { user } = getState();
+    if (user.firebaseUser) {
+      dispatch({ type: ACTION_START, start: { loading: true, error: '' } });
+      const q = query(collection(firestore, 'archive'), where('boardId', '==', boardId));
+      getDocs(q)
+        .then((archiveDocs) => {
+          const archives: Archive[] = [];
+          archiveDocs.forEach((archiveDoc) => {
+            const a = archiveDoc.data();
+            archives.push({
+              id: archiveDoc.id,
+              boardId: a.boardId,
+              todos: a.todos
+            });
+          });
+          dispatch({ type: FETCH_ARCHIVE, archive: archives });
         })
         .catch((err: FirebaseError) => {
           dispatch({ type: SET_ERROR, error: err.message });
@@ -301,7 +349,62 @@ export function deleteSharing(uid: string, boardId: string): AppThunk {
       udpatedBoards[boardIndex].sharing.splice(shareIndex, 1);
       dispatch(updateBoardSharing(udpatedBoards[boardIndex]));
     } else {
-      dispatch({ type: SET_ERROR, error: 'User already has access.' });
+      dispatch({ type: SET_ERROR, error: 'Trouble removing user access.' });
     }
+  };
+}
+
+export function archiveTodo(todo: Todo): AppThunk {
+  return async (dispatch, getState) => {
+    const { boards } = getState();
+    if (boards.activeBoardArchive.length > 0) {
+      const updatedArchive = JSON.parse(JSON.stringify([...boards.activeBoardArchive]));
+      const arhciveIndex = updatedArchive.findIndex((a: Archive) => a.boardId === todo.boardId);
+      if (updatedArchive[arhciveIndex].todos.length < 100) {
+        updatedArchive[arhciveIndex].todos.push(todo);
+        dispatch({ type: ACTION_START, start: { loading: true, error: '' } });
+        const archiveDocRef = doc(archiveCol, updatedArchive[arhciveIndex].id);
+        updateDoc(archiveDocRef, {
+          todos: updatedArchive[arhciveIndex].todos
+        })
+          .then(() => {
+            dispatch({ type: UPDATE_ARCHIVE, archive: updatedArchive[arhciveIndex] });
+            dispatch(deleteTodo(todo));
+          })
+          .catch((err: FirebaseError) => {
+            dispatch({ type: SET_ERROR, error: err.message });
+          })
+          .finally(() => {
+            dispatch({ type: SET_IS_LOADING, loading: false });
+          });
+      } else {
+        dispatch(createArchive(todo));
+      }
+    } else {
+      dispatch(createArchive(todo));
+    }
+  };
+}
+
+function createArchive(todo: Todo): AppThunk {
+  return async (dispatch) => {
+    dispatch({ type: ACTION_START, start: { loading: true, error: '' } });
+    addDoc(collection(firestore, 'archive'), {
+      boardId: todo.boardId,
+      todos: [todo]
+    })
+      .then((docRef) => {
+        dispatch({
+          type: UPDATE_ARCHIVE,
+          board: { boardId: todo.boardId, todos: [todo], id: docRef.id }
+        });
+        dispatch(deleteTodo(todo));
+      })
+      .catch((err: FirebaseError) => {
+        dispatch({ type: SET_ERROR, error: err.message });
+      })
+      .finally(() => {
+        dispatch({ type: SET_IS_LOADING, loading: false });
+      });
   };
 }

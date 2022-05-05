@@ -11,9 +11,10 @@ import TodoComment from '../TodoComment';
 type Props = {
   allStages: Stage[];
   todo: Todo;
+  onArchive: () => void;
 };
 
-const TodoDetail = ({ allStages, todo }: Props) => {
+const TodoDetail = ({ allStages, todo, onArchive }: Props) => {
   const [todoStageNumber, setTodoStageNumber] = useState<number>(0);
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
@@ -87,12 +88,16 @@ const TodoDetail = ({ allStages, todo }: Props) => {
           />
         </div>
         <div className="tooltip tooltip-bottom" data-tip="Archive">
-          <label htmlFor="delete-todo-modal">
-            <BsArchiveFill size={20} className="mx-2 mb-1 cursor-pointer text-purple-500" />
+          <label>
+            <BsArchiveFill
+              size={20}
+              className="mx-2 mb-1 cursor-pointer text-purple-500"
+              onClick={onArchive}
+            />
           </label>
         </div>
         <div className="tooltip tooltip-bottom" data-tip="Delete">
-          <label htmlFor="archive-todo-modal">
+          <label htmlFor="delete-todo-modal">
             <MdDelete size={28} className="mx-2 cursor-pointer text-red-500" />
           </label>
         </div>
