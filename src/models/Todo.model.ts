@@ -4,7 +4,7 @@ export type Todo = {
   assignee: string;
   boardId: string;
   comments: Comment[];
-  due: number;
+  created: number;
   description: string;
   stage: string;
   id: string;

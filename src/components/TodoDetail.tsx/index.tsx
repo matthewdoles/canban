@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { BsArchiveFill } from 'react-icons/bs';
 import { MdDelete, MdOutlineModeEditOutline } from 'react-icons/md';
 import Moment from 'react-moment';
 import { useAppDispatch } from '../../hooks';
@@ -85,8 +86,13 @@ const TodoDetail = ({ allStages, todo }: Props) => {
             onClick={() => setEditMode(!editMode)}
           />
         </div>
-        <div className="tooltip tooltip-bottom" data-tip="Delete">
+        <div className="tooltip tooltip-bottom" data-tip="Archive">
           <label htmlFor="delete-todo-modal">
+            <BsArchiveFill size={20} className="mx-2 mb-1 cursor-pointer text-purple-500" />
+          </label>
+        </div>
+        <div className="tooltip tooltip-bottom" data-tip="Delete">
+          <label htmlFor="archive-todo-modal">
             <MdDelete size={28} className="mx-2 cursor-pointer text-red-500" />
           </label>
         </div>
@@ -119,7 +125,7 @@ const TodoDetail = ({ allStages, todo }: Props) => {
       <div className="m-4">
         <p className="font-bold">Due</p>
         <Moment className="text-xl" format="MM/DD/YY, h:mm a">
-          {todo.due}
+          {todo.created}
         </Moment>
       </div>
       <div className="m-4">

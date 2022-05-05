@@ -33,7 +33,7 @@ const TodoForm = ({ addNewTodo, allStages, autoPopStage, boardId }: Props) => {
       boardId,
       comments: [],
       id: uuidv4(),
-      due: Date.now(),
+      created: Date.now(),
       assignee: user.uid
     });
   };

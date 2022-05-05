@@ -18,7 +18,7 @@ const Board = () => {
     stage: 'None',
     description: '',
     title: '',
-    due: Date.now(),
+    created: Date.now(),
     assignee: ''
   });
   const [isDragging, setIsDragging] = useState<boolean>(false);

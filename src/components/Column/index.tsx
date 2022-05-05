@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { DraggableData, DraggableEvent } from 'react-draggable';
 import { MdAdd } from 'react-icons/md';
+import { BsArchiveFill } from 'react-icons/bs';
 
 import { Todo } from '../../models/Todo.model';
 import { Stage } from '../../models/Stage.model';
@@ -58,6 +59,12 @@ const Column = ({
           {stage}
         </p>
         <label
+          className="absolute right-14 top-3 text-3xl text-white font-bold cursor-pointer"
+          htmlFor={`archive-${stage}`}
+          onClick={() => setCreateFormOpen(true)}>
+          <BsArchiveFill size={20} />
+        </label>
+        <label
           className="absolute right-3 top-2 text-3xl text-white font-bold cursor-pointer"
           htmlFor={`todo-form-${stage}`}
           onClick={() => setCreateFormOpen(true)}>
@@ -111,7 +118,7 @@ const Column = ({
                       comments: [],
                       title: '',
                       boardId: '',
-                      due: Date.now(),
+                      created: Date.now(),
                       assignee: ''
                     });
                     updateIsDragging(false);
