@@ -45,7 +45,28 @@ function Login() {
             setPassword('');
           })
           .catch((err: FirebaseError) => {
-            dispatch({ type: SET_USER_ERROR, error: err.message });
+            console.log(err);
+            if (
+              err.message ===
+              'Firebase: Password should be at least 6 characters (auth/weak-password).'
+            ) {
+              dispatch({
+                type: SET_USER_ERROR,
+                error: 'Password must be at least six characters long.'
+              });
+            } else if (err.message === 'Firebase: Error (auth/invalid-email).') {
+              dispatch({ type: SET_USER_ERROR, error: 'Please enter a valid email to sign up.' });
+            } else if (err.message === 'Firebase: Error (auth/email-already-in-use).') {
+              dispatch({
+                type: SET_USER_ERROR,
+                error: 'Email is already in use by an existing user.'
+              });
+            } else {
+              dispatch({
+                type: SET_USER_ERROR,
+                error: 'Unknown error occured. Please try again later.'
+              });
+            }
           })
           .finally(() => {
             dispatch({ type: SET_USER_LOADING, loading: false });
@@ -59,7 +80,16 @@ function Login() {
             setPassword('');
           })
           .catch((err: FirebaseError) => {
-            dispatch({ type: SET_USER_ERROR, error: err.message });
+            if (err.message === 'Firebase: Error (auth/wrong-password).') {
+              dispatch({ type: SET_USER_ERROR, error: 'Incorrect email/password.' });
+            } else if (err.message === 'Firebase: Error (auth/invalid-email).') {
+              dispatch({ type: SET_USER_ERROR, error: 'Please enter a valid email to sign-in.' });
+            } else {
+              dispatch({
+                type: SET_USER_ERROR,
+                error: 'Unknown error occured. Please try again later.'
+              });
+            }
           })
           .finally(() => {
             dispatch({ type: SET_USER_LOADING, loading: false });
