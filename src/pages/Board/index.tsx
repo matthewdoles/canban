@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import ArchiveDetails from '../../components/ArchiveDetails';
 import Column from '../../components/Column';
 import Modal from '../../components/Modals';
 import DeleteTodo from '../../components/Modals/DeleteTodo';
@@ -93,6 +94,12 @@ const Board = () => {
             />
           ))}
         </div>
+        <ArchiveDetails
+          updateActiveTodo={(todo: Todo) => {
+            setActiveTodo(todo);
+            setShowDetail(true);
+          }}
+        />
       </div>
       <div className="drawer-side">
         <div className="drawer-overlay" onClick={() => setShowDetail(false)}></div>
