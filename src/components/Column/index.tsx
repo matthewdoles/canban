@@ -78,57 +78,59 @@ const Column = ({
               activeTodo.id === todo.id ||
               activeTodo.stage === stage ||
               !isDragging) && (
-              <TodoCard
-                todo={todo}
-                clicked={(todo: Todo) => updateActiveDrag(todo)}
-                dragging={(_e: DraggableEvent, position: DraggableData) => {
-                  const { x } = position;
-                  const columnWidth = window.innerWidth / 4 - 50;
-                  const offset = columnWidth * (stageNumber - 1) + (x + columnWidth / 2);
-                  let column =
-                    columnWidth > offset
-                      ? 1
-                      : columnWidth * 2 > offset && columnWidth < offset
-                      ? 2
-                      : columnWidth * 3 > offset && columnWidth * 2 < offset
-                      ? 3
-                      : columnWidth * 4 > offset && columnWidth * 3 < offset
-                      ? 4
-                      : 5;
-                  if (column > allStages.length) column = allStages.length;
-                  updateActiveHoverColumn(Math.floor(column));
-                  if (!isDragging) updateIsDragging(true);
-                }}
-                dragStart={() => {
-                  updateActiveDrag(todo);
-                }}
-                dragStop={async () => {
-                  try {
-                    const updatedTodo = {
-                      ...todo,
-                      stage:
-                        allStages.find((stage) => stage.stageOrder === activeHoverColumn)?.title ||
-                        todo.stage
-                    };
-                    updateBoardTodos(updatedTodo);
-                    updateActiveDrag({
-                      id: '0',
-                      stage: 'None',
-                      description: '',
-                      comments: [],
-                      title: '',
-                      boardId: '',
-                      created: Date.now(),
-                      assignee: ''
-                    });
-                    updateIsDragging(false);
-                  } catch (err) {
-                    console.log(err);
-                  }
-                }}
-                color={color}
-                disabled={false}
-              />
+              <div className="m-3">
+                <TodoCard
+                  todo={todo}
+                  clicked={(todo: Todo) => updateActiveDrag(todo)}
+                  dragging={(_e: DraggableEvent, position: DraggableData) => {
+                    const { x } = position;
+                    const columnWidth = window.innerWidth / 4 - 50;
+                    const offset = columnWidth * (stageNumber - 1) + (x + columnWidth / 2);
+                    let column =
+                      columnWidth > offset
+                        ? 1
+                        : columnWidth * 2 > offset && columnWidth < offset
+                        ? 2
+                        : columnWidth * 3 > offset && columnWidth * 2 < offset
+                        ? 3
+                        : columnWidth * 4 > offset && columnWidth * 3 < offset
+                        ? 4
+                        : 5;
+                    if (column > allStages.length) column = allStages.length;
+                    updateActiveHoverColumn(Math.floor(column));
+                    if (!isDragging) updateIsDragging(true);
+                  }}
+                  dragStart={() => {
+                    updateActiveDrag(todo);
+                  }}
+                  dragStop={async () => {
+                    try {
+                      const updatedTodo = {
+                        ...todo,
+                        stage:
+                          allStages.find((stage) => stage.stageOrder === activeHoverColumn)
+                            ?.title || todo.stage
+                      };
+                      updateBoardTodos(updatedTodo);
+                      updateActiveDrag({
+                        id: '0',
+                        stage: 'None',
+                        description: '',
+                        comments: [],
+                        title: '',
+                        boardId: '',
+                        created: Date.now(),
+                        assignee: ''
+                      });
+                      updateIsDragging(false);
+                    } catch (err) {
+                      console.log(err);
+                    }
+                  }}
+                  color={color}
+                  disabled={false}
+                />
+              </div>
             )}
           </div>
         ))}

@@ -54,7 +54,7 @@ const ArchiveDetails = ({ updateActiveTodo }: Props) => {
             </p>
           ))}
         </div>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-2 mt-4">
           {archivedTodos?.map((todo: Todo) => {
             if (todo.stage === selectedStage) {
               return (

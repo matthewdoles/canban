@@ -26,7 +26,7 @@ const TodoCard = ({ color, disabled, clicked, dragging, dragStart, dragStop, tod
       onStart={dragStart}
       onStop={dragStop}
       position={{ x: 0, y: 0 }}>
-      <div className="min-h-[100px] bg-white m-3 drop-shadow-lg rounded-lg" ref={nodeRef}>
+      <div className="min-h-[100px] bg-white drop-shadow-lg rounded-lg" ref={nodeRef}>
         <div
           className={`flex flex-row ${color} p-1 rounded-t-lg ${
             !disabled ? 'cursor-grab' : ''

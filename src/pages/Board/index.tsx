@@ -110,17 +110,17 @@ const Board = () => {
           }}
         />
       </div>
-      <div className="drawer-side">
-        <div className="drawer-overlay" onClick={() => setShowDetail(false)}></div>
-        {activeBoard && activeTodo.id !== '0' && (
+      {activeBoard && activeTodo.id !== '0' && !isDragging && (
+        <div className="drawer-side">
+          <div className="drawer-overlay" onClick={() => setShowDetail(false)}></div>
           <TodoDetail
             allStages={activeBoard.stages}
             todo={activeTodo}
             onArchive={handleArchive}
             isArchived={isArchived}
           />
-        )}
-      </div>
+        </div>
+      )}
       <Modal id="delete-todo-modal">
         <DeleteTodo confirm={onConfirmDelete} title={activeTodo.title} />
       </Modal>
