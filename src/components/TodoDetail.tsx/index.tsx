@@ -10,11 +10,12 @@ import TodoComment from '../TodoComment';
 
 type Props = {
   allStages: Stage[];
+  isArchived: boolean;
   todo: Todo;
   onArchive: () => void;
 };
 
-const TodoDetail = ({ allStages, todo, onArchive }: Props) => {
+const TodoDetail = ({ allStages, isArchived, todo, onArchive }: Props) => {
   const [todoStageNumber, setTodoStageNumber] = useState<number>(0);
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
@@ -79,29 +80,44 @@ const TodoDetail = ({ allStages, todo, onArchive }: Props) => {
             return stage.title === todo.stage;
           })?.color
         } p-1`}></div>
-      <div className="absolute right-3 top-14">
-        <div className="tooltip tooltip-bottom" data-tip="Edit">
-          <MdOutlineModeEditOutline
-            size={28}
-            className="mr-2 cursor-pointer text-green-500"
-            onClick={() => setEditMode(!editMode)}
-          />
-        </div>
-        <div className="tooltip tooltip-bottom" data-tip="Archive">
-          <label>
-            <BsArchiveFill
-              size={20}
-              className="mx-2 mb-1 cursor-pointer text-purple-500"
-              onClick={onArchive}
+
+      {!isArchived ? (
+        <div className="absolute right-3 top-14">
+          <div className="tooltip tooltip-bottom" data-tip="Edit">
+            <MdOutlineModeEditOutline
+              size={28}
+              className="mr-2 cursor-pointer text-green-500"
+              onClick={() => setEditMode(!editMode)}
             />
-          </label>
+          </div>
+          <div className="tooltip tooltip-bottom" data-tip="Archive">
+            <label>
+              <BsArchiveFill
+                size={20}
+                className="mx-2 mb-1 cursor-pointer text-purple-500"
+                onClick={onArchive}
+              />
+            </label>
+          </div>
+          <div className="tooltip tooltip-bottom" data-tip="Delete">
+            <label htmlFor="delete-todo-modal">
+              <MdDelete size={28} className="mx-2 cursor-pointer text-red-500" />
+            </label>
+          </div>
         </div>
-        <div className="tooltip tooltip-bottom" data-tip="Delete">
-          <label htmlFor="delete-todo-modal">
-            <MdDelete size={28} className="mx-2 cursor-pointer text-red-500" />
-          </label>
+      ) : (
+        <div className="absolute right-6 top-16">
+          <div className="tooltip tooltip-bottom" data-tip="Un-Archive">
+            <label>
+              <BsArchiveFill
+                size={20}
+                className="mx-2 mb-1 cursor-pointer text-purple-500"
+                onClick={onArchive}
+              />
+            </label>
+          </div>
         </div>
-      </div>
+      )}
       <div className="m-4">
         <p className="font-bold">Title</p>
         {editMode ? (

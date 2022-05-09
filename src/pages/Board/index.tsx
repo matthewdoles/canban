@@ -15,6 +15,7 @@ import {
   fetchArchivedTodos,
   fetchBoards,
   SET_ACTIVE_BOARD,
+  unarchiveTodo,
   updateTodo
 } from '../../store/reducers/boards';
 
@@ -29,6 +30,7 @@ const Board = () => {
     created: Date.now(),
     assignee: ''
   });
+  const [isArchived, setIsArchived] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [activeHoverColumn, setActiveHoverColumn] = useState<number>(0);
   const [showDetail, setShowDetail] = useState<boolean>(false);
@@ -62,9 +64,14 @@ const Board = () => {
   };
 
   const handleArchive = async () => {
-    dispatch(archiveTodo(activeTodo));
+    if (isArchived) {
+      dispatch(unarchiveTodo(activeTodo));
+    } else {
+      dispatch(archiveTodo(activeTodo));
+    }
     setActiveTodo(initTodo);
     setShowDetail(false);
+    setIsArchived(false);
   };
 
   return (
@@ -87,6 +94,7 @@ const Board = () => {
               updateActiveDrag={(todo: Todo) => {
                 setActiveTodo(todo);
                 setShowDetail(true);
+                setIsArchived(false);
               }}
               updateActiveHoverColumn={(column: number) => setActiveHoverColumn(column)}
               updateIsDragging={(dragging: boolean) => setIsDragging(dragging)}
@@ -98,13 +106,19 @@ const Board = () => {
           updateActiveTodo={(todo: Todo) => {
             setActiveTodo(todo);
             setShowDetail(true);
+            setIsArchived(true);
           }}
         />
       </div>
       <div className="drawer-side">
         <div className="drawer-overlay" onClick={() => setShowDetail(false)}></div>
         {activeBoard && activeTodo.id !== '0' && (
-          <TodoDetail allStages={activeBoard.stages} todo={activeTodo} onArchive={handleArchive} />
+          <TodoDetail
+            allStages={activeBoard.stages}
+            todo={activeTodo}
+            onArchive={handleArchive}
+            isArchived={isArchived}
+          />
         )}
       </div>
       <Modal id="delete-todo-modal">

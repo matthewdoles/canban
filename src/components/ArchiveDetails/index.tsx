@@ -13,7 +13,7 @@ type Props = {
 const ArchiveDetails = ({ updateActiveTodo }: Props) => {
   const activeBoard = useAppSelector((state) => state.boards.activeBoard);
   const archivedData = useAppSelector((state) => state.boards.activeBoardArchive);
-  const [selectedStage, setSelectedStage] = useState<string>(activeBoard?.stages[0].title);
+  const [selectedStage, setSelectedStage] = useState<string>('');
   const [archivedCount, setArchivedCount] = useState<number>(0);
   const [archivedTodos, setArchivedTodos] = useState<Todo[]>([]);
 
@@ -26,6 +26,9 @@ const ArchiveDetails = ({ updateActiveTodo }: Props) => {
         archiveRecord.todos.forEach((todo) => todos.push(todo));
       }
     });
+    if (activeBoard.stages.length > 0) {
+      setSelectedStage(activeBoard?.stages[0].title);
+    }
     setArchivedCount(count);
     setArchivedTodos(todos);
   }, [archivedData]);
@@ -51,7 +54,7 @@ const ArchiveDetails = ({ updateActiveTodo }: Props) => {
             </p>
           ))}
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-2">
           {archivedTodos?.map((todo: Todo) => {
             if (todo.stage === selectedStage) {
               return (

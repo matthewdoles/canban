@@ -287,8 +287,10 @@ export function createTodo(todo: Todo): AppThunk {
     const { boards } = getState();
     const udpatedBoards = JSON.parse(JSON.stringify([...boards.boards]));
     const boardIndex = udpatedBoards.findIndex((b: BoardSettings) => b.id === todo.boardId);
-    udpatedBoards[boardIndex].todos.push(todo);
-    dispatch(updateBoardTodos(udpatedBoards[boardIndex]));
+    if (udpatedBoards[boardIndex].todos.length <= 100) {
+      udpatedBoards[boardIndex].todos.push(todo);
+      dispatch(updateBoardTodos(udpatedBoards[boardIndex]));
+    }
   };
 }
 
@@ -399,6 +401,33 @@ function createArchive(todo: Todo): AppThunk {
           board: { boardId: todo.boardId, todos: [todo], id: docRef.id }
         });
         dispatch(deleteTodo(todo));
+      })
+      .catch((err: FirebaseError) => {
+        dispatch({ type: SET_ERROR, error: err.message });
+      })
+      .finally(() => {
+        dispatch({ type: SET_IS_LOADING, loading: false });
+      });
+  };
+}
+
+export function unarchiveTodo(todo: Todo): AppThunk {
+  return async (dispatch, getState) => {
+    const { boards } = getState();
+
+    const updatedArchive = JSON.parse(JSON.stringify([...boards.activeBoardArchive]));
+    const arhciveIndex = updatedArchive.findIndex((a: Archive) => a.boardId === todo.boardId);
+    const todoIndex = updatedArchive[arhciveIndex].todos.findIndex((t: Todo) => t.id === todo.id);
+    updatedArchive[arhciveIndex].todos.splice(todoIndex, 1);
+
+    dispatch({ type: SET_IS_LOADING, loading: true });
+    const archiveDocRef = doc(archiveCol, updatedArchive[arhciveIndex].id);
+    updateDoc(archiveDocRef, {
+      todos: updatedArchive[arhciveIndex].todos
+    })
+      .then(() => {
+        dispatch({ type: UPDATE_ARCHIVE, archive: updatedArchive[arhciveIndex] });
+        dispatch(createTodo(todo));
       })
       .catch((err: FirebaseError) => {
         dispatch({ type: SET_ERROR, error: err.message });
