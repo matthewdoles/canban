@@ -41,7 +41,7 @@ const SharingTable = ({ boardSharing, boardId }: Props) => {
                           <td className="w-1/2">
                             <div className="flex items-center space-x-3">
                               <div className="avatar placeholder justify-end">
-                                <div className="w-10 h-10 rounded-full bg-blue-500">
+                                <div className="w-10 h-10 rounded-full bg-primary">
                                   {u.photoURL === null || u.photoURL.length === 0 ? (
                                     <span className="text-xl text-white font-bold">
                                       {u.displayName ? u.displayName.charAt(0) : u.email.charAt(0)}

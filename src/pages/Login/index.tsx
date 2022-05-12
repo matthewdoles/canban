@@ -101,7 +101,7 @@ function Login() {
     <div className="pt-8">
       {user.firebaseUser === null && (
         <div className="lg:w-2/5 md:3/4 sm:w-4/5 flex flex-col mx-auto bg-white shadow-lg items-center rounded-lg">
-          <div className="w-full relative justify-center bg-blue-500 p-1 rounded-t-lg">
+          <div className="w-full relative justify-center bg-primary p-1 rounded-t-lg">
             <p
               className="text-xl text-white text-center font-bold"
               style={{ fontFamily: 'Noto Sans' }}>

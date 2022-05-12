@@ -8,7 +8,7 @@ import Login from './pages/Login';
 function App() {
   const user = useAppSelector((state) => state.user.firebaseUser);
   return (
-    <div className="min-h-screen min-w-screen bg-zinc-300" style={{ fontFamily: 'Roboto' }}>
+    <div className="min-h-screen min-w-screen bg-secondary" style={{ fontFamily: 'Roboto' }}>
       {user === null ? (
         <Routes>
           <Route path="/" element={<Login />} />

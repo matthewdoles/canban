@@ -43,7 +43,7 @@ const TodoForm = ({ addNewTodo, allStages, autoPopStage, boardId }: Props) => {
       <input type="checkbox" id={`todo-form-${autoPopStage}`} className="modal-toggle" />
       <div className="modal">
         <div className="modal-box p-0 !min-w-[650px]">
-          <div className="w-full relative justify-center bg-blue-500 p-1 rounded-t-lg">
+          <div className="w-full relative justify-center bg-primary p-1 rounded-t-lg">
             <p className="text-2xl text-white text-center font-bold">New Todo</p>
           </div>
           <div className="flex flex-col w-full items-center p-4">
@@ -77,10 +77,10 @@ const TodoForm = ({ addNewTodo, allStages, autoPopStage, boardId }: Props) => {
             <div className="modal-action">
               <label
                 htmlFor={`todo-form-${autoPopStage}`}
-                className="btn bg-red-500 w-20 border-none">
+                className="btn bg-red-500 text-white w-20 border-none">
                 Cancel
               </label>
-              <label className="btn bg-green-500 w-20 border-none" onClick={onSaveClick}>
+              <label className="btn bg-green-500 text-white w-20 border-none" onClick={onSaveClick}>
                 Save
               </label>
             </div>

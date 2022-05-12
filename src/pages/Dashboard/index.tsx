@@ -71,7 +71,7 @@ const Dashboard = () => {
       <div className="p-8 flex flex-col items-center">
         <div className="dropdown dropdown-end mb-8">
           <label tabIndex={0} className="avatar placeholder justify-center">
-            <div className="w-20 h-20 rounded-full bg-blue-500 border-4 border-white hover:border-black">
+            <div className="w-20 h-20 rounded-full bg-primary border-4 border-white hover:border-black">
               {user !== null && (
                 <>
                   {user.photoURL === null || user.photoURL.length === 0 ? (
@@ -89,21 +89,21 @@ const Dashboard = () => {
             tabIndex={0}
             className="mt-1 mr-4 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
             <li>
-              <label htmlFor="profile-modal" className="text-xl active:bg-blue-500">
+              <label htmlFor="profile-modal" className="text-xl active:bg-primary">
                 Profile
               </label>
             </li>
             <li>
-              <a onClick={signOut} className="text-xl active:bg-blue-500">
+              <a onClick={signOut} className="text-xl active:bg-primary">
                 Logout
               </a>
             </li>
           </ul>
         </div>
-        <div className="lg:w-1/2 md:3/4 sm:w-4/5 flex flex-col mx-auto bg-gray-100 shadow-lg items-center rounded-lg">
-          <div className="w-full relative justify-center bg-blue-500 p-1 rounded-t-lg">
+        <div className="lg:w-1/2 md:3/4 w-full flex flex-col mx-auto bg-accent shadow-lg items-center rounded-lg">
+          <div className="w-full relative justify-center bg-primary p-1 rounded-t-lg">
             <p
-              className="text-lg text-white text-center font-bold"
+              className="text-xl text-white text-center font-bold"
               style={{ fontFamily: 'Noto Sans' }}>
               My Boards
             </p>

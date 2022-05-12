@@ -23,8 +23,8 @@ const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) 
 
   return (
     <div className="bg-white drop-shadow-lg rounded-lg">
-      <div className="bg-blue-500 p-1 rounded-t-lg">
-        <p className="text-lg text-white ml-2" style={{ fontFamily: 'Noto Sans' }}>
+      <div className="bg-primary p-1 rounded-t-lg">
+        <p className="text-lg font-bold text-white ml-2" style={{ fontFamily: 'Noto Sans' }}>
           {board.boardName}
         </p>
       </div>
@@ -34,12 +34,12 @@ const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) 
         </div>
       )}
       {!boards.loading || (selectedBoard.id !== board.id && boards.loading) ? (
-        <div className="flex flex-row justify-between p-2 text-lg">
+        <div className="flex flex-row justify-between p-2 text-lg rounded">
           <div>
             {board.stages.map((stage) => (
               <div key={stage.stageOrder} className="flex flex-row m-2 items-center">
-                <div className={`${stage.color} h-4 w-4 mr-2 rounded-full`}></div>
-                <p>
+                <div className={`${stage.color} h-5 w-5 mr-2 rounded-full`}></div>
+                <p className="text-xl">
                   {todos.filter((todo) => todo.stage === stage.title).length} {stage.title}
                 </p>
               </div>
@@ -47,7 +47,7 @@ const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) 
           </div>
           <div className="flex flex-col justify-between mt-2 mr-2">
             <div className="avatar placeholder justify-end">
-              <div className="w-10 h-10 rounded-full bg-blue-500">
+              <div className="w-10 h-10 rounded-full bg-primary">
                 {user !== null && (
                   <>
                     {user.photoURL === null || user.photoURL.length === 0 ? (

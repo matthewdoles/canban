@@ -34,12 +34,12 @@ const ArchiveDetails = ({ updateActiveTodo }: Props) => {
   }, [archivedData]);
 
   return (
-    <div tabIndex={0} className="collapse bg-gray-100 m-2">
+    <div tabIndex={0} className="collapse bg-accent m-2">
       <input type="checkbox" />
       <div className="collapse-title flex">
-        <MdAdd size={28} />
-        <p className="text-xl font-bold mx-2">Archive</p>
-        <p className="text-xl opacity-30 font-bold">({archivedCount})</p>
+        <MdAdd size={28} color="white" />
+        <p className="text-xl text-white font-bold mx-2">Archive</p>
+        <p className="text-xl text-white opacity-60 font-bold">({archivedCount})</p>
       </div>
       <div className="collapse-content">
         <div className="flex">
@@ -47,7 +47,7 @@ const ArchiveDetails = ({ updateActiveTodo }: Props) => {
             <p
               key={i}
               onClick={() => setSelectedStage(stage.title)}
-              className={`text-lg capitalize mx-2 cursor-pointer btn btn-sm border-none ${
+              className={`text-lg text-white capitalize mx-2 cursor-pointer btn btn-sm border-none ${
                 selectedStage === stage.title ? `${stage.color} text-white` : 'btn-ghost'
               }`}>
               {stage.title}

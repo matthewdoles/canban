@@ -146,7 +146,7 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
       <input type="checkbox" id="board-form" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box p-0 !min-w-[650px]">
-          <div className="w-full relative justify-center bg-green-500 p-1 rounded-t-lg">
+          <div className="w-full relative justify-center bg-primary p-1 rounded-t-lg">
             <p className="text-2xl text-white text-center font-bold">
               {selectedBoard.id ? 'Edit Board' : 'New Board'}
             </p>
@@ -175,7 +175,7 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
                 <div className="tooltip" data-tip="Move Up">
                   <FaArrowUp
                     size={36}
-                    className="mx-2 cursor-pointer hover:text-blue-500"
+                    className="mx-2 cursor-pointer hover:bg-primary"
                     onClick={() => {
                       if (i !== 0) {
                         switchStagesOrdering(stage);
@@ -186,7 +186,7 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
                 <div className="tooltip" data-tip="Move Down">
                   <FaArrowDown
                     size={36}
-                    className="mx-2 cursor-pointer hover:text-blue-500"
+                    className="mx-2 cursor-pointer hover:bg-primary0"
                     onClick={() => {
                       if (i + 1 !== stages.length) {
                         switchStagesOrdering(stages[i + 1]);
@@ -210,7 +210,7 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
                 </div>
               </div>
             ))}
-            <p className="text-center mt-4">
+            <p className="text-xl text-center mx-4 mt-4">
               Please be mindful that at this time stage settings cannot be altered after creation.
             </p>
             {error.length > 0 && (
@@ -221,13 +221,13 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
             <div className="modal-action">
               <label
                 htmlFor="board-form"
-                className="btn bg-red-500 w-20 border-none"
+                className="btn bg-red-500 text-white w-20 border-none"
                 onClick={onCancelClick}>
                 Cancel
               </label>
               <label
                 htmlFor="board-form"
-                className="btn bg-green-500 w-20 border-none"
+                className="btn bg-green-500 text-white w-20 border-none"
                 onClick={onSaveClick}>
                 Save
               </label>

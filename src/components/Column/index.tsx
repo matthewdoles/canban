@@ -50,13 +50,13 @@ const Column = ({
           ? `bg-green-50 ${
               activeHoverColumn === stageNumber ? 'border-green-300 border-4' : 'border-none'
             }`
-          : 'bg-gray-100 border-transparent border-none'
+          : 'bg-accent border-transparent border-none'
       }`}>
-      <div className={`${color} p-2 relative justify-center`}>
-        <p className="text-lg text-white font-bold ml-2">
-          <span className="badge mr-2">{todos.length}</span>
-          {stage}
-        </p>
+      <div className={`${color} p-2 relative flex items-center`}>
+        <span className="badge text-lg font-bold bg-white border-none h-6 mx-2">
+          {todos.length}
+        </span>
+        <p className="text-xl text-white font-bold ml-2">{stage}</p>
         <label
           className="absolute right-3 top-2 text-3xl text-white font-bold cursor-pointer"
           htmlFor={`todo-form-${stage}`}

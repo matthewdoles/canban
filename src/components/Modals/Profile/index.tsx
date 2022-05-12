@@ -25,12 +25,12 @@ const Profile = () => {
 
   return (
     <>
-      <div className="flex flex-row justify-center bg-blue-500 p-1 rounded-t-lg">
+      <div className="flex flex-row justify-center bg-primary p-1 rounded-t-lg">
         <h3 className="text-2xl text-white font-bold">Your Profile</h3>
       </div>
       <div className="flex flex-col mx-4 mb-8">
         <div className="avatar placeholder justify-center mt-4">
-          <div className="w-20 h-20 rounded-full bg-blue-500">
+          <div className="w-20 h-20 rounded-full bg-primary">
             {photoURL.length === 0 ? (
               <span className="text-3xl text-white font-bold">{displayName.charAt(0)}</span>
             ) : (
@@ -65,13 +65,13 @@ const Profile = () => {
         <div className="modal-action px-4">
           <label
             htmlFor="profile-modal"
-            className="btn border-none w-20 bg-red-500"
+            className="btn border-none w-20 bg-red-500 text-white"
             onClick={resetForm}>
             Close
           </label>
           <label
             htmlFor="profile-modal"
-            className="btn border-none w-20 bg-green-500"
+            className="btn border-none w-20 bg-green-500 text-white"
             onClick={onSaveClick}>
             Save
           </label>

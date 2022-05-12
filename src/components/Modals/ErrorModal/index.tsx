@@ -16,7 +16,7 @@ const ErrorModal = ({ error, onClose }: Props) => {
         <p className="text-lg">{error}</p>
       </div>
       <div className="modal-action p-4">
-        <label className="btn border-none bg-red-500" onClick={onClose}>
+        <label className="btn border-none bg-red-500 text-white" onClick={onClose}>
           Close
         </label>
       </div>

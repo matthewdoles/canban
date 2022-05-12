@@ -33,7 +33,7 @@ const SharingForm = ({ selectedBoard }: Props) => {
             )}
           </div>
           <div className="modal-action pb-4 pr-4">
-            <label htmlFor="share-form" className="btn bg-red-500 w-20 border-none">
+            <label htmlFor="share-form" className="btn bg-red-500 text-white w-20 border-none">
               Close
             </label>
           </div>

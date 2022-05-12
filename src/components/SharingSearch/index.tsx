@@ -78,7 +78,7 @@ const SharingSearch = ({ selectedBoard }: Props) => {
         <div className="flex flex-row items-center w-full justify-evenly my-4">
           <div className="flex flex-row items-center">
             <div className="avatar placeholder justify-end">
-              <div className="w-10 h-10 rounded-full bg-blue-500">
+              <div className="w-10 h-10 rounded-full bg-primary">
                 {user.photoURL === null || user.photoURL.length === 0 ? (
                   <span className="text-xl text-white font-bold">
                     {user.displayName ? user.displayName.charAt(0) : user.email.charAt(0)}

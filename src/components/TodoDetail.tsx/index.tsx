@@ -175,10 +175,14 @@ const TodoDetail = ({ allStages, isArchived, todo, onArchive }: Props) => {
       </div>
       {editMode && (
         <div className="flex flex-row justify-center">
-          <button className="btn bg-red-500 w-30 border-none mx-2" onClick={onCancelClick}>
+          <button
+            className="btn bg-red-500 text-white w-30 border-none mx-2"
+            onClick={onCancelClick}>
             Cancel
           </button>
-          <button className="btn bg-green-500 w-30 border-none mx-2" onClick={onSaveSubmit}>
+          <button
+            className="btn bg-green-500 text-white w-30 border-none mx-2"
+            onClick={onSaveSubmit}>
             Save
           </button>
           <div className="divider mt-4" />
@@ -212,7 +216,9 @@ const TodoDetail = ({ allStages, isArchived, todo, onArchive }: Props) => {
               value={newComment}
             />
             <div className="flex justify-end">
-              <button className="btn bg-green-500 w-30 border-none mt-4" onClick={onCommentSubmit}>
+              <button
+                className="btn bg-green-500 text-white w-30 border-none mt-4"
+                onClick={onCommentSubmit}>
                 Submit
               </button>
             </div>
