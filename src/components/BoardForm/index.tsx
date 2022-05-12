@@ -172,7 +172,7 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
                   onChange={(e) => updateStageSetting(stage, 'title', e.target.value)}
                   className={inputStyles}
                 />
-                <div className="tooltip" data-tip="Move Up">
+                <div className="tooltip font-bold" data-tip="Move Up">
                   <FaArrowUp
                     size={36}
                     className="mx-2 cursor-pointer hover:bg-primary"
@@ -183,7 +183,7 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
                     }}
                   />
                 </div>
-                <div className="tooltip" data-tip="Move Down">
+                <div className="tooltip font-bold" data-tip="Move Down">
                   <FaArrowDown
                     size={36}
                     className="mx-2 cursor-pointer hover:bg-primary0"
@@ -194,14 +194,14 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
                     }}
                   />
                 </div>
-                <div className="tooltip" data-tip="Add Below">
+                <div className="tooltip font-bold" data-tip="Add Below">
                   <MdOutlineAddCircle
                     size={36}
                     className="mx-2 cursor-pointer text-green-500"
                     onClick={() => addStage(stage)}
                   />
                 </div>
-                <div className="tooltip" data-tip="Delete">
+                <div className="tooltip font-bold" data-tip="Delete">
                   <MdDelete
                     size={36}
                     className="mx-2 cursor-pointer text-red-500"

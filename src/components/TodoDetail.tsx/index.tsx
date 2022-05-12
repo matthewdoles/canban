@@ -84,14 +84,14 @@ const TodoDetail = ({ allStages, isArchived, todo, onArchive }: Props) => {
 
       {!isArchived ? (
         <div className="absolute right-3 top-14">
-          <div className="tooltip tooltip-bottom" data-tip="Edit">
+          <div className="tooltip tooltip-bottom font-bold" data-tip="Edit">
             <MdOutlineModeEditOutline
               size={28}
               className="mr-2 cursor-pointer text-green-500"
               onClick={() => setEditMode(!editMode)}
             />
           </div>
-          <div className="tooltip tooltip-bottom" data-tip="Archive">
+          <div className="tooltip tooltip-bottom font-bold" data-tip="Archive">
             <label>
               <BsArchiveFill
                 size={20}
@@ -100,7 +100,7 @@ const TodoDetail = ({ allStages, isArchived, todo, onArchive }: Props) => {
               />
             </label>
           </div>
-          <div className="tooltip tooltip-bottom" data-tip="Delete">
+          <div className="tooltip tooltip-bottom font-bold" data-tip="Delete">
             <label htmlFor="delete-todo-modal">
               <MdDelete size={28} className="mx-2 cursor-pointer text-red-500" />
             </label>
@@ -108,7 +108,7 @@ const TodoDetail = ({ allStages, isArchived, todo, onArchive }: Props) => {
         </div>
       ) : (
         <div className="absolute right-6 top-16">
-          <div className="tooltip tooltip-bottom" data-tip="Un-Archive">
+          <div className="tooltip tooltip-bottom font-bold" data-tip="Un-Archive">
             <label>
               <BsArchiveFill
                 size={20}

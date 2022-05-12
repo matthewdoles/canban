@@ -62,7 +62,7 @@ const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) 
               </div>
             </div>
             <div>
-              <div className="tooltip" data-tip="Delete">
+              <div className="tooltip font-bold" data-tip="Delete">
                 <label htmlFor="delete-board-modal">
                   <MdDelete
                     size={24}
@@ -71,7 +71,7 @@ const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) 
                   />
                 </label>
               </div>
-              <div className="tooltip" data-tip="Share">
+              <div className="tooltip font-bold" data-tip="Share">
                 <label htmlFor="share-form">
                   <MdShare
                     size={24}
@@ -84,7 +84,7 @@ const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) 
                 key={board.id}
                 to={`/board/${board.id}`}
                 onClick={() => dispatch({ type: SET_ACTIVE_BOARD, board })}>
-                <div className="tooltip" data-tip="Open">
+                <div className="tooltip font-bold" data-tip="Open">
                   <AiFillEye size={24} className="ml-2 cursor-pointer text-blue-500" />
                 </div>
               </Link>

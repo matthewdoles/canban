@@ -31,7 +31,7 @@ const TodoCard = ({ color, disabled, clicked, dragging, dragStart, dragStop, tod
           className={`flex flex-row ${color} p-1 rounded-t-lg ${
             !disabled ? 'cursor-grab' : ''
           } header`}>
-          <p className="text-xl text-white font-bold ml-2">{todo.title}</p>
+          <p className="text-lg text-white font-bold ml-2">{todo.title}</p>
           {!disabled && <p className="text-xl text-white font-bold ml-auto mr-2">&equiv;</p>}
         </div>
         <div onClick={() => clicked(todo)}>
