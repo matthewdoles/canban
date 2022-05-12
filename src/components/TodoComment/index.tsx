@@ -4,7 +4,7 @@ import Moment from 'react-moment';
 type Props = {
   author: string;
   comment: string;
-  date: string;
+  date: number;
   profilePic: string;
 };
 

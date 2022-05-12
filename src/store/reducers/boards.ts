@@ -200,7 +200,11 @@ export function fetchArchivedTodos(boardId: string): AppThunk {
     const { user } = getState();
     if (user.firebaseUser) {
       dispatch({ type: ACTION_START, start: { loading: true, error: '' } });
-      const q = query(collection(firestore, 'archive'), where('boardId', '==', boardId));
+      const q = query(
+        collection(firestore, 'archive'),
+        where('boardId', '==', boardId),
+        where('uid', '==', user.firebaseUser.uid)
+      );
       getDocs(q)
         .then((archiveDocs) => {
           const archives: Archive[] = [];
@@ -209,7 +213,8 @@ export function fetchArchivedTodos(boardId: string): AppThunk {
             archives.push({
               id: archiveDoc.id,
               boardId: a.boardId,
-              todos: a.todos
+              todos: a.todos,
+              uid: a.uid
             });
           });
           dispatch({ type: FETCH_ARCHIVE, archive: archives });
@@ -389,11 +394,13 @@ export function archiveTodo(todo: Todo): AppThunk {
 }
 
 function createArchive(todo: Todo): AppThunk {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const { user } = getState();
     dispatch({ type: ACTION_START, start: { loading: true, error: '' } });
     addDoc(collection(firestore, 'archive'), {
       boardId: todo.boardId,
-      todos: [todo]
+      todos: [todo],
+      uid: user.firebaseUser.uid
     })
       .then((docRef) => {
         dispatch({

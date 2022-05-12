@@ -39,7 +39,7 @@ const ArchiveDetails = ({ updateActiveTodo }: Props) => {
       <div className="collapse-title flex">
         <MdAdd size={28} />
         <p className="text-xl font-bold mx-2">Archive</p>
-        <p className="text-xl opacity-25 font-bold">({archivedCount})</p>
+        <p className="text-xl opacity-30 font-bold">({archivedCount})</p>
       </div>
       <div className="collapse-content">
         <div className="flex">

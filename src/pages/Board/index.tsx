@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { MdError } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import ArchiveDetails from '../../components/ArchiveDetails';
 import Column from '../../components/Column';
@@ -36,6 +37,7 @@ const Board = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const boardData = useAppSelector((state) => state.boards.boards);
   const activeBoard = useAppSelector((state) => state.boards.activeBoard);
+  const error = useAppSelector((state) => state.boards.error);
   const user = useAppSelector((state) => state.user.firebaseUser);
   const dispatch = useAppDispatch();
   const { id } = useParams();
@@ -43,13 +45,15 @@ const Board = () => {
   useEffect(() => {
     if (boardData.length === 0) dispatch(fetchBoards());
     else {
-      const board = boardData.find((b) => b.id === id);
-      if (board) {
-        dispatch({ type: SET_ACTIVE_BOARD, board });
-        dispatch(fetchArchivedTodos(board.id));
+      if (activeBoard.id === '' || id === activeBoard.id) {
+        const board = boardData.find((b) => b.id === id);
+        if (board) {
+          dispatch({ type: SET_ACTIVE_BOARD, board });
+          dispatch(fetchArchivedTodos(board.id));
+        }
       }
     }
-  }, [boardData, user]);
+  }, [boardData, user, activeBoard.id]);
 
   useEffect(() => {
     if (activeTodo.id !== '0') {
@@ -78,6 +82,14 @@ const Board = () => {
     <div className="drawer drawer-end">
       <input type="checkbox" checked={showDetail} className="drawer-toggle" />
       <div className="drawer-content p-8">
+        {error.length > 0 && (
+          <div className="alert alert-error shadow-lg bg-red-400 flex justify-center">
+            <div>
+              <MdError size={24} color="white" />
+              <p className="text-white font-bold">{error}</p>
+            </div>
+          </div>
+        )}
         <div className="flex flex-row w-full">
           {activeBoard?.stages.map((stage: Stage) => (
             <Column

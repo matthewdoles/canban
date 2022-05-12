@@ -4,4 +4,5 @@ export type Archive = {
   id?: string;
   boardId?: string;
   todos?: Todo[];
+  uid: string;
 };

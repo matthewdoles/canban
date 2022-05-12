@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BsArchiveFill } from 'react-icons/bs';
 import { MdDelete, MdOutlineModeEditOutline } from 'react-icons/md';
 import Moment from 'react-moment';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { Stage } from '../../models/Stage.model';
 import { Todo } from '../../models/Todo.model';
 import { updateTodo } from '../../store/reducers/boards';
@@ -22,6 +22,7 @@ const TodoDetail = ({ allStages, isArchived, todo, onArchive }: Props) => {
   const [stageTitle, setStageTitle] = useState<string>('');
   const [editMode, setEditMode] = useState<boolean>(false);
   const [newComment, setNewComment] = useState<string>('');
+  const user = useAppSelector((state) => state.user.firebaseUser);
   const dispatch = useAppDispatch();
 
   const inputStyles =
@@ -65,7 +66,7 @@ const TodoDetail = ({ allStages, isArchived, todo, onArchive }: Props) => {
         ...todo,
         comments: [
           ...todo.comments,
-          { authorId: '12345', description: newComment, date: Date.now() }
+          { authorId: user.uid, description: newComment, date: Date.now() }
         ]
       })
     );
@@ -190,10 +191,10 @@ const TodoDetail = ({ allStages, isArchived, todo, onArchive }: Props) => {
           {todo.comments.map((comment, i) => (
             <div key={comment.date}>
               <TodoComment
-                author="Matthew Doles"
+                author={user.displayName}
                 comment={comment.description}
-                date={new Date(comment.date).toString().substring(4, 11)}
-                profilePic="https://avatars.githubusercontent.com/u/38084552?s=48&v=4"
+                date={comment.date}
+                profilePic={user.photoURL}
               />
               {i + 1 !== todo.comments.length && <div className="divider mt-4" />}
             </div>
