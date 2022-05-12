@@ -1,17 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { AiFillEye } from 'react-icons/ai';
-import { MdDelete, MdShare } from 'react-icons/md';
+import { MdDelete, MdOutlineStar, MdShare, MdStarOutline } from 'react-icons/md';
 import { BounceLoader } from 'react-spinners';
 
 import { BoardSettings } from '../../models/BoardSettings.model';
 import { Todo } from '../../models/Todo.model';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { SET_ACTIVE_BOARD } from '../../store/reducers/boards';
+import { updateUser } from '../../store/reducers/user';
 
 type Props = {
   board: BoardSettings;
-  todos: Todo[];
+  todos: Todo[] | null;
   selectedBoard: BoardSettings;
   updateSelectedBoard: (board: BoardSettings) => void;
 };
@@ -40,7 +41,7 @@ const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) 
               <div key={stage.stageOrder} className="flex flex-row m-2 items-center">
                 <div className={`${stage.color} h-5 w-5 mr-2 rounded-full`}></div>
                 <p className="text-xl">
-                  {todos.filter((todo) => todo.stage === stage.title).length} {stage.title}
+                  {todos?.filter((todo) => todo.stage === stage.title).length} {stage.title}
                 </p>
               </div>
             ))}
@@ -79,6 +80,39 @@ const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) 
                     onClick={() => updateSelectedBoard(board)}
                   />
                 </label>
+              </div>
+              <div className="tooltip font-bold" data-tip="Favorite">
+                {user.favorites.includes(board.id) ? (
+                  <label>
+                    <MdOutlineStar
+                      size={24}
+                      className="mx-2 cursor-pointer text-yellow-500"
+                      onClick={() =>
+                        dispatch(
+                          updateUser({
+                            ...user,
+                            favorites: user.favorites.filter((id: string) => id !== board.id)
+                          })
+                        )
+                      }
+                    />
+                  </label>
+                ) : (
+                  <label>
+                    <MdStarOutline
+                      size={24}
+                      className="mx-2 cursor-pointer text-yellow-500"
+                      onClick={() =>
+                        dispatch(
+                          updateUser({
+                            ...user,
+                            favorites: [...user.favorites, board.id]
+                          })
+                        )
+                      }
+                    />
+                  </label>
+                )}
               </div>
               <Link
                 key={board.id}

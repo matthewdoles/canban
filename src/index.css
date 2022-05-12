@@ -20,3 +20,10 @@ code {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "LemonMilk";
+  src: local("LemonMilk"),
+   url("./fonts/LemonMilk/LemonMilkMediumItalic.otf") format("truetype");
+  font-weight: bold;
+}

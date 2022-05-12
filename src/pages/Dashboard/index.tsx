@@ -33,6 +33,7 @@ const newBoard = {
 };
 
 const Dashboard = () => {
+  const [boards, setBoards] = useState<BoardSettings[] | null>();
   const [selectedBoard, setSelectedBoard] = useState<BoardSettings>(newBoard);
   const boardData = useAppSelector((state) => state.boards);
   const user = useAppSelector((state) => state.user.firebaseUser);
@@ -48,6 +49,19 @@ const Dashboard = () => {
       setSelectedBoard(boardData.activeBoard);
     }
   }, [boardData.activeBoard]);
+
+  useEffect(() => {
+    const sortedBoards: BoardSettings[] = [...boardData.boards];
+    if (user.favorites) {
+      user.favorites.forEach((id: string) => {
+        const boardIndex = sortedBoards.findIndex((b: BoardSettings) => b.id === id);
+        if (boardIndex > -1) {
+          sortedBoards.unshift(...sortedBoards.splice(boardIndex, 1));
+        }
+      });
+    }
+    setBoards(sortedBoards);
+  }, [user.favorites, boardData.boards]);
 
   const getBoards = async () => {
     if (boardData.boards.length === 0) dispatch(fetchBoards());
@@ -123,12 +137,16 @@ const Dashboard = () => {
             {boardData.error.length > 0 && (
               <p className="text-red-500 text-center font-bold">{boardData.error}</p>
             )}
-            {boardData.boards.map((board) => (
+            {boards?.map((board) => (
               <div key={board.id} className="m-4">
                 <BoardCard
                   board={board}
                   selectedBoard={selectedBoard}
-                  todos={board.todos.filter((todo: Todo) => todo.boardId === board.id)}
+                  todos={
+                    board.todos
+                      ? board.todos.filter((todo: Todo) => todo.boardId === board.id)
+                      : null
+                  }
                   updateSelectedBoard={(board: BoardSettings) => setSelectedBoard(board)}
                 />
               </div>

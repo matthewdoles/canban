@@ -37,6 +37,7 @@ function Login() {
               email: user.user.email,
               emailVerified: user.user.emailVerified,
               creationTime: user.user.metadata.creationTime,
+              favorites: [],
               photoURL: user.user.photoURL,
               uid: user.user.uid,
               displayName: user.user.email
@@ -99,6 +100,9 @@ function Login() {
 
   return (
     <div className="pt-8">
+      <p className="text-5xl text-center text-primary mb-8" style={{ fontFamily: 'LemonMilk' }}>
+        Canban
+      </p>
       {user.firebaseUser === null && (
         <div className="lg:w-2/5 md:3/4 sm:w-4/5 flex flex-col mx-auto bg-white shadow-lg items-center rounded-lg">
           <div className="w-full relative justify-center bg-primary p-1 rounded-t-lg">
@@ -135,7 +139,7 @@ function Login() {
               {!user.loading && (
                 <>
                   <label
-                    className="btn bg-green-500 w-40 border-none my-2"
+                    className="btn bg-green-500 text-white w-40 border-none my-2"
                     onClick={handleFormSubmit}>
                     {isCreate ? 'Create' : 'Login'}
                   </label>

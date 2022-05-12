@@ -58,7 +58,8 @@ export function updateUser(user: User): AppThunk {
     const userDocRef = doc(userCol, user.recordId);
     updateDoc(userDocRef, {
       displayName: user.displayName,
-      photoURL: user.photoURL
+      photoURL: user.photoURL,
+      favorites: user.favorites
     })
       .then(() => {
         dispatch({ type: SET_USER, user });
