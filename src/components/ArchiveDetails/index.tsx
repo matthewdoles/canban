@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
+
 import { useAppSelector } from '../../hooks';
 import { Archive } from '../../models/Archive.model';
 import { Stage } from '../../models/Stage.model';
@@ -20,26 +21,31 @@ const ArchiveDetails = ({ updateActiveTodo }: Props) => {
   useEffect(() => {
     let count = 0;
     const todos: Todo[] = [];
+
+    // Pull all todos from related archive records
     archivedData.forEach((archiveRecord: Archive) => {
       if (archiveRecord.todos) {
         count += archiveRecord.todos.length;
         archiveRecord.todos.forEach((todo) => todos.push(todo));
       }
     });
+
+    // Set last stage as actively selected stage
     if (activeBoard.stages.length > 0) {
-      setSelectedStage(activeBoard?.stages[0].title);
+      setSelectedStage(activeBoard?.stages[activeBoard.stages.length - 1].title);
     }
+
     setArchivedCount(count);
     setArchivedTodos(todos);
   }, [archivedData]);
 
   return (
-    <div tabIndex={0} className="collapse bg-accent m-2">
+    <div className="collapse bg-accent m-2">
       <input type="checkbox" />
-      <div className="collapse-title flex">
+      <div className="collapse-title flex items-center">
         <MdAdd size={28} color="white" />
-        <p className="text-xl text-white font-bold mx-2">Archive</p>
-        <p className="text-xl text-white opacity-60 font-bold">({archivedCount})</p>
+        <p className="text-xl text-white font-bold mx-4">Archive</p>
+        <p className="text-xl text-white font-bold opacity-60">({archivedCount})</p>
       </div>
       <div className="collapse-content">
         <div className="flex">

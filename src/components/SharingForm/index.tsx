@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { BoardSettings } from '../../models/BoardSettings.model';
 import { getUsers } from '../../store/reducers/user';

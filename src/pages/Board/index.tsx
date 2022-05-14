@@ -1,36 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { MdError } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
-import ArchiveDetails from '../../components/ArchiveDetails';
-import Column from '../../components/Column';
-import Modal from '../../components/Modals';
-import DeleteTodo from '../../components/Modals/DeleteTodo';
-import TodoDetail from '../../components/TodoDetail.tsx';
-import { initTodo } from '../../const/initData';
+
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { initTodo } from '../../const/initData';
 import { Stage } from '../../models/Stage.model';
 import { Todo } from '../../models/Todo.model';
-import {
-  archiveTodo,
-  deleteTodo,
-  fetchArchivedTodos,
-  fetchBoards,
-  SET_ACTIVE_BOARD,
-  unarchiveTodo,
-  updateTodo
-} from '../../store/reducers/boards';
+import { SET_ACTIVE_BOARD } from '../../store/reducers/boards';
+import { fetchBoards } from '../../store/actions/boards';
+import { deleteTodo, updateTodo } from '../../store/actions/todos';
+import { archiveTodo, fetchArchivedTodos, unarchiveTodo } from '../../store/actions/archive';
+import ArchiveDetails from '../../components/ArchiveDetails';
+import Column from '../../components/Column';
+import DeleteTodo from '../../components/Modals/DeleteTodo';
+import Modal from '../../components/Modals';
+import TodoDetail from '../../components/TodoDetail.tsx';
 
 const Board = () => {
-  const [activeTodo, setActiveTodo] = useState<Todo>({
-    boardId: '',
-    comments: [],
-    id: '0',
-    stage: 'None',
-    description: '',
-    title: '',
-    created: Date.now(),
-    assignee: ''
-  });
+  const [activeTodo, setActiveTodo] = useState<Todo>(initTodo);
   const [isArchived, setIsArchived] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [activeHoverColumn, setActiveHoverColumn] = useState<number>(0);

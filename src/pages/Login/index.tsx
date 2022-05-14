@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, firestore } from '../../firebase';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { useNavigate } from 'react-router-dom';
-import { addDoc, collection } from 'firebase/firestore';
 import { BounceLoader } from 'react-spinners';
-import { SET_USER_ERROR, SET_USER_LOADING } from '../../store/reducers/user';
+import { addDoc, collection } from 'firebase/firestore';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
+import { useNavigate } from 'react-router-dom';
+
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { auth, firestore } from '../../firebase';
+import { SET_USER_ERROR, SET_USER_LOADING } from '../../store/reducers/user';
 
 function Login() {
   const [email, setEmail] = useState<string>('');
@@ -133,7 +134,7 @@ function Login() {
             <div className="flex flex-col w-full items-center mt-4">
               {user.loading && (
                 <div className="flex flex-row justify-center p-4">
-                  <BounceLoader size={75} color="#3B82F6" />
+                  <BounceLoader size={75} color="#FFD369" />
                 </div>
               )}
               {!user.loading && (

@@ -1,8 +1,9 @@
 import React from 'react';
-import { MdDelete } from 'react-icons/md';
 import { BounceLoader } from 'react-spinners';
+import { MdDelete } from 'react-icons/md';
+
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { deleteSharing } from '../../store/reducers/boards';
+import { deleteSharing } from '../../store/actions/sharing';
 
 type Props = {
   boardSharing: string[];
@@ -59,7 +60,7 @@ const SharingTable = ({ boardSharing, boardId }: Props) => {
                           </td>
                           <th className="w-1/4">
                             <div className="flex justify-center space-x-3">
-                              {loading && <BounceLoader size={24} color="#3B82F6 " />}
+                              {loading && <BounceLoader size={24} color="#FFD369 " />}
                               {!loading && (
                                 <MdDelete
                                   size={32}

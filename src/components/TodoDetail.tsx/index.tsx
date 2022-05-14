@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { BsArchiveFill } from 'react-icons/bs';
 import { MdDelete, MdOutlineModeEditOutline } from 'react-icons/md';
 import Moment from 'react-moment';
+
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { Stage } from '../../models/Stage.model';
 import { Todo } from '../../models/Todo.model';
-import { updateTodo } from '../../store/reducers/boards';
+import { updateTodo } from '../../store/actions/todos';
 import TodoComment from '../TodoComment';
 
 type Props = {

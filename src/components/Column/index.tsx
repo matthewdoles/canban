@@ -6,8 +6,8 @@ import { Todo } from '../../models/Todo.model';
 import { Stage } from '../../models/Stage.model';
 import TodoCard from '../TodoCard';
 import TodoForm from '../TodoForm';
-import { createTodo } from '../../store/reducers/boards';
 import { useAppDispatch } from '../../hooks';
+import { createTodo } from '../../store/actions/todos';
 
 type Props = {
   activeTodo: Todo;

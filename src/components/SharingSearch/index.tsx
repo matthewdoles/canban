@@ -1,11 +1,13 @@
 import { collection, getDocs, limit, query, where } from 'firebase/firestore';
 import React, { useState } from 'react';
 import { BounceLoader } from 'react-spinners';
-import { firestore } from '../../firebase';
+
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { firestore } from '../../firebase';
 import { BoardSettings } from '../../models/BoardSettings.model';
 import { User } from '../../models/User.model';
-import { addSharing, SET_ERROR } from '../../store/reducers/boards';
+import { addSharing } from '../../store/actions/sharing';
+import { SET_ERROR } from '../../store/reducers/boards';
 
 type Props = {
   selectedBoard: BoardSettings;
@@ -69,7 +71,7 @@ const SharingSearch = ({ selectedBoard }: Props) => {
           onChange={(e) => setEmail(e.target.value)}
           className={`input ${inputStyles}`}
         />
-        <button className="btn bg-purple-500 w-20 border-none" onClick={searchForUser}>
+        <button className="btn bg-purple-500 text-white w-20 border-none" onClick={searchForUser}>
           Search
         </button>
       </div>
@@ -94,7 +96,7 @@ const SharingSearch = ({ selectedBoard }: Props) => {
             </div>
           </div>
           <div className="flex flex-row items-center">
-            {loading && <BounceLoader size={24} color="#3B82F6 " />}
+            {loading && <BounceLoader size={24} color="#FFD369 " />}
             {!loading && (
               <button className="btn bg-green-500 w-20 border-none" onClick={handleBoardSharing}>
                 Add

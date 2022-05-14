@@ -1,12 +1,12 @@
 import React from 'react';
+import { BounceLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
 import { AiFillEye } from 'react-icons/ai';
 import { MdDelete, MdOutlineStar, MdShare, MdStarOutline } from 'react-icons/md';
-import { BounceLoader } from 'react-spinners';
 
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { BoardSettings } from '../../models/BoardSettings.model';
 import { Todo } from '../../models/Todo.model';
-import { useAppDispatch, useAppSelector } from '../../hooks';
 import { SET_ACTIVE_BOARD } from '../../store/reducers/boards';
 import { updateUser } from '../../store/reducers/user';
 
@@ -31,7 +31,7 @@ const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) 
       </div>
       {selectedBoard.id === board.id && boards.loading && (
         <div className="flex flex-row justify-center p-4">
-          <BounceLoader size={75} color="#3B82F6 " />
+          <BounceLoader size={75} color="#FFD369 " />
         </div>
       )}
       {!boards.loading || (selectedBoard.id !== board.id && boards.loading) ? (
@@ -86,7 +86,7 @@ const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) 
                   <label>
                     <MdOutlineStar
                       size={24}
-                      className="mx-2 cursor-pointer text-yellow-500"
+                      className="mx-2 cursor-pointer text-primary"
                       onClick={() =>
                         dispatch(
                           updateUser({
@@ -101,7 +101,7 @@ const BoardCard = ({ board, todos, selectedBoard, updateSelectedBoard }: Props) 
                   <label>
                     <MdStarOutline
                       size={24}
-                      className="mx-2 cursor-pointer text-yellow-500"
+                      className="mx-2 cursor-pointer text-primary"
                       onClick={() =>
                         dispatch(
                           updateUser({

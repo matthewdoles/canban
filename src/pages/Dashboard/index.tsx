@@ -1,34 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { BounceLoader } from 'react-spinners';
+import { useNavigate } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { initStages } from '../../const/initData';
+import { auth } from '../../firebase';
+import { BoardSettings } from '../../models/BoardSettings.model';
+import { Todo } from '../../models/Todo.model';
+import { RESET_BOARDS } from '../../store/reducers/boards';
+import { SET_USER } from '../../store/reducers/user';
+import BoardCard from '../../components/BoardCard';
+import BoardForm from '../../components/BoardForm';
+import DeleteBoard from '../../components/Modals/DeleteBoard';
+import Modal from '../../components/Modals';
+import Profile from '../../components/Modals/Profile';
+import ProfileDropdown from '../../components/ProfileDropdown';
+import SharingForm from '../../components/SharingForm';
 import {
   createBoard,
   deleteBoard,
   fetchBoards,
-  RESET_BOARDS,
   updateBoardSettings
-} from '../../store/reducers/boards';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { BoardSettings } from '../../models/BoardSettings.model';
-import { Todo } from '../../models/Todo.model';
-import BoardCard from '../../components/BoardCard';
-import BoardForm from '../../components/BoardForm';
-import Modal from '../../components/Modals';
-import DeleteBoard from '../../components/Modals/DeleteBoard';
-import { auth } from '../../firebase';
-import { useNavigate } from 'react-router-dom';
-import Profile from '../../components/Modals/Profile';
-import SharingForm from '../../components/SharingForm';
-import { SET_USER } from '../../store/reducers/user';
+} from '../../store/actions/boards';
 
 const newBoard = {
   boardName: '',
-  stages: [
-    { title: 'Todo', color: 'bg-blue-500', stageOrder: 1 },
-    { title: 'In Progress', color: 'bg-yellow-400', stageOrder: 2 },
-    { title: 'Done', color: 'bg-green-500', stageOrder: 3 }
-  ],
+  stages: initStages,
   uid: ''
 };
 
@@ -83,37 +81,7 @@ const Dashboard = () => {
   return (
     <>
       <div className="p-8 flex flex-col items-center">
-        <div className="dropdown dropdown-end mb-8">
-          <label tabIndex={0} className="avatar placeholder justify-center">
-            <div className="w-20 h-20 rounded-full bg-primary border-4 border-white hover:border-black">
-              {user !== null && (
-                <>
-                  {user.photoURL === null || user.photoURL.length === 0 ? (
-                    <span className="text-3xl text-white font-bold">
-                      {user.displayName ? user.displayName.charAt(0) : user.email.charAt(0)}
-                    </span>
-                  ) : (
-                    <img src={user.photoURL} />
-                  )}
-                </>
-              )}
-            </div>
-          </label>
-          <ul
-            tabIndex={0}
-            className="mt-1 mr-4 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
-            <li>
-              <label htmlFor="profile-modal" className="text-xl active:bg-primary">
-                Profile
-              </label>
-            </li>
-            <li>
-              <a onClick={signOut} className="text-xl active:bg-primary">
-                Logout
-              </a>
-            </li>
-          </ul>
-        </div>
+        <ProfileDropdown signOut={signOut} />
         <div className="lg:w-1/2 md:3/4 w-full flex flex-col mx-auto bg-accent shadow-lg items-center rounded-lg">
           <div className="w-full relative justify-center bg-primary p-1 rounded-t-lg">
             <p
@@ -131,7 +99,7 @@ const Dashboard = () => {
           <div className="w-full p-4">
             {boardData.loading && boardData.boards.length === 0 && (
               <div className="flex flex-row justify-center p-4">
-                <BounceLoader size={75} color="#3B82F6 " />
+                <BounceLoader size={75} color="#FFD369" />
               </div>
             )}
             {boardData.error.length > 0 && (

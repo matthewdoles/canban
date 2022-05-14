@@ -1,10 +1,11 @@
 import React, { ReactElement, useEffect } from 'react';
-import { User } from 'firebase/auth';
-import { auth, firestore } from '../../firebase';
-import { useAppDispatch } from '../../hooks';
-import { SET_USER, SET_USER_ERROR, SET_USER_LOADING } from '../../store/reducers/user';
 import { collection, getDocs, limit, query, where } from 'firebase/firestore';
 import { FirebaseError } from 'firebase/app';
+import { User } from 'firebase/auth';
+
+import { useAppDispatch } from '../../hooks';
+import { auth, firestore } from '../../firebase';
+import { SET_USER, SET_USER_ERROR, SET_USER_LOADING } from '../../store/reducers/user';
 
 type Props = {
   children: React.ReactNode;

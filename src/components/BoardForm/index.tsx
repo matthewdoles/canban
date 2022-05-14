@@ -3,6 +3,7 @@ import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { MdDelete, MdOutlineAddCircle } from 'react-icons/md';
 
 import ColorPicker from '../ColorPicker';
+import { initStages } from '../../const/initData';
 import { BoardSettings } from '../../models/BoardSettings.model';
 import { Stage } from '../../models/Stage.model';
 
@@ -14,11 +15,7 @@ type Props = {
 
 const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
   const [boardName, setBoardName] = useState<string>('');
-  const [stages, setStages] = useState<Stage[]>([
-    { title: 'Todo', color: 'bg-blue-500', stageOrder: 1 },
-    { title: 'In Progress', color: 'bg-yellow-400', stageOrder: 2 },
-    { title: 'Done', color: 'bg-green-500', stageOrder: 3 }
-  ]);
+  const [stages, setStages] = useState<Stage[]>(initStages);
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
@@ -175,7 +172,7 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
                 <div className="tooltip font-bold" data-tip="Move Up">
                   <FaArrowUp
                     size={36}
-                    className="mx-2 cursor-pointer hover:bg-primary"
+                    className="mx-2 cursor-pointer hover:text-primary"
                     onClick={() => {
                       if (i !== 0) {
                         switchStagesOrdering(stage);
@@ -186,7 +183,7 @@ const BoardForm = ({ addNewBoard, onBoardUpdate, selectedBoard }: Props) => {
                 <div className="tooltip font-bold" data-tip="Move Down">
                   <FaArrowDown
                     size={36}
-                    className="mx-2 cursor-pointer hover:bg-primary0"
+                    className="mx-2 cursor-pointer hover:text-primary"
                     onClick={() => {
                       if (i + 1 !== stages.length) {
                         switchStagesOrdering(stages[i + 1]);

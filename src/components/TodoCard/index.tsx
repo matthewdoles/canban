@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
+
 import { useAppSelector } from '../../hooks';
 import { Todo } from '../../models/Todo.model';
 
@@ -26,7 +27,7 @@ const TodoCard = ({ color, disabled, clicked, dragging, dragStart, dragStop, tod
       onStart={dragStart}
       onStop={dragStop}
       position={{ x: 0, y: 0 }}>
-      <div className="min-h-[100px] bg-white drop-shadow-lg rounded-lg" ref={nodeRef}>
+      <div className="min-h-[100px] h-full bg-white drop-shadow-lg rounded-lg" ref={nodeRef}>
         <div
           className={`flex flex-row ${color} p-1 rounded-t-lg ${
             !disabled ? 'cursor-grab' : ''
