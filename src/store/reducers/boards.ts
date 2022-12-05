@@ -4,6 +4,7 @@ import { AppThunk } from '../configureReducer';
 import { supabase } from '../../supabaseClient';
 import { Stage } from '../../models/Stage.model';
 import { BoardSettings } from '../../models/BoardSettings.model';
+import { Todo } from '../../models/Todo.model';
 
 export const ACTION_START = 'ACTION_START';
 export const ADD_BOARD = 'ADD_BOARD';
@@ -31,8 +32,8 @@ export default function boardReducer(state = initialState, action: AnyAction) {
     case ACTION_START:
       return {
         ...state,
-        boardsError: action.start.error,
-        boardsLoading: action.start.loading
+        boardsError: '',
+        boardsLoading: true
       };
     case ADD_BOARD:
       return {
@@ -56,12 +57,12 @@ export default function boardReducer(state = initialState, action: AnyAction) {
     case SET_ERROR:
       return {
         ...state,
-        boardsError: action.error
+        boardsError: action.boardsError
       };
     case SET_IS_LOADING:
       return {
         ...state,
-        boardsLoading: action.loading
+        boardsLoading: action.boardsLoading
       };
     case UPDATE_BOARD: {
       return {
@@ -69,8 +70,7 @@ export default function boardReducer(state = initialState, action: AnyAction) {
         boards: [
           ...state.boards.filter((b) => b.id !== action.board.id),
           { ...state.boards.find((b) => b.id === action.board.id), ...action.board }
-        ].sort((a, b) => a.boardName.localeCompare(b.boardName)),
-        activeBoard: action.board
+        ].sort((a, b) => a.boardName.localeCompare(b.boardName))
       };
     }
     default:
@@ -81,7 +81,7 @@ export default function boardReducer(state = initialState, action: AnyAction) {
 export function submitBoard(boardName: string, stages: Stage[]): AppThunk {
   return async (dispatch, getState) => {
     const { profile } = getState();
-    dispatch({ type: ACTION_START, start: { boardsLoading: true, boardsError: '' } });
+    dispatch({ type: ACTION_START });
     try {
       const { data, error } = await supabase
         .from('boards')
@@ -115,6 +115,7 @@ export function submitBoard(boardName: string, stages: Stage[]): AppThunk {
 
 export function deleteBoard(id: number): AppThunk {
   return async (dispatch) => {
+    dispatch({ type: ACTION_START });
     try {
       const { error } = await supabase.from('boards').delete().match({ id });
       if (error) {
@@ -137,6 +138,7 @@ export function deleteBoard(id: number): AppThunk {
 
 export function fetchBoards(): AppThunk {
   return async (dispatch) => {
+    dispatch({ type: ACTION_START });
     try {
       const { data, error } = await supabase.from('boards').select().order('id');
       if (error) {
@@ -144,6 +146,36 @@ export function fetchBoards(): AppThunk {
       }
       if (data) {
         dispatch({ type: FETCH_BOARDS, boards: data });
+      }
+    } catch (e: unknown) {
+      if (typeof e === 'string') {
+        dispatch({ type: SET_ERROR, boardsError: e });
+      } else if (e instanceof Error) {
+        dispatch({ type: SET_ERROR, boardsError: e.message });
+      }
+    } finally {
+      dispatch({ type: SET_IS_LOADING, boardsLoading: false });
+    }
+  };
+}
+
+export function updateBoardTodos(boardId: number, todos: Todo[]): AppThunk {
+  return async (dispatch) => {
+    dispatch({ type: ACTION_START });
+    try {
+      const { data, error } = await supabase
+        .from('boards')
+        .update({ todos: todos })
+        .eq('id', boardId)
+        .select();
+      if (error) {
+        dispatch({ type: SET_ERROR, boardsError: error.message });
+      }
+      if (data) {
+        dispatch({
+          type: UPDATE_BOARD,
+          board: data[0]
+        });
       }
     } catch (e: unknown) {
       if (typeof e === 'string') {

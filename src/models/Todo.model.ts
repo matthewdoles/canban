@@ -2,7 +2,7 @@ import { Comment } from './Comment.model';
 
 export type Todo = {
   assignee: string;
-  boardId: string;
+  boardId: number;
   comments: Comment[];
   created: number;
   description: string;

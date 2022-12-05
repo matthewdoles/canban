@@ -6,10 +6,11 @@ import { BounceLoader } from 'react-spinners';
 import { useAppSelector } from '../../hooks';
 
 type Props = {
-  signIn: () => void;
+  signInGithub: () => void;
+  signInGoogle: () => void;
 };
 
-const Login = ({ signIn }: Props) => {
+const Login = ({ signInGithub, signInGoogle }: Props) => {
   const { profileError, profileLoading } = useAppSelector((state) => state.profile);
 
   return (
@@ -26,7 +27,7 @@ const Login = ({ signIn }: Props) => {
             <>
               <div
                 className="btn btn-white w-60 border-none my-2 align-center justify-between"
-                onClick={signIn}>
+                onClick={signInGoogle}>
                 <div className="w-1/3 flex justify-center">
                   <FcGoogle size={22} />
                 </div>
@@ -37,7 +38,7 @@ const Login = ({ signIn }: Props) => {
               </div>
               <div
                 className="btn btn-white w-60 border-none my-2 align-center justify-between"
-                onClick={signIn}>
+                onClick={signInGithub}>
                 <div className="w-1/3 flex justify-center">
                   <FaGithub size={22} />
                 </div>

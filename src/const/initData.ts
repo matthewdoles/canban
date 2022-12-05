@@ -5,7 +5,7 @@ export const initStages = [
 ];
 
 export const initTodo = {
-  boardId: '',
+  boardId: 0,
   comments: [],
   id: '0',
   stage: 'None',

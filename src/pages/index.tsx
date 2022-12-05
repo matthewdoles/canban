@@ -18,7 +18,13 @@ function Dashboard() {
     }
   }, [profile]);
 
-  const signIn = async () => {
+  const signInGithub = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: 'github'
+    });
+  };
+
+  const signInGoogle = async () => {
     await supabase.auth.signInWithOAuth({
       provider: 'google'
     });
@@ -33,10 +39,10 @@ function Dashboard() {
     <div className="pt-8">
       {profile.id.length === 0 ? (
         <>
-          <p className="text-5xl text-center text-primary mb-8" style={{ fontFamily: 'LemonMilk' }}>
+          <p className="text-5xl text-center text-primary" style={{ fontFamily: 'LemonMilk' }}>
             Canban
           </p>
-          <Login signIn={signIn} />
+          <Login signInGithub={signInGithub} signInGoogle={signInGoogle} />
         </>
       ) : (
         <div className="p-8 flex flex-col items-center">

@@ -80,7 +80,7 @@ const BoardCard = ({ board, todos, selectedBoardId, updateSelectedBoard }: Props
                   />
                 </label>
               </div>
-              <Link key={board.id} to={`/board/${board.id}`} onClick={() => console.log('asdfasd')}>
+              <Link key={board.id} to={`/board/${board.id}`}>
                 <div className="tooltip font-bold" data-tip="Open">
                   <AiFillEye size={24} className="ml-2 cursor-pointer text-blue-500" />
                 </div>

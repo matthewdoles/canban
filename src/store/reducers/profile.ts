@@ -96,11 +96,14 @@ const createProfile = (): AppThunk => {
       .getUser()
       .then(async ({ data }) => {
         if (data.user?.id && data.user?.email) {
-          const record = await supabase.from('profiles').upsert({
-            email: data.user.email,
-            username: data.user.email.substring(0, data.user.email.lastIndexOf('@')),
-            id: data.user.id
-          });
+          const record = await supabase
+            .from('profiles')
+            .upsert({
+              email: data.user.email,
+              username: data.user.email.substring(0, data.user.email.lastIndexOf('@')),
+              id: data.user.id
+            })
+            .select();
           if (record.error) {
             dispatch({ type: SET_PROFILE_ERROR, profileError: record.error.message });
           }
