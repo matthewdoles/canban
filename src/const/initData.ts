@@ -12,7 +12,8 @@ export const initTodo = {
   description: '',
   title: '',
   created: Date.now(),
-  assignee: ''
+  assignee: '',
+  isArchived: false
 };
 
 export const initBoard = {

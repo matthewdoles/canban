@@ -9,4 +9,5 @@ export type Todo = {
   stage: string;
   id: string;
   title: string;
+  isArchived: boolean;
 };

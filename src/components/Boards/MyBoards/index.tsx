@@ -23,14 +23,11 @@ const MyBoards = () => {
 
   return (
     <div className="lg:w-1/2 md:3/4 w-full flex flex-col mx-auto bg-accent shadow-lg items-center rounded-lg">
-      <div className="w-full relative justify-center bg-primary p-1 rounded-t-lg">
-        <p className="text-xl text-white text-center font-bold" style={{ fontFamily: 'Noto Sans' }}>
-          My Boards
-        </p>
+      <div className="w-full h-12 relative justify-center bg-primary p-1 rounded-t-lg">
         <label
           className="absolute right-3 top-1 text-3xl text-white font-bold cursor-pointer"
           htmlFor="board-form">
-          <MdAdd size={28} />
+          <MdAdd size={36} />
         </label>
       </div>
       <div className="w-full p-4">

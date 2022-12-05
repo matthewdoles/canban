@@ -11,7 +11,7 @@ const ProfileDropdown = ({ signOut }: Props) => {
 
   return (
     <div className="dropdown dropdown-end mb-8">
-      <label tabIndex={0} className="avatar placeholder justify-center">
+      <label tabIndex={0} className="avatar placeholder justify-center  cursor-pointer">
         <div className="w-20 h-20 rounded-full bg-primary border-4 border-white hover:border-black">
           <span className="text-3xl text-white font-bold">{profile.username.charAt(0)}</span>
         </div>

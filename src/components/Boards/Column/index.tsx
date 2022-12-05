@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { DraggableData, DraggableEvent } from 'react-draggable';
 import { MdAdd } from 'react-icons/md';
+import { initTodo } from '../../../const/initData';
 import { Stage } from '../../../models/Stage.model';
 import { Todo } from '../../../models/Todo.model';
 import TodoCard from '../../Todos/TodoCard';
@@ -103,16 +104,7 @@ const Column = ({
                             ?.title || todo.stage
                       };
                       updateBoardTodos(updatedTodo);
-                      updateActiveDrag({
-                        id: '0',
-                        stage: 'None',
-                        description: '',
-                        comments: [],
-                        title: '',
-                        boardId: 0,
-                        created: Date.now(),
-                        assignee: ''
-                      });
+                      updateActiveDrag(initTodo);
                       updateIsDragging(false);
                     } catch (err) {
                       console.log(err);

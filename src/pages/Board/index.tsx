@@ -11,13 +11,18 @@ import Column from '../../components/Boards/Column';
 import { Stage } from '../../models/Stage.model';
 import { Todo } from '../../models/Todo.model';
 import { fetchProfile } from '../../store/reducers/profile';
+import TodoDetail from '../../components/Todos/TodoDetail';
+import Modal from '../../components/Modals';
+import DeleteTodo from '../../components/Modals/DeleteTodo';
+import ArchiveTodos from '../../components/Todos/ArchiveTodos';
 
 const Board = () => {
   const [board, setBoard] = useState<BoardSettings>(initBoard);
   const [activeTodo, setActiveTodo] = useState<Todo>(initTodo);
   const [activeHoverColumn, setActiveHoverColumn] = useState<number>(0);
+  const [isArchived, setIsArchived] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [showDetail] = useState<boolean>(false);
+  const [showDetail, setShowDetail] = useState<boolean>(false);
   const { boards, boardsError } = useAppSelector((state) => state.boards);
   const { profile } = useAppSelector((state) => state.profile);
   const dispatch = useAppDispatch();
@@ -36,22 +41,43 @@ const Board = () => {
     }
   }, [boards, profile]);
 
-  // const onConfirmDelete = async () => {
-  //   // dispatch(deleteTodo(activeTodo));
-  //   // setActiveTodo(initTodo);
-  //   // setShowDetail(false);
-  // };
+  const updateTodos = (updatedTodo: Todo) => {
+    const updatedTodos = [...board.todos];
+    const todoIndex = updatedTodos.findIndex((t: Todo) => t.id === updatedTodo.id);
+    updatedTodos[todoIndex] = {
+      ...updatedTodos[todoIndex],
+      ...updatedTodo
+    };
+    dispatch(updateBoardTodos(board.id, updatedTodos));
+  };
 
-  // const handleArchive = async () => {
-  //   // if (isArchived) {
-  //   //   dispatch(unarchiveTodo(activeTodo));
-  //   // } else {
-  //   //   dispatch(archiveTodo(activeTodo));
-  //   // }
-  //   // setActiveTodo(initTodo);
-  //   // setShowDetail(false);
-  //   // setIsArchived(false);
-  // };
+  const onConfirmDelete = async () => {
+    dispatch(updateBoardTodos(board.id, [...board.todos.filter((t) => t.id !== activeTodo.id)]));
+    setActiveTodo(initTodo);
+    setShowDetail(false);
+  };
+
+  const handleArchive = async () => {
+    const updatedTodos = [...board.todos];
+    const todoIndex = updatedTodos.findIndex((t: Todo) => t.id === activeTodo.id);
+
+    if (isArchived) {
+      updatedTodos[todoIndex] = {
+        ...updatedTodos[todoIndex],
+        isArchived: false
+      };
+    } else {
+      updatedTodos[todoIndex] = {
+        ...updatedTodos[todoIndex],
+        isArchived: true
+      };
+    }
+
+    dispatch(updateBoardTodos(board.id, updatedTodos));
+    setActiveTodo(initTodo);
+    setShowDetail(false);
+    setIsArchived(false);
+  };
 
   return (
     <div className="drawer drawer-end">
@@ -80,21 +106,23 @@ const Board = () => {
               isDragging={isDragging}
               stage={stage.title}
               stageNumber={stage.stageOrder}
-              todos={board.todos.filter((todo: Todo) => todo.stage === stage.title)}
+              todos={board.todos.filter(
+                (todo: Todo) => todo.stage === stage.title && !todo.isArchived
+              )}
               updateActiveDrag={(todo: Todo) => {
                 setActiveTodo(todo);
-                //setShowDetail(true);
-                //setIsArchived(false);
+                setShowDetail(true);
+                setIsArchived(false);
               }}
               updateActiveHoverColumn={(column: number) => setActiveHoverColumn(column)}
               updateIsDragging={(dragging: boolean) => setIsDragging(dragging)}
-              updateBoardTodos={(updatedTodo: Todo) => console.log(updatedTodo)}
+              updateBoardTodos={(updatedTodo: Todo) => updateTodos(updatedTodo)}
             />
           ))}
         </div>
-      </div>
-
-      {/* <ArchiveDetails
+        <ArchiveTodos
+          archivedTodos={board.todos.filter((t) => t.isArchived)}
+          board={board}
           updateActiveTodo={(todo: Todo) => {
             setActiveTodo(todo);
             setShowDetail(true);
@@ -109,13 +137,13 @@ const Board = () => {
             allStages={board.stages}
             todo={activeTodo}
             onArchive={handleArchive}
-            isArchived={isArchived}
+            updateTodo={(updatedTodo: Todo) => updateTodos(updatedTodo)}
           />
         </div>
       )}
       <Modal id="delete-todo-modal">
         <DeleteTodo confirm={onConfirmDelete} title={activeTodo.title} />
-      </Modal> */}
+      </Modal>
     </div>
   );
 };

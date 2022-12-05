@@ -2,7 +2,7 @@ import React from 'react';
 import { BounceLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
 import { AiFillEye } from 'react-icons/ai';
-import { MdDelete, MdShare, MdStarOutline } from 'react-icons/md';
+import { MdDelete } from 'react-icons/md';
 
 import { Stage } from '../../../models/Stage.model';
 import { useAppSelector } from '../../../hooks';
@@ -59,24 +59,6 @@ const BoardCard = ({ board, todos, selectedBoardId, updateSelectedBoard }: Props
                     size={24}
                     className="mr-2 cursor-pointer text-red-500"
                     onClick={() => updateSelectedBoard(board)}
-                  />
-                </label>
-              </div>
-              <div className="tooltip font-bold" data-tip="Share">
-                <label htmlFor="share-form">
-                  <MdShare
-                    size={24}
-                    className="mx-2 cursor-pointer text-purple-500"
-                    onClick={() => updateSelectedBoard(board)}
-                  />
-                </label>
-              </div>
-              <div className="tooltip font-bold" data-tip="Favorite">
-                <label>
-                  <MdStarOutline
-                    size={24}
-                    className="mx-2 cursor-pointer text-primary"
-                    onClick={() => console.log('asdfsd')}
                   />
                 </label>
               </div>
