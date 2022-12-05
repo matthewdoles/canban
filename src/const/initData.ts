@@ -14,3 +14,11 @@ export const initTodo = {
   created: Date.now(),
   assignee: ''
 };
+
+export const initBoard = {
+  boardName: '',
+  id: 0,
+  stages: [],
+  todos: [],
+  uid: ''
+};

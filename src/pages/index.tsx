@@ -6,6 +6,7 @@ import { fetchProfile, initProfile, SET_PROFILE } from '../store/reducers/profil
 import ProfileDropdown from '../components/ProfileDropdown';
 import Login from '../components/Login';
 import MyBoards from '../components/Boards/MyBoards';
+import BoardForm from '../components/Boards/BoardForm';
 
 function Dashboard() {
   const { profile } = useAppSelector((state) => state.profile);
@@ -41,6 +42,7 @@ function Dashboard() {
         <div className="p-8 flex flex-col items-center">
           <ProfileDropdown signOut={signOut} />
           <MyBoards />
+          <BoardForm />
         </div>
       )}
     </div>

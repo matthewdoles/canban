@@ -1,13 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { BounceLoader } from 'react-spinners';
+import { initBoard } from '../../../const/initData';
 
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { BoardSettings } from '../../../models/BoardSettings.model';
-import { fetchBoards } from '../../../store/reducers/boards';
+import { deleteBoard, fetchBoards } from '../../../store/reducers/boards';
+import Modal from '../../Modals';
+import DeleteBoard from '../../Modals/DeleteBoard';
 import BoardCard from '../BoardCard';
 
 const MyBoards = () => {
+  const [selectedBoard, setSelectedBoard] = useState<BoardSettings>(initBoard);
   const { boards, boardsError, boardsLoading } = useAppSelector((state) => state.boards);
   const dispatch = useAppDispatch();
 
@@ -25,8 +29,7 @@ const MyBoards = () => {
         </p>
         <label
           className="absolute right-3 top-1 text-3xl text-white font-bold cursor-pointer"
-          htmlFor="board-form"
-          onClick={() => console.log('asdfs')}>
+          htmlFor="board-form">
           <MdAdd size={28} />
         </label>
       </div>
@@ -43,11 +46,17 @@ const MyBoards = () => {
               board={board}
               selectedBoardId={0}
               todos={board.todos}
-              updateSelectedBoard={(board: BoardSettings) => console.log(board)}
+              updateSelectedBoard={(board: BoardSettings) => setSelectedBoard(board)}
             />
           </div>
         ))}
       </div>
+      <Modal id="delete-board-modal">
+        <DeleteBoard
+          board={selectedBoard}
+          confirm={() => dispatch(deleteBoard(selectedBoard.id))}
+        />
+      </Modal>
     </div>
   );
 };

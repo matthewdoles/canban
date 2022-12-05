@@ -78,33 +78,28 @@ export default function boardReducer(state = initialState, action: AnyAction) {
   }
 }
 
-export function submitBoard(boardName: string, stages: Stage[], id?: string): AppThunk {
+export function submitBoard(boardName: string, stages: Stage[]): AppThunk {
   return async (dispatch, getState) => {
     const { profile } = getState();
     dispatch({ type: ACTION_START, start: { boardsLoading: true, boardsError: '' } });
     try {
-      const { data, error } = await supabase.from('boards').upsert({
-        boardName: boardName,
-        stages: stages,
-        uid: profile.profile.id,
-        todos: [],
-        sharing: []
-      });
+      const { data, error } = await supabase
+        .from('boards')
+        .insert({
+          boardName,
+          stages,
+          uid: profile.profile.id,
+          todos: []
+        })
+        .select();
       if (error) {
         dispatch({ type: SET_ERROR, boardsError: error.message });
       }
       if (data) {
-        if (id) {
-          dispatch({
-            type: UPDATE_BOARD,
-            board: data[0]
-          });
-        } else {
-          dispatch({
-            type: ADD_BOARD,
-            board: data[0]
-          });
-        }
+        dispatch({
+          type: ADD_BOARD,
+          board: data[0]
+        });
       }
     } catch (e: unknown) {
       if (typeof e === 'string') {
@@ -118,14 +113,14 @@ export function submitBoard(boardName: string, stages: Stage[], id?: string): Ap
   };
 }
 
-export function deleteBoard(id: string): AppThunk {
+export function deleteBoard(id: number): AppThunk {
   return async (dispatch) => {
     try {
-      const { data, error } = await supabase.from('boards').delete().match({ id });
+      const { error } = await supabase.from('boards').delete().match({ id });
       if (error) {
         dispatch({ type: SET_ERROR, boardsError: error.message });
       }
-      if (data) {
+      if (!error) {
         dispatch({ type: DELETE_BOARD, boardId: id });
       }
     } catch (e: unknown) {
