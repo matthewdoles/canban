@@ -2,9 +2,11 @@ import { configureStore } from '@reduxjs/toolkit';
 import { AnyAction } from 'redux';
 import { ThunkAction } from '@reduxjs/toolkit';
 import profileReducer from './reducers/profile';
+import boardReducer from './reducers/boards';
 
 export const store = configureStore({
   reducer: {
+    boards: boardReducer,
     profile: profileReducer
   }
 });

@@ -1,4 +1,6 @@
 import React from 'react';
+import { FcGoogle } from 'react-icons/fc';
+import { FaGithub } from 'react-icons/fa';
 import { BounceLoader } from 'react-spinners';
 
 import { useAppSelector } from '../../hooks';
@@ -11,7 +13,7 @@ const Login = ({ signIn }: Props) => {
   const { profileError, profileLoading } = useAppSelector((state) => state.profile);
 
   return (
-    <div className="lg:w-2/5 md:3/4 sm:w-4/5 flex flex-col mx-auto bg-white shadow-lg items-center rounded-lg">
+    <div className="lg:w-2/5 md:3/4 sm:w-4/5 flex flex-col mx-auto items-center rounded-lg">
       <div className="flex flex-col w-full items-center p-4">
         <p className="text-red-500 font-bold">{profileError}</p>
         <div className="flex flex-col w-full items-center mt-4">
@@ -22,9 +24,28 @@ const Login = ({ signIn }: Props) => {
           )}
           {!profileLoading && (
             <>
-              <label className="btn btn-ghost w-40 border-none my-2" onClick={signIn}>
-                Google
-              </label>
+              <div
+                className="btn btn-white w-60 border-none my-2 align-center justify-between"
+                onClick={signIn}>
+                <div className="w-1/3 flex justify-center">
+                  <FcGoogle size={22} />
+                </div>
+                <div className="w-1/3">
+                  <p>Google</p>
+                </div>
+                <div className="w-1/3"></div>
+              </div>
+              <div
+                className="btn btn-white w-60 border-none my-2 align-center justify-between"
+                onClick={signIn}>
+                <div className="w-1/3 flex justify-center">
+                  <FaGithub size={22} />
+                </div>
+                <div className="w-1/3">
+                  <p>Github</p>
+                </div>
+                <div className="w-1/3"></div>
+              </div>
             </>
           )}
         </div>
