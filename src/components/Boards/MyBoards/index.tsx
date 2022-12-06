@@ -18,7 +18,7 @@ const MyBoards = () => {
     if (boards.length === 0) {
       dispatch(fetchBoards());
     }
-  });
+  }, []);
 
   return (
     <div className="w-full w-full flex flex-col mx-auto items-center rounded-lg">
@@ -43,13 +43,17 @@ const MyBoards = () => {
               />
             </div>
           ))}
-          <label
-            htmlFor="board-form"
-            className="m-2 btn btn-ghost drop-shadow-lg rounded-lg border-accent border-4 hover:border-accent min-h-44 h-44">
-            <div className="flex flex-row justify-center align-center text-center">
-              <p className="text-3xl text-accent">New Board</p>
-            </div>
-          </label>
+          {!boardsLoading ? (
+            <label
+              htmlFor="board-form"
+              className={`m-2 btn btn-ghost drop-shadow-lg rounded-lg border-accent border-4 hover:border-accent ${
+                boards.length === 0 || boards.length % 3 === 0 ? 'h-44' : 'min-h-full'
+              }`}>
+              <div className="flex flex-row justify-center align-center text-center">
+                <p className="text-3xl text-accent">New Board</p>
+              </div>
+            </label>
+          ) : null}
         </div>
       </div>
       <DeleteBoard
@@ -57,7 +61,7 @@ const MyBoards = () => {
         boardName={selectedBoard.boardName}
         confirm={() => {
           dispatch(deleteBoard(selectedBoard.id));
-          setShowDeleteBoard(true);
+          setShowDeleteBoard(false);
           setSelectedBoard(initBoard);
         }}
         close={() => {

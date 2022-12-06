@@ -21,7 +21,7 @@ const BoardCard = ({ board, todos, selectedBoardId, handleDeleteBoard }: Props) 
   const { profile } = useAppSelector((state) => state.profile);
 
   return (
-    <div className="bg-white drop-shadow-lg rounded-lg min-h-44 h-44">
+    <div className="bg-white drop-shadow-lg rounded-lg h-full">
       <div className="bg-primary p-1 rounded-t-lg">
         <p className="text-lg font-bold text-white ml-2" style={{ fontFamily: 'Noto Sans' }}>
           {board.boardName}
@@ -44,7 +44,7 @@ const BoardCard = ({ board, todos, selectedBoardId, handleDeleteBoard }: Props) 
               </div>
             ))}
           </div>
-          <div className="flex flex-col justify-between mt-2 mr-2">
+          <div className="flex mt-2 mr-2">
             <div className="avatar placeholder justify-end">
               <div className="w-10 h-10 rounded-full bg-primary">
                 {profile !== null && (
@@ -52,7 +52,7 @@ const BoardCard = ({ board, todos, selectedBoardId, handleDeleteBoard }: Props) 
                 )}
               </div>
             </div>
-            <div>
+            <div className="absolute flex bottom-2 right-4">
               <div className="tooltip font-bold" data-tip="Delete">
                 <label htmlFor="delete-board-modal">
                   <MdDelete
