@@ -12,10 +12,11 @@ type Props = {
   allStages: Stage[];
   todo: Todo;
   onArchive: () => void;
+  onDelete: () => void;
   updateTodo: (todo: Todo) => void;
 };
 
-const TodoDetail = ({ allStages, todo, onArchive, updateTodo }: Props) => {
+const TodoDetail = ({ allStages, todo, onArchive, onDelete, updateTodo }: Props) => {
   const [todoStageNumber, setTodoStageNumber] = useState<number>(0);
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
@@ -98,7 +99,7 @@ const TodoDetail = ({ allStages, todo, onArchive, updateTodo }: Props) => {
             </label>
           </div>
           <div className="tooltip tooltip-bottom font-bold" data-tip="Delete">
-            <label htmlFor="delete-todo-modal">
+            <label onClick={onDelete}>
               <MdDelete size={28} className="mx-2 cursor-pointer text-red-500" />
             </label>
           </div>

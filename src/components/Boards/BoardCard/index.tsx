@@ -13,10 +13,10 @@ type Props = {
   board: BoardSettings;
   todos: Todo[] | null;
   selectedBoardId: number;
-  updateSelectedBoard: (board: BoardSettings) => void;
+  handleDeleteBoard: (board: BoardSettings) => void;
 };
 
-const BoardCard = ({ board, todos, selectedBoardId, updateSelectedBoard }: Props) => {
+const BoardCard = ({ board, todos, selectedBoardId, handleDeleteBoard }: Props) => {
   const { boardsLoading } = useAppSelector((state) => state.boards);
   const { profile } = useAppSelector((state) => state.profile);
 
@@ -58,7 +58,7 @@ const BoardCard = ({ board, todos, selectedBoardId, updateSelectedBoard }: Props
                   <MdDelete
                     size={24}
                     className="mr-2 cursor-pointer text-red-500"
-                    onClick={() => updateSelectedBoard(board)}
+                    onClick={() => handleDeleteBoard(board)}
                   />
                 </label>
               </div>

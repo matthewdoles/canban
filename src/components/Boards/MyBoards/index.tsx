@@ -6,12 +6,12 @@ import { initBoard } from '../../../const/initData';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { BoardSettings } from '../../../models/BoardSettings.model';
 import { deleteBoard, fetchBoards } from '../../../store/reducers/boards';
-import Modal from '../../Modals';
 import DeleteBoard from '../../Modals/DeleteBoard';
 import BoardCard from '../BoardCard';
 
 const MyBoards = () => {
   const [selectedBoard, setSelectedBoard] = useState<BoardSettings>(initBoard);
+  const [showDeleteBoard, setShowDeleteBoard] = useState<boolean>(false);
   const { boards, boardsError, boardsLoading } = useAppSelector((state) => state.boards);
   const dispatch = useAppDispatch();
 
@@ -41,19 +41,29 @@ const MyBoards = () => {
           <div key={board.id} className="m-4">
             <BoardCard
               board={board}
-              selectedBoardId={0}
+              selectedBoardId={selectedBoard.id}
               todos={board.todos}
-              updateSelectedBoard={(board: BoardSettings) => setSelectedBoard(board)}
+              handleDeleteBoard={(board: BoardSettings) => {
+                setSelectedBoard(board);
+                setShowDeleteBoard(true);
+              }}
             />
           </div>
         ))}
       </div>
-      <Modal id="delete-board-modal">
-        <DeleteBoard
-          board={selectedBoard}
-          confirm={() => dispatch(deleteBoard(selectedBoard.id))}
-        />
-      </Modal>
+      <DeleteBoard
+        checked={showDeleteBoard}
+        boardName={selectedBoard.boardName}
+        confirm={() => {
+          dispatch(deleteBoard(selectedBoard.id));
+          setShowDeleteBoard(true);
+          setSelectedBoard(initBoard);
+        }}
+        close={() => {
+          setShowDeleteBoard(false);
+          setSelectedBoard(initBoard);
+        }}
+      />
     </div>
   );
 };

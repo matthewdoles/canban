@@ -12,7 +12,6 @@ import { Stage } from '../../models/Stage.model';
 import { Todo } from '../../models/Todo.model';
 import { fetchProfile } from '../../store/reducers/profile';
 import TodoDetail from '../../components/Todos/TodoDetail';
-import Modal from '../../components/Modals';
 import DeleteTodo from '../../components/Modals/DeleteTodo';
 import ArchiveTodos from '../../components/Todos/ArchiveTodos';
 
@@ -23,6 +22,7 @@ const Board = () => {
   const [isArchived, setIsArchived] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
+  const [showDeleteTodo, setShowDeleteTodo] = useState<boolean>(false);
   const { boards, boardsError } = useAppSelector((state) => state.boards);
   const { profile } = useAppSelector((state) => state.profile);
   const dispatch = useAppDispatch();
@@ -55,6 +55,7 @@ const Board = () => {
     dispatch(updateBoardTodos(board.id, [...board.todos.filter((t) => t.id !== activeTodo.id)]));
     setActiveTodo(initTodo);
     setShowDetail(false);
+    setShowDeleteTodo(false);
   };
 
   const handleArchive = async () => {
@@ -137,13 +138,17 @@ const Board = () => {
             allStages={board.stages}
             todo={activeTodo}
             onArchive={handleArchive}
+            onDelete={() => setShowDeleteTodo(true)}
             updateTodo={(updatedTodo: Todo) => updateTodos(updatedTodo)}
           />
         </div>
       )}
-      <Modal id="delete-todo-modal">
-        <DeleteTodo confirm={onConfirmDelete} title={activeTodo.title} />
-      </Modal>
+      <DeleteTodo
+        checked={showDeleteTodo}
+        confirm={onConfirmDelete}
+        close={() => setShowDeleteTodo(false)}
+        title={activeTodo.title}
+      />
     </div>
   );
 };

@@ -18,8 +18,8 @@ const ArchiveTodos = ({ archivedTodos, board, updateActiveTodo }: Props) => {
 
   useEffect(() => {
     setArchivedCount(archivedTodos.length);
-    setSelectedStage(board.stages[board.stages.length - 1].title);
-  }, [archivedTodos]);
+    if (board.stages.length > 0) setSelectedStage(board.stages[board.stages.length - 1].title);
+  }, [archivedTodos, board]);
 
   return (
     <div className="collapse bg-accent m-2">
