@@ -9,10 +9,9 @@ type Props = {
   addNewTodo: (todo: Todo) => void;
   allStages: Stage[];
   autoPopStage: string;
-  boardId: number;
 };
 
-const TodoForm = ({ addNewTodo, allStages, autoPopStage, boardId }: Props) => {
+const TodoForm = ({ addNewTodo, allStages, autoPopStage }: Props) => {
   const [todoName, setTodoName] = useState<string>('');
   const [selectedStage, setSelectedStage] = useState<string>(autoPopStage);
   const [stages] = useState<Stage[]>(allStages);
@@ -30,7 +29,6 @@ const TodoForm = ({ addNewTodo, allStages, autoPopStage, boardId }: Props) => {
       title: todoName,
       description: description,
       stage: selectedStage,
-      boardId,
       comments: [],
       id: uuidv4(),
       created: Date.now(),

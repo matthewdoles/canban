@@ -2,6 +2,7 @@ import { AnyAction } from 'redux';
 import { Profile } from '../../models/Profile.model';
 import { supabase } from '../../supabaseClient';
 import { AppThunk } from '../configureReducer';
+import { createInitBoard } from './boards';
 
 export const SET_PROFILE = 'SET_PROFILE';
 export const SET_PROFILE_COLLECTION = 'SET_PROFILE_COLLECTION';
@@ -111,6 +112,7 @@ const createProfile = (): AppThunk => {
           }
           if (record.data) {
             dispatch({ type: SET_PROFILE, profile: record.data[0] });
+            dispatch(createInitBoard());
           }
         }
       })

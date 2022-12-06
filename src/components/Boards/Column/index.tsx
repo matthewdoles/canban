@@ -12,7 +12,6 @@ type Props = {
   addNewTodo: (todo: Todo) => void;
   activeHoverColumn: number;
   allStages: Stage[];
-  boardId: number;
   color: string;
   isDragging: boolean;
   stage: string;
@@ -29,7 +28,6 @@ const Column = ({
   addNewTodo,
   activeHoverColumn,
   allStages,
-  boardId,
   color,
   isDragging,
   stage,
@@ -126,7 +124,6 @@ const Column = ({
           }}
           allStages={allStages}
           autoPopStage={stage}
-          boardId={boardId}
         />
       )}
     </div>

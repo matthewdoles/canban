@@ -5,6 +5,7 @@ import { supabase } from '../../supabaseClient';
 import { Stage } from '../../models/Stage.model';
 import { BoardSettings } from '../../models/BoardSettings.model';
 import { Todo } from '../../models/Todo.model';
+import { newUserBoard } from '../../const/initData';
 
 export const ACTION_START = 'ACTION_START';
 export const ADD_BOARD = 'ADD_BOARD';
@@ -174,6 +175,40 @@ export function updateBoardTodos(boardId: number, todos: Todo[]): AppThunk {
       if (data) {
         dispatch({
           type: UPDATE_BOARD,
+          board: data[0]
+        });
+      }
+    } catch (e: unknown) {
+      if (typeof e === 'string') {
+        dispatch({ type: SET_ERROR, boardsError: e });
+      } else if (e instanceof Error) {
+        dispatch({ type: SET_ERROR, boardsError: e.message });
+      }
+    } finally {
+      dispatch({ type: SET_IS_LOADING, boardsLoading: false });
+    }
+  };
+}
+
+export function createInitBoard(): AppThunk {
+  return async (dispatch, getState) => {
+    const { profile } = getState();
+    dispatch({ type: ACTION_START });
+    const newBoard = { ...newUserBoard };
+    newBoard.uid = profile.profile.id;
+    newBoard.todos[0].assignee = profile.profile.id;
+    newBoard.todos[0].comments[0].author = profile.profile.id;
+    try {
+      const { data, error } = await supabase
+        .from('boards')
+        .insert({ ...newBoard })
+        .select();
+      if (error) {
+        dispatch({ type: SET_ERROR, boardsError: error.message });
+      }
+      if (data) {
+        dispatch({
+          type: ADD_BOARD,
           board: data[0]
         });
       }

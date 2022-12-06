@@ -106,7 +106,6 @@ const Board = () => {
                   }
                   activeHoverColumn={activeHoverColumn}
                   allStages={board.stages}
-                  boardId={board.id}
                   color={stage.color}
                   isDragging={isDragging}
                   stage={stage.title}
