@@ -1,29 +1,16 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-
-import { useAppSelector } from './hooks';
+import Dashboard from './pages';
 import Board from './pages/Board';
-import Dashboard from './pages/Dashboard';
-import Login from './pages/Login';
 
 function App() {
-  const user = useAppSelector((state) => state.user.firebaseUser);
   return (
     <div className="min-h-screen min-w-screen bg-secondary" style={{ fontFamily: 'Roboto' }}>
-      {user === null ? (
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="*" element={<Navigate to="/" />} />
-          <Route path="/board/:id" element={<Board />} />
-        </Routes>
-      ) : (
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/board/:id" element={<Board />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="*" element={<Navigate to="/dashboard" />} />
-        </Routes>
-      )}
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/board/:id" element={<Board />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     </div>
   );
 }

@@ -1,24 +1,28 @@
 import React from 'react';
 
 type Props = {
+  checked: boolean;
   error: string;
   onClose: () => void;
 };
 
-const ErrorModal = ({ error, onClose }: Props) => {
+const ErrorModal = ({ checked, error, onClose }: Props) => {
   return (
     <>
-      <div
-        className={`flex flex-row justify-center bg-red-500 p-1 rounded-t-lg cursor-grab header`}>
-        <h3 className="text-2xl text-white font-bold">Error</h3>
-      </div>
-      <div className="mt-4 text-center">
-        <p className="text-lg">{error}</p>
-      </div>
-      <div className="modal-action p-4">
-        <label className="btn border-none bg-red-500 text-white" onClick={onClose}>
-          Close
-        </label>
+      <input type="checkbox" className="modal-toggle" checked={checked} readOnly />
+      <div className="modal">
+        <div className="modal-box p-0">
+          <div className="bg-red-500 p-1" />
+          <p className="text-lg my-4 px-8 break-word">{error}</p>
+          <div className="modal-action mb-4 mr-4">
+            <label
+              htmlFor="profile-modal"
+              className="btn btn-sm border-none bg-red-500 text-white"
+              onClick={onClose}>
+              Close
+            </label>
+          </div>
+        </div>
       </div>
     </>
   );

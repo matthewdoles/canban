@@ -6,18 +6,15 @@ import './index.css';
 import './fonts/LemonMilk/LemonMilkMediumItalic.otf';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import AuthProvider from './components/AuthProvider';
 import { Provider } from 'react-redux';
 import { store } from './store/configureReducer';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <AuthProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </AuthProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

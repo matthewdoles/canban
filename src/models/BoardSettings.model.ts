@@ -3,9 +3,8 @@ import { Todo } from './Todo.model';
 
 export type BoardSettings = {
   boardName: string;
-  id?: string;
-  sharing?: string[];
+  id: number;
   stages: Stage[];
-  todos?: Todo[];
+  todos: Todo[];
   uid: string;
 };

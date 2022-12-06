@@ -5,12 +5,21 @@ export const initStages = [
 ];
 
 export const initTodo = {
-  boardId: '',
+  boardId: 0,
   comments: [],
   id: '0',
   stage: 'None',
   description: '',
   title: '',
   created: Date.now(),
-  assignee: ''
+  assignee: '',
+  isArchived: false
+};
+
+export const initBoard = {
+  boardName: '',
+  id: 0,
+  stages: [],
+  todos: [],
+  uid: ''
 };
