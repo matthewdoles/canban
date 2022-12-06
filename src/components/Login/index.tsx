@@ -1,16 +1,17 @@
 import React from 'react';
 import { FcGoogle } from 'react-icons/fc';
-import { FaGithub } from 'react-icons/fa';
+import { FaFacebook, FaGithub } from 'react-icons/fa';
 import { BounceLoader } from 'react-spinners';
 
 import { useAppSelector } from '../../hooks';
 
 type Props = {
+  signInFacebook: () => void;
   signInGithub: () => void;
   signInGoogle: () => void;
 };
 
-const Login = ({ signInGithub, signInGoogle }: Props) => {
+const Login = ({ signInFacebook, signInGithub, signInGoogle }: Props) => {
   const { profileError, profileLoading } = useAppSelector((state) => state.profile);
 
   return (
@@ -25,28 +26,45 @@ const Login = ({ signInGithub, signInGoogle }: Props) => {
           )}
           {!profileLoading && (
             <>
-              <p className="text-primary font-bold grow-0">LOGIN</p>
-              <div
-                className="btn btn-white w-60 border-none my-2 align-center justify-between"
-                onClick={signInGoogle}>
-                <div className="w-1/3 flex justify-center">
-                  <FcGoogle size={22} />
+              <div className="flex flex-col border-4 border-primary rounded-md p-8">
+                <div className="bg-primary p-3 rounded-md w-60 border-none my-2 align-center justify-between">
+                  <p className="text-white text-center" style={{ fontFamily: 'LemonMilk' }}>
+                    LOGIN
+                  </p>
                 </div>
-                <div className="w-1/3">
-                  <p>Google</p>
+                <div
+                  className="btn btn-white w-60 border-none my-2 align-center justify-between"
+                  onClick={signInGoogle}>
+                  <div className="w-1/3 flex justify-center">
+                    <FcGoogle size={22} />
+                  </div>
+                  <div className="w-1/3">
+                    <p>Google</p>
+                  </div>
+                  <div className="w-1/3"></div>
                 </div>
-                <div className="w-1/3"></div>
-              </div>
-              <div
-                className="btn btn-white w-60 border-none my-2 align-center justify-between"
-                onClick={signInGithub}>
-                <div className="w-1/3 flex justify-center">
-                  <FaGithub size={22} />
+                <div
+                  className="btn btn-white w-60 border-none my-2 align-center justify-between"
+                  onClick={signInGithub}>
+                  <div className="w-1/3 flex justify-center">
+                    <FaGithub size={22} />
+                  </div>
+                  <div className="w-1/3">
+                    <p>Github</p>
+                  </div>
+                  <div className="w-1/3"></div>
                 </div>
-                <div className="w-1/3">
-                  <p>Github</p>
+                <div
+                  className="btn btn-white w-60 border-none my-2 align-center justify-between"
+                  onClick={signInFacebook}>
+                  <div className="w-1/3 flex justify-center">
+                    <FaFacebook size={22} className="text-blue-700" />
+                  </div>
+                  <div className="w-1/3">
+                    <p>Facebook</p>
+                  </div>
+                  <div className="w-1/3"></div>
                 </div>
-                <div className="w-1/3"></div>
               </div>
             </>
           )}

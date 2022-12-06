@@ -18,6 +18,12 @@ function Dashboard() {
     }
   }, [profile]);
 
+  const signInFacebook = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: 'twitter'
+    });
+  };
+
   const signInGithub = async () => {
     await supabase.auth.signInWithOAuth({
       provider: 'github'
@@ -37,8 +43,12 @@ function Dashboard() {
           <p className="text-5xl text-center text-primary" style={{ fontFamily: 'LemonMilk' }}>
             Canban
           </p>
-          <p className="text-md text-white text-center font-bold pt-4 mb-8">You can do anything!</p>
-          <Login signInGithub={signInGithub} signInGoogle={signInGoogle} />
+          <p className="text-md text-white text-center font-bold mt-4">You can do anything!</p>
+          <Login
+            signInFacebook={signInFacebook}
+            signInGithub={signInGithub}
+            signInGoogle={signInGoogle}
+          />
         </div>
       ) : (
         <div className="pt-4">
