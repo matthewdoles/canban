@@ -31,23 +31,23 @@ function Dashboard() {
   };
 
   return (
-    <div className="pt-4 mx-4">
+    <div className="mx-4">
       {profile.id.length === 0 ? (
-        <>
+        <div className="h-screen flex flex-col justify-center">
           <p className="text-5xl text-center text-primary" style={{ fontFamily: 'LemonMilk' }}>
             Canban
           </p>
-          <p className="text-md text-white text-center font-bold pt-4">You can do anything.</p>
+          <p className="text-md text-white text-center font-bold pt-4 mb-8">You can do anything!</p>
           <Login signInGithub={signInGithub} signInGoogle={signInGoogle} />
-        </>
+        </div>
       ) : (
-        <>
+        <div className="pt-4">
           <Navigation />
           <div className="p-4 flex flex-col items-center">
             <MyBoards />
             <BoardForm />
           </div>
-        </>
+        </div>
       )}
     </div>
   );

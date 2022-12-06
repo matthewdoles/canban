@@ -46,11 +46,9 @@ const MyBoards = () => {
           {!boardsLoading ? (
             <label
               htmlFor="board-form"
-              className={`m-2 btn btn-ghost drop-shadow-lg rounded-lg border-accent border-4 hover:border-accent ${
-                boards.length === 0 || boards.length % 3 === 0 ? 'h-44' : 'min-h-full'
-              }`}>
+              className={`m-2 btn btn-ghost bg-primary text-white drop-shadow-lg rounded-lg border-4 hover:border-accent h-44`}>
               <div className="flex flex-row justify-center align-center text-center">
-                <p className="text-3xl text-accent">New Board</p>
+                <p className="text-3xl">New Board</p>
               </div>
             </label>
           ) : null}

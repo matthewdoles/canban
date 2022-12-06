@@ -42,7 +42,11 @@ const TodoCard = ({ color, disabled, clicked, dragging, dragStart, dragStop, tod
             </div>
             <div className="avatar placeholder m-2">
               <div className="w-10 h-10 rounded-full bg-blue-500">
-                <span className="text-xl text-white font-bold">{profile.username.charAt(0)}</span>
+                {profile.photoURL.length === 0 ? (
+                  <span className="text-xl text-white font-bold">{profile.username.charAt(0)}</span>
+                ) : (
+                  <img src={profile.photoURL} />
+                )}
               </div>
             </div>
           </div>

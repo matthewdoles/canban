@@ -47,8 +47,10 @@ const BoardCard = ({ board, todos, selectedBoardId, handleDeleteBoard }: Props) 
           <div className="flex mt-2 mr-2">
             <div className="avatar placeholder justify-end">
               <div className="w-10 h-10 rounded-full bg-primary">
-                {profile !== null && (
+                {profile.photoURL.length === 0 ? (
                   <span className="text-xl text-white font-bold">{profile.username.charAt(0)}</span>
+                ) : (
+                  <img src={profile.photoURL} />
                 )}
               </div>
             </div>

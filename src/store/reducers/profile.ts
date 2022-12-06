@@ -8,6 +8,7 @@ export const SET_PROFILE_COLLECTION = 'SET_PROFILE_COLLECTION';
 export const SET_PROFILE_ACTION_START = 'SET_PROFILE_ACTION_START';
 export const SET_PROFILE_ERROR = 'SET_PROFILE_ERROR';
 export const SET_PROFILE_LOADING = 'SET_PROFILE_LOADING';
+export const SET_PROFILE_UPDATE = 'SET_PROFILE_UPDATE';
 
 export const initProfile = {
   id: '',
@@ -101,7 +102,8 @@ const createProfile = (): AppThunk => {
             .upsert({
               email: data.user.email,
               username: data.user.email.substring(0, data.user.email.lastIndexOf('@')),
-              id: data.user.id
+              id: data.user.id,
+              photoURL: ''
             })
             .select();
           if (record.error) {
@@ -124,3 +126,32 @@ const createProfile = (): AppThunk => {
       });
   };
 };
+
+export function updateProfile(username: string, photoURL: string): AppThunk {
+  return async (dispatch, getState) => {
+    dispatch({ type: SET_PROFILE_ACTION_START });
+    const { profile } = getState();
+
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .update({ username, photoURL })
+        .eq('id', profile.profile.id)
+        .select();
+      if (error) {
+        dispatch({ type: SET_PROFILE_ERROR, profileError: error.message });
+      }
+      if (data) {
+        dispatch({ type: SET_PROFILE, profile: data[0] });
+      }
+    } catch (e: unknown) {
+      if (typeof e === 'string') {
+        dispatch({ type: SET_PROFILE_ERROR, profileError: e });
+      } else if (e instanceof Error) {
+        dispatch({ type: SET_PROFILE_ERROR, profileError: e.message });
+      }
+    } finally {
+      dispatch({ type: SET_PROFILE_LOADING, profileLoading: false });
+    }
+  };
+}
