@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { supabase } from '../supabaseClient';
-import { fetchProfile, initProfile, SET_PROFILE } from '../store/reducers/profile';
-import ProfileDropdown from '../components/ProfileDropdown';
+import { fetchProfile } from '../store/reducers/profile';
 import Login from '../components/Login';
 import MyBoards from '../components/Boards/MyBoards';
 import BoardForm from '../components/Boards/BoardForm';
+import Navigation from '../components/Navigation';
 
 function Dashboard() {
   const { profile } = useAppSelector((state) => state.profile);
@@ -30,26 +30,24 @@ function Dashboard() {
     });
   };
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
-    dispatch({ type: SET_PROFILE, profile: initProfile });
-  };
-
   return (
-    <div className="pt-8">
+    <div className="pt-4 mx-4">
       {profile.id.length === 0 ? (
         <>
           <p className="text-5xl text-center text-primary" style={{ fontFamily: 'LemonMilk' }}>
             Canban
           </p>
+          <p className="text-md text-white text-center font-bold pt-4">You can do anything.</p>
           <Login signInGithub={signInGithub} signInGoogle={signInGoogle} />
         </>
       ) : (
-        <div className="p-8 flex flex-col items-center">
-          <ProfileDropdown signOut={signOut} />
-          <MyBoards />
-          <BoardForm />
-        </div>
+        <>
+          <Navigation />
+          <div className="p-4 flex flex-col items-center">
+            <MyBoards />
+            <BoardForm />
+          </div>
+        </>
       )}
     </div>
   );

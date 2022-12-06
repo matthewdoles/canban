@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { MdAdd } from 'react-icons/md';
 import { BounceLoader } from 'react-spinners';
 import { initBoard } from '../../../const/initData';
 
@@ -22,14 +21,7 @@ const MyBoards = () => {
   });
 
   return (
-    <div className="lg:w-1/2 md:3/4 w-full flex flex-col mx-auto bg-accent shadow-lg items-center rounded-lg">
-      <div className="w-full h-12 relative justify-center bg-primary p-1 rounded-t-lg">
-        <label
-          className="absolute right-3 top-1 text-3xl text-white font-bold cursor-pointer"
-          htmlFor="board-form">
-          <MdAdd size={36} />
-        </label>
-      </div>
+    <div className="w-full w-full flex flex-col mx-auto items-center rounded-lg">
       <div className="w-full p-4">
         {boardsLoading && boards.length === 0 && (
           <div className="flex flex-row justify-center p-4">
@@ -37,19 +29,28 @@ const MyBoards = () => {
           </div>
         )}
         {boardsError > 0 && <p className="text-red-500 text-center font-bold">{boardsError}</p>}
-        {boards?.map((board) => (
-          <div key={board.id} className="m-4">
-            <BoardCard
-              board={board}
-              selectedBoardId={selectedBoard.id}
-              todos={board.todos}
-              handleDeleteBoard={(board: BoardSettings) => {
-                setSelectedBoard(board);
-                setShowDeleteBoard(true);
-              }}
-            />
-          </div>
-        ))}
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1">
+          {boards?.map((board) => (
+            <div key={board.id} className="m-2 shadow-lg">
+              <BoardCard
+                board={board}
+                selectedBoardId={selectedBoard.id}
+                todos={board.todos}
+                handleDeleteBoard={(board: BoardSettings) => {
+                  setSelectedBoard(board);
+                  setShowDeleteBoard(true);
+                }}
+              />
+            </div>
+          ))}
+          <label
+            htmlFor="board-form"
+            className="m-2 btn btn-ghost drop-shadow-lg rounded-lg border-accent border-4 hover:border-accent min-h-44 h-44">
+            <div className="flex flex-row justify-center align-center text-center">
+              <p className="text-3xl text-accent">New Board</p>
+            </div>
+          </label>
+        </div>
       </div>
       <DeleteBoard
         checked={showDeleteBoard}

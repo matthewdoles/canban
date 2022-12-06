@@ -14,6 +14,7 @@ import { fetchProfile } from '../../store/reducers/profile';
 import TodoDetail from '../../components/Todos/TodoDetail';
 import DeleteTodo from '../../components/Modals/DeleteTodo';
 import ArchiveTodos from '../../components/Todos/ArchiveTodos';
+import Navigation from '../../components/Navigation';
 
 const Board = () => {
   const [board, setBoard] = useState<BoardSettings>(initBoard);
@@ -83,7 +84,8 @@ const Board = () => {
   return (
     <div className="drawer drawer-end">
       <input type="checkbox" checked={showDetail} className="drawer-toggle" />
-      <div className="drawer-content p-8">
+      <div className="drawer-content p-4">
+        <Navigation />
         {boardsError.length > 0 && (
           <div className="alert alert-error shadow-lg bg-red-400 flex justify-center">
             <div>
@@ -92,44 +94,48 @@ const Board = () => {
             </div>
           </div>
         )}
-        <div className="flex flex-row w-full">
-          {board.stages.map((stage: Stage) => (
-            <Column
-              key={stage.title}
-              activeTodo={activeTodo}
-              addNewTodo={(todo: Todo) =>
-                dispatch(updateBoardTodos(board.id, [...board.todos, todo]))
-              }
-              activeHoverColumn={activeHoverColumn}
-              allStages={board.stages}
-              boardId={board.id}
-              color={stage.color}
-              isDragging={isDragging}
-              stage={stage.title}
-              stageNumber={stage.stageOrder}
-              todos={board.todos.filter(
-                (todo: Todo) => todo.stage === stage.title && !todo.isArchived
-              )}
-              updateActiveDrag={(todo: Todo) => {
+        {board.id !== 0 ? (
+          <>
+            <div className="flex flex-row w-full pt-4">
+              {board.stages.map((stage: Stage) => (
+                <Column
+                  key={stage.title}
+                  activeTodo={activeTodo}
+                  addNewTodo={(todo: Todo) =>
+                    dispatch(updateBoardTodos(board.id, [...board.todos, todo]))
+                  }
+                  activeHoverColumn={activeHoverColumn}
+                  allStages={board.stages}
+                  boardId={board.id}
+                  color={stage.color}
+                  isDragging={isDragging}
+                  stage={stage.title}
+                  stageNumber={stage.stageOrder}
+                  todos={board.todos.filter(
+                    (todo: Todo) => todo.stage === stage.title && !todo.isArchived
+                  )}
+                  updateActiveDrag={(todo: Todo) => {
+                    setActiveTodo(todo);
+                    setShowDetail(true);
+                    setIsArchived(false);
+                  }}
+                  updateActiveHoverColumn={(column: number) => setActiveHoverColumn(column)}
+                  updateIsDragging={(dragging: boolean) => setIsDragging(dragging)}
+                  updateBoardTodos={(updatedTodo: Todo) => updateTodos(updatedTodo)}
+                />
+              ))}
+            </div>
+            <ArchiveTodos
+              archivedTodos={board.todos.filter((t) => t.isArchived)}
+              board={board}
+              updateActiveTodo={(todo: Todo) => {
                 setActiveTodo(todo);
                 setShowDetail(true);
-                setIsArchived(false);
+                setIsArchived(true);
               }}
-              updateActiveHoverColumn={(column: number) => setActiveHoverColumn(column)}
-              updateIsDragging={(dragging: boolean) => setIsDragging(dragging)}
-              updateBoardTodos={(updatedTodo: Todo) => updateTodos(updatedTodo)}
             />
-          ))}
-        </div>
-        <ArchiveTodos
-          archivedTodos={board.todos.filter((t) => t.isArchived)}
-          board={board}
-          updateActiveTodo={(todo: Todo) => {
-            setActiveTodo(todo);
-            setShowDetail(true);
-            setIsArchived(true);
-          }}
-        />
+          </>
+        ) : null}
       </div>
       {board && activeTodo.id !== '0' && !isDragging && (
         <div className="drawer-side">

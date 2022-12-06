@@ -25,6 +25,7 @@ const Login = ({ signInGithub, signInGoogle }: Props) => {
           )}
           {!profileLoading && (
             <>
+              <p className="text-primary font-bold grow-0">LOGIN</p>
               <div
                 className="btn btn-white w-60 border-none my-2 align-center justify-between"
                 onClick={signInGoogle}>

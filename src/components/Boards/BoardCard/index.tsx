@@ -21,7 +21,7 @@ const BoardCard = ({ board, todos, selectedBoardId, handleDeleteBoard }: Props) 
   const { profile } = useAppSelector((state) => state.profile);
 
   return (
-    <div className="bg-white drop-shadow-lg rounded-lg">
+    <div className="bg-white drop-shadow-lg rounded-lg min-h-44 h-44">
       <div className="bg-primary p-1 rounded-t-lg">
         <p className="text-lg font-bold text-white ml-2" style={{ fontFamily: 'Noto Sans' }}>
           {board.boardName}
