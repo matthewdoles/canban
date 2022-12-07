@@ -4,64 +4,68 @@ import { v4 as uuidv4 } from 'uuid';
 import { useAppSelector } from '../../../hooks';
 import { Stage } from '../../../models/Stage.model';
 import { Todo } from '../../../models/Todo.model';
+import { inputStyles } from '../../../const';
 
 type Props = {
   addNewTodo: (todo: Todo) => void;
   allStages: Stage[];
   autoPopStage: string;
+  checked: boolean;
+  close: () => void;
 };
 
-const TodoForm = ({ addNewTodo, allStages, autoPopStage }: Props) => {
-  const [todoName, setTodoName] = useState<string>('');
-  const [selectedStage, setSelectedStage] = useState<string>(autoPopStage);
-  const [stages] = useState<Stage[]>(allStages);
+const TodoForm = ({ addNewTodo, allStages, autoPopStage, checked, close }: Props) => {
   const [description, setDescription] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const [selectedStage, setSelectedStage] = useState<string>(autoPopStage);
+  const [stages] = useState<Stage[]>(allStages);
+  const [todoName, setTodoName] = useState<string>('');
   const { profile } = useAppSelector((state) => state.profile);
-
-  const inputStyles =
-    '!outline-0 text-xl w-full max-w-sm my-4 border-x-transparent ' +
-    'border-t-transparent rounded-none border-b-2 mr-2 border-gray-200';
 
   const onSaveClick = () => {
     if (todoName.length === 0) return setError('Please enter a task name.');
     addNewTodo({
-      title: todoName,
-      description: description,
-      stage: selectedStage,
-      comments: [],
-      id: uuidv4(),
-      created: Date.now(),
       assignee: profile.id,
-      isArchived: false
+      comments: [],
+      created: Date.now(),
+      description: description,
+      id: uuidv4(),
+      isArchived: false,
+      stage: selectedStage,
+      title: todoName
     });
+    closeForm();
+  };
+
+  const closeForm = () => {
+    setDescription('');
+    setTodoName('');
+    close();
   };
 
   return (
     <>
-      <input type="checkbox" id={`todo-form-${autoPopStage}`} className="modal-toggle" />
+      <input className="modal-toggle" checked={checked} readOnly type="checkbox" />
       <div className="modal">
-        <div className="modal-box p-0 !min-w-[650px]">
-          <div className="w-full relative justify-center bg-primary p-1 rounded-t-lg">
-            <p className="text-2xl text-white text-center font-bold">New Todo</p>
-          </div>
+        <div className="modal-box !min-w-[650px] p-0">
+          <div className="w-full relative justify-center bg-primary rounded-t-lg p-1"></div>
           <div className="flex flex-col w-full items-center p-4">
             <input
-              type="text"
-              placeholder="Task Name"
-              value={todoName}
+              className={`input max-w-md ${inputStyles}`}
               onChange={(e) => setTodoName(e.target.value)}
-              className={`input ${inputStyles}`}
+              placeholder="Task Name"
+              type="text"
+              value={todoName}
             />
             <textarea
-              className={`textarea ${inputStyles}`}
-              rows={3}
-              placeholder="Description"
-              value={description}
+              className={`textarea max-w-md ${inputStyles}`}
               onChange={(e) => setDescription(e.target.value)}
+              placeholder="Description"
+              rows={3}
+              value={description}
             />
             <select
-              className={`select ${inputStyles}`}
+              className={`select max-w-md ${inputStyles}`}
               onChange={(e) => setSelectedStage(e.target.value)}
               value={selectedStage}>
               {stages.map((stage) => (
@@ -74,9 +78,7 @@ const TodoForm = ({ addNewTodo, allStages, autoPopStage }: Props) => {
               </div>
             )}
             <div className="modal-action">
-              <label
-                htmlFor={`todo-form-${autoPopStage}`}
-                className="btn bg-red-500 text-white w-20 border-none">
+              <label className="btn bg-red-500 text-white w-20 border-none" onClick={closeForm}>
                 Cancel
               </label>
               <label className="btn bg-green-500 text-white w-20 border-none" onClick={onSaveClick}>

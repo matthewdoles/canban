@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { inputStyles } from '../../../const';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { updateProfile } from '../../../store/reducers/profile';
 
@@ -16,10 +17,6 @@ const Profile = ({ checked, close }: Props) => {
   useEffect(() => {
     resetForm();
   }, [profile]);
-
-  const inputStyles =
-    '!outline-0 text-xl w-full my-2 border-x-transparent ' +
-    'border-t-transparent rounded-none border-b-2 border-gray-200';
 
   const onSaveClick = () => {
     dispatch(updateProfile(username, photoURL));

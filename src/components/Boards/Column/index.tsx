@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { DraggableData, DraggableEvent } from 'react-draggable';
 import { MdAdd } from 'react-icons/md';
-import { initTodo } from '../../../const/initData';
-import { Stage } from '../../../models/Stage.model';
-import { Todo } from '../../../models/Todo.model';
+
 import TodoCard from '../../Todos/TodoCard';
 import TodoForm from '../../Todos/TodoForm';
+import { Stage } from '../../../models/Stage.model';
+import { Todo } from '../../../models/Todo.model';
+import { initTodo } from '../../../const/initData';
 
 type Props = {
   activeTodo: Todo;
-  addNewTodo: (todo: Todo) => void;
   activeHoverColumn: number;
+  addNewTodo: (todo: Todo) => void;
   allStages: Stage[];
   color: string;
   isDragging: boolean;
@@ -25,8 +26,8 @@ type Props = {
 
 const Column = ({
   activeTodo,
-  addNewTodo,
   activeHoverColumn,
+  addNewTodo,
   allStages,
   color,
   isDragging,
@@ -38,7 +39,36 @@ const Column = ({
   updateBoardTodos,
   updateIsDragging
 }: Props) => {
-  const [createFormOpen, setCreateFormOpen] = useState<boolean>(false);
+  const [todoFormOpen, setTodoFormOpen] = useState<boolean>(false);
+
+  const handleDragging = (position: DraggableData) => {
+    const { x } = position;
+    const columnWidth = window.innerWidth / 4 - 50;
+    const offset = columnWidth * (stageNumber - 1) + (x + columnWidth / 2);
+    let column =
+      columnWidth > offset
+        ? 1
+        : columnWidth * 2 > offset && columnWidth < offset
+        ? 2
+        : columnWidth * 3 > offset && columnWidth * 2 < offset
+        ? 3
+        : columnWidth * 4 > offset && columnWidth * 3 < offset
+        ? 4
+        : 5;
+    if (column > allStages.length) column = allStages.length;
+    updateActiveHoverColumn(Math.floor(column));
+    if (!isDragging) updateIsDragging(true);
+  };
+
+  const handleDragStop = (todo: Todo) => {
+    const updatedTodo = {
+      ...todo,
+      stage: allStages.find((stage) => stage.stageOrder === activeHoverColumn)?.title || todo.stage
+    };
+    updateBoardTodos(updatedTodo);
+    updateActiveDrag(initTodo);
+    updateIsDragging(false);
+  };
 
   return (
     <div
@@ -57,7 +87,7 @@ const Column = ({
         <label
           className="absolute right-3 top-2 text-3xl text-white font-bold cursor-pointer"
           htmlFor={`todo-form-${stage}`}
-          onClick={() => setCreateFormOpen(true)}>
+          onClick={() => setTodoFormOpen(true)}>
           <MdAdd size={28} />
         </label>
       </div>
@@ -70,62 +100,31 @@ const Column = ({
               !isDragging) && (
               <div className="m-3">
                 <TodoCard
-                  todo={todo}
-                  clicked={(todo: Todo) => updateActiveDrag(todo)}
-                  dragging={(_e: DraggableEvent, position: DraggableData) => {
-                    const { x } = position;
-                    const columnWidth = window.innerWidth / 4 - 50;
-                    const offset = columnWidth * (stageNumber - 1) + (x + columnWidth / 2);
-                    let column =
-                      columnWidth > offset
-                        ? 1
-                        : columnWidth * 2 > offset && columnWidth < offset
-                        ? 2
-                        : columnWidth * 3 > offset && columnWidth * 2 < offset
-                        ? 3
-                        : columnWidth * 4 > offset && columnWidth * 3 < offset
-                        ? 4
-                        : 5;
-                    if (column > allStages.length) column = allStages.length;
-                    updateActiveHoverColumn(Math.floor(column));
-                    if (!isDragging) updateIsDragging(true);
-                  }}
-                  dragStart={() => {
-                    updateActiveDrag(todo);
-                  }}
-                  dragStop={async () => {
-                    try {
-                      const updatedTodo = {
-                        ...todo,
-                        stage:
-                          allStages.find((stage) => stage.stageOrder === activeHoverColumn)
-                            ?.title || todo.stage
-                      };
-                      updateBoardTodos(updatedTodo);
-                      updateActiveDrag(initTodo);
-                      updateIsDragging(false);
-                    } catch (err) {
-                      console.log(err);
-                    }
-                  }}
                   color={color}
+                  clicked={(todo: Todo) => updateActiveDrag(todo)}
+                  dragging={(_e: DraggableEvent, position: DraggableData) =>
+                    handleDragging(position)
+                  }
+                  dragStart={() => updateActiveDrag(todo)}
+                  dragStop={async () => handleDragStop(todo)}
                   disabled={false}
+                  todo={todo}
                 />
               </div>
             )}
           </div>
         ))}
       </div>
-      {createFormOpen && (
-        <TodoForm
-          addNewTodo={(todo) => {
-            addNewTodo(todo);
-            setCreateFormOpen(false);
-          }}
-          allStages={allStages}
-          autoPopStage={stage}
-        />
-      )}
+      <TodoForm
+        addNewTodo={(todo) => {
+          addNewTodo(todo);
+          setTodoFormOpen(false);
+        }}
+        allStages={allStages}
+        autoPopStage={stage}
+        checked={todoFormOpen}
+        close={() => setTodoFormOpen(false)}
+      />
     </div>
   );
 };

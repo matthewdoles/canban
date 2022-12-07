@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { BounceLoader } from 'react-spinners';
-import { initBoard } from '../../../const/initData';
 
+import BoardCard from '../BoardCard';
+import DeleteBoard from '../../Modals/DeleteBoard';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { BoardSettings } from '../../../models/BoardSettings.model';
 import { deleteBoard, fetchBoards } from '../../../store/reducers/boards';
-import DeleteBoard from '../../Modals/DeleteBoard';
-import BoardCard from '../BoardCard';
+import { initBoard } from '../../../const/initData';
+import { colors } from '../../../const';
 
-const MyBoards = () => {
+type Props = {
+  showBoardForm: () => void;
+};
+
+const MyBoards = ({ showBoardForm }: Props) => {
   const [selectedBoard, setSelectedBoard] = useState<BoardSettings>(initBoard);
   const [showDeleteBoard, setShowDeleteBoard] = useState<boolean>(false);
   const { boards, boardsError, boardsLoading } = useAppSelector((state) => state.boards);
@@ -23,30 +28,32 @@ const MyBoards = () => {
   return (
     <div className="w-full w-full flex flex-col mx-auto items-center rounded-lg">
       <div className="w-full p-4">
-        {boardsLoading && boards.length === 0 && (
+        {boardsLoading && boards.length === 0 ? (
           <div className="flex flex-row justify-center p-4">
-            <BounceLoader size={75} color="#FFD369" />
+            <BounceLoader color={colors.primary} size={75} />
           </div>
-        )}
-        {boardsError > 0 && <p className="text-red-500 text-center font-bold">{boardsError}</p>}
+        ) : null}
+        {boardsError > 0 ? (
+          <p className="text-red-500 text-center font-bold">{boardsError}</p>
+        ) : null}
         <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1">
           {boards?.map((board) => (
             <div key={board.id} className="m-2 shadow-lg">
               <BoardCard
                 board={board}
-                selectedBoardId={selectedBoard.id}
-                todos={board.todos}
                 handleDeleteBoard={(board: BoardSettings) => {
                   setSelectedBoard(board);
                   setShowDeleteBoard(true);
                 }}
+                selectedBoardId={selectedBoard.id}
+                todos={board.todos}
               />
             </div>
           ))}
           {!boardsLoading ? (
             <label
-              htmlFor="board-form"
-              className={`m-2 btn btn-ghost bg-primary text-white drop-shadow-lg rounded-lg border-4 hover:border-accent h-44`}>
+              className={`m-2 btn btn-ghost bg-primary text-white drop-shadow-lg rounded-lg border-4 hover:border-accent h-44`}
+              onClick={showBoardForm}>
               <div className="flex flex-row justify-center align-center text-center">
                 <p className="text-3xl">New Board</p>
               </div>
@@ -55,14 +62,14 @@ const MyBoards = () => {
         </div>
       </div>
       <DeleteBoard
-        checked={showDeleteBoard}
         boardName={selectedBoard.boardName}
-        confirm={() => {
-          dispatch(deleteBoard(selectedBoard.id));
+        checked={showDeleteBoard}
+        close={() => {
           setShowDeleteBoard(false);
           setSelectedBoard(initBoard);
         }}
-        close={() => {
+        confirm={() => {
+          dispatch(deleteBoard(selectedBoard.id));
           setShowDeleteBoard(false);
           setSelectedBoard(initBoard);
         }}

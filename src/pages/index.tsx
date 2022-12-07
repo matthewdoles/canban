@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { supabase } from '../supabaseClient';
@@ -9,6 +9,7 @@ import BoardForm from '../components/Boards/BoardForm';
 import Navigation from '../components/Navigation';
 
 function Dashboard() {
+  const [showBoardForm, setShowBoardForm] = useState<boolean>(false);
   const { profile } = useAppSelector((state) => state.profile);
   const dispatch = useAppDispatch();
 
@@ -54,8 +55,8 @@ function Dashboard() {
         <div className="pt-4">
           <Navigation />
           <div className="p-4 flex flex-col items-center">
-            <MyBoards />
-            <BoardForm />
+            <MyBoards showBoardForm={() => setShowBoardForm(true)} />
+            <BoardForm checked={showBoardForm} close={() => setShowBoardForm(false)} />
           </div>
         </div>
       )}
