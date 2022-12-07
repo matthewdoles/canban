@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
+import Profile from '../Modals/Profile';
+import { supabase } from '../../supabaseClient';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { initProfile, SET_PROFILE } from '../../store/reducers/profile';
-import { supabase } from '../../supabaseClient';
-import Profile from '../Modals/Profile';
 
 const Navigation = () => {
   const [showProfile, setShowProfile] = useState<boolean>(false);

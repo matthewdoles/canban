@@ -51,13 +51,13 @@ const MyBoards = ({ showBoardForm }: Props) => {
             </div>
           ))}
           {!boardsLoading ? (
-            <label
-              className={`m-2 btn btn-ghost bg-primary text-white drop-shadow-lg rounded-lg border-4 hover:border-accent h-44`}
+            <div
+              className="m-2 btn btn-ghost bg-primary text-white drop-shadow-lg rounded-lg border-4 hover:border-accent h-44"
               onClick={showBoardForm}>
               <div className="flex flex-row justify-center align-center text-center">
                 <p className="text-3xl">New Board</p>
               </div>
-            </label>
+            </div>
           ) : null}
         </div>
       </div>

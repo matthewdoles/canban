@@ -8,7 +8,7 @@ import { useAppSelector } from '../../../hooks';
 import { BoardSettings } from '../../../models/BoardSettings.model';
 import { Stage } from '../../../models/Stage.model';
 import { Todo } from '../../../models/Todo.model';
-import { colors, notoSans } from '../../../const';
+import { colors, fonts } from '../../../const';
 
 type Props = {
   board: BoardSettings;
@@ -24,7 +24,7 @@ const BoardCard = ({ board, handleDeleteBoard, selectedBoardId, todos }: Props) 
   return (
     <div className="bg-white drop-shadow-lg rounded-lg h-full">
       <div className="bg-primary p-1 rounded-t-lg">
-        <p className="text-lg text-white font-bold ml-2" style={{ fontFamily: notoSans }}>
+        <p className="text-lg text-white font-bold ml-2" style={{ fontFamily: fonts.notoSans }}>
           {board.boardName}
         </p>
       </div>

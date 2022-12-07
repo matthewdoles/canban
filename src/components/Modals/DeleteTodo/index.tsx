@@ -1,4 +1,5 @@
 import React from 'react';
+import { messages } from '../../../const';
 
 type Props = {
   checked: boolean;
@@ -16,7 +17,7 @@ const DeleteTodo = ({ checked, title, confirm, close }: Props) => {
           <div
             className={`flex flex-row justify-center bg-red-500 p-1 rounded-t-lg cursor-grab header`}></div>
           <div className="mt-4 text-center">
-            <p className="text-lg">Are you sure you want to delete this task?</p>
+            <p className="text-lg">{messages.confirmDeleteTask}</p>
             <p className="text-2xl font-bold my-2">
               <b>{title}</b>
             </p>

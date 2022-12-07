@@ -5,8 +5,8 @@ export type Todo = {
   comments: Comment[];
   created: number;
   description: string;
-  stage: string;
   id: string;
-  title: string;
   isArchived: boolean;
+  stage: string;
+  title: string;
 };

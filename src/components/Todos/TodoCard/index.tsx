@@ -15,25 +15,25 @@ type Props = {
 };
 
 const TodoCard = ({ color, disabled, clicked, dragging, dragStart, dragStop, todo }: Props) => {
-  const nodeRef = useRef<HTMLDivElement>(null);
+  const draggableRef = useRef<HTMLDivElement>(null);
   const { profile } = useAppSelector((state) => state.profile);
 
   return (
     <Draggable
-      nodeRef={nodeRef}
+      nodeRef={draggableRef}
       disabled={disabled}
       handle=".header"
       onDrag={dragging}
       onStart={dragStart}
       onStop={dragStop}
       position={{ x: 0, y: 0 }}>
-      <div className="min-h-[100px] h-full bg-white drop-shadow-lg rounded-lg" ref={nodeRef}>
+      <div className="min-h-[100px] h-full bg-white drop-shadow-lg rounded-lg" ref={draggableRef}>
         <div
           className={`flex flex-row ${color} p-1 rounded-t-lg ${
             !disabled ? 'cursor-grab' : ''
           } header`}>
           <p className="text-lg text-white font-bold ml-2">{todo.title}</p>
-          {!disabled && <p className="text-xl text-white font-bold ml-auto mr-2">&equiv;</p>}
+          {!disabled ? <p className="text-xl text-white font-bold ml-auto mr-2">&equiv;</p> : null}
         </div>
         <div onClick={() => clicked(todo)}>
           <div className="flex flex-row justify-between cursor-pointer">

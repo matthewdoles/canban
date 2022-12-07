@@ -2,24 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { MdError } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { initBoard, initTodo } from '../../const/initData';
-
-import { BoardSettings } from '../../models/BoardSettings.model';
-import { fetchBoards, updateBoardTodos } from '../../store/reducers/boards';
+import ArchiveTodos from '../../components/Todos/ArchiveTodos';
 import Column from '../../components/Boards/Column';
+import DeleteTodo from '../../components/Modals/DeleteTodo';
+import Navigation from '../../components/Navigation';
+import TodoDetail from '../../components/Todos/TodoDetail';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { fetchBoards, updateBoardTodos } from '../../store/reducers/boards';
+import { fetchProfile } from '../../store/reducers/profile';
+import { BoardSettings } from '../../models/BoardSettings.model';
 import { Stage } from '../../models/Stage.model';
 import { Todo } from '../../models/Todo.model';
-import { fetchProfile } from '../../store/reducers/profile';
-import TodoDetail from '../../components/Todos/TodoDetail';
-import DeleteTodo from '../../components/Modals/DeleteTodo';
-import ArchiveTodos from '../../components/Todos/ArchiveTodos';
-import Navigation from '../../components/Navigation';
+import { initBoard, initTodo } from '../../const/initData';
 
 const Board = () => {
-  const [board, setBoard] = useState<BoardSettings>(initBoard);
   const [activeTodo, setActiveTodo] = useState<Todo>(initTodo);
   const [activeHoverColumn, setActiveHoverColumn] = useState<number>(0);
+  const [board, setBoard] = useState<BoardSettings>(initBoard);
   const [isArchived, setIsArchived] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
@@ -62,7 +61,6 @@ const Board = () => {
   const handleArchive = async () => {
     const updatedTodos = [...board.todos];
     const todoIndex = updatedTodos.findIndex((t: Todo) => t.id === activeTodo.id);
-
     if (isArchived) {
       updatedTodos[todoIndex] = {
         ...updatedTodos[todoIndex],
@@ -74,7 +72,6 @@ const Board = () => {
         isArchived: true
       };
     }
-
     dispatch(updateBoardTodos(board.id, updatedTodos));
     setActiveTodo(initTodo);
     setShowDetail(false);
@@ -83,17 +80,17 @@ const Board = () => {
 
   return (
     <div className="drawer drawer-end">
-      <input type="checkbox" checked={showDetail} className="drawer-toggle" />
+      <input type="checkbox" checked={showDetail} className="drawer-toggle" readOnly />
       <div className="drawer-content p-4">
         <Navigation />
-        {boardsError.length > 0 && (
+        {boardsError.length > 0 ? (
           <div className="alert alert-error shadow-lg bg-red-400 flex justify-center">
             <div>
-              <MdError size={24} color="white" />
+              <MdError color="white" size={24} />
               <p className="text-white font-bold">{boardsError}</p>
             </div>
           </div>
-        )}
+        ) : null}
         {board.id !== 0 ? (
           <>
             <div className="flex flex-row w-full pt-4">
@@ -136,7 +133,7 @@ const Board = () => {
           </>
         ) : null}
       </div>
-      {board && activeTodo.id !== '0' && !isDragging && (
+      {board && activeTodo.id !== '0' && !isDragging ? (
         <div className="drawer-side">
           <div className="drawer-overlay" onClick={() => setShowDetail(false)}></div>
           <TodoDetail
@@ -147,7 +144,7 @@ const Board = () => {
             updateTodo={(updatedTodo: Todo) => updateTodos(updatedTodo)}
           />
         </div>
-      )}
+      ) : null}
       <DeleteTodo
         checked={showDeleteTodo}
         confirm={onConfirmDelete}

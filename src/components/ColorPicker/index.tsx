@@ -1,5 +1,5 @@
 import React from 'react';
-import { stageColors } from '../../const/stageColors';
+import { stageColors } from '../../const';
 
 type Props = {
   color: string;

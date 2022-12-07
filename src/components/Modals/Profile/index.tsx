@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { inputStyles } from '../../../const';
+
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { updateProfile } from '../../../store/reducers/profile';
+import { inputStyles } from '../../../const';
 
 type Props = {
   checked: boolean;
@@ -49,19 +50,19 @@ const Profile = ({ checked, close }: Props) => {
               <div className="m-4">
                 <p className="text-xl font-bold">Username</p>
                 <input
-                  type="text"
                   className={`input ${inputStyles}`}
-                  value={username}
                   onChange={(e) => setUsername(e.target.value)}
+                  type="text"
+                  value={username}
                 />
               </div>
               <div className="m-4">
                 <p className="text-xl font-bold">Photo URL</p>
                 <input
-                  type="text"
                   className={`input ${inputStyles}`}
-                  value={photoURL}
                   onChange={(e) => setPhotoURL(e.target.value)}
+                  type="text"
+                  value={photoURL}
                 />
               </div>
               <div className="m-4">
@@ -70,16 +71,10 @@ const Profile = ({ checked, close }: Props) => {
               </div>
             </div>
             <div className="modal-action px-4">
-              <label
-                htmlFor="profile-modal"
-                className="btn border-none w-20 bg-red-500 text-white"
-                onClick={resetForm}>
+              <label className="btn border-none w-20 bg-red-500 text-white" onClick={resetForm}>
                 Close
               </label>
-              <label
-                htmlFor="profile-modal"
-                className="btn border-none w-20 bg-green-500 text-white"
-                onClick={onSaveClick}>
+              <label className="btn border-none w-20 bg-green-500 text-white" onClick={onSaveClick}>
                 Save
               </label>
             </div>

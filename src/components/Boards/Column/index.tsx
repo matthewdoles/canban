@@ -86,7 +86,6 @@ const Column = ({
         <p className="text-xl text-white font-bold ml-2">{stage}</p>
         <label
           className="absolute right-3 top-2 text-3xl text-white font-bold cursor-pointer"
-          htmlFor={`todo-form-${stage}`}
           onClick={() => setTodoFormOpen(true)}>
           <MdAdd size={28} />
         </label>

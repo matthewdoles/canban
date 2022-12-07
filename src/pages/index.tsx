@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-import { useAppDispatch, useAppSelector } from '../hooks';
-import { supabase } from '../supabaseClient';
-import { fetchProfile } from '../store/reducers/profile';
-import Login from '../components/Login';
-import MyBoards from '../components/Boards/MyBoards';
 import BoardForm from '../components/Boards/BoardForm';
+import Login from '../components/Login';
 import Navigation from '../components/Navigation';
+import MyBoards from '../components/Boards/MyBoards';
+import { supabase } from '../supabaseClient';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { fetchProfile } from '../store/reducers/profile';
+import { fonts, messages } from '../const';
 
 function Dashboard() {
   const [showBoardForm, setShowBoardForm] = useState<boolean>(false);
@@ -41,10 +42,10 @@ function Dashboard() {
     <div className="mx-4">
       {profile.id.length === 0 ? (
         <div className="h-screen flex flex-col justify-center">
-          <p className="text-5xl text-center text-primary" style={{ fontFamily: 'LemonMilk' }}>
-            Canban
+          <p className="text-5xl text-center text-primary" style={{ fontFamily: fonts.lemonMilk }}>
+            {messages.title}
           </p>
-          <p className="text-md text-white text-center font-bold mt-4">You can do anything!</p>
+          <p className="text-md text-white text-center font-bold mt-4">{messages.subtitle}</p>
           <Login
             signInFacebook={signInFacebook}
             signInGithub={signInGithub}
@@ -54,7 +55,7 @@ function Dashboard() {
       ) : (
         <div className="pt-4">
           <Navigation />
-          <div className="p-4 flex flex-col items-center">
+          <div className="flex flex-col items-center p-4">
             <MyBoards showBoardForm={() => setShowBoardForm(true)} />
             <BoardForm checked={showBoardForm} close={() => setShowBoardForm(false)} />
           </div>
