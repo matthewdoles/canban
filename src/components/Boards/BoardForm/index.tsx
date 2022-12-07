@@ -139,7 +139,7 @@ const BoardForm = ({ checked, close }: Props) => {
           <div className="w-full relative justify-center bg-primary rounded-t-lg p-1 "></div>
           <div className="flex flex-col w-full items-center p-4">
             <input
-              className={`text-center max-w-sm ${inputStyles}`}
+              className={`text-center max-w-sm p-2 ${inputStyles}`}
               onChange={(e) => setBoardName(e.target.value)}
               placeholder="Board Name"
               type="text"
@@ -153,7 +153,7 @@ const BoardForm = ({ checked, close }: Props) => {
                   updateColor={(color: string) => updateStageSetting(stage, 'color', color)}
                 />
                 <input
-                  className={inputStyles}
+                  className={`ml-4 p-2 ${inputStyles}`}
                   onChange={(e) => updateStageSetting(stage, 'title', e.target.value)}
                   type="text"
                   value={stage.title}

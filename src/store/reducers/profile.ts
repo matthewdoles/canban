@@ -14,7 +14,7 @@ export const SET_PROFILE_UPDATE = 'SET_PROFILE_UPDATE';
 export const initProfile = {
   id: '',
   photoURL: '',
-  username: ''
+  username: 'Demo User'
 };
 
 type ProfileState = {

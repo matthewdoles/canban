@@ -197,7 +197,7 @@ export function createInitBoard(): AppThunk {
     const newBoard = { ...newUserBoard };
     newBoard.uid = profile.profile.id;
     newBoard.todos[0].assignee = profile.profile.id;
-    newBoard.todos[0].comments[0].author = profile.profile.id;
+    newBoard.todos[0].comments[0].authorId = profile.profile.id;
     try {
       const { data, error } = await supabase
         .from('boards')

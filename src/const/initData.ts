@@ -36,7 +36,7 @@ export const newUserBoard = {
     {
       comments: [
         {
-          author: '',
+          authorId: '',
           date: Date.now(),
           description: 'Use the buttons in the top right to Edit, Archive, and Delete your tasks.'
         }
