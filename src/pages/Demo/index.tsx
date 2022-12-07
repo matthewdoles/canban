@@ -15,7 +15,6 @@ const Demo = () => {
   const [activeTodo, setActiveTodo] = useState<Todo>(initTodo);
   const [activeHoverColumn, setActiveHoverColumn] = useState<number>(0);
   const [board, setBoard] = useState<BoardSettings>(initBoard);
-  const [isArchived, setIsArchived] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const [showDeleteTodo, setShowDeleteTodo] = useState<boolean>(false);
@@ -53,7 +52,7 @@ const Demo = () => {
   const handleArchive = async () => {
     const updatedTodos = [...board.todos];
     const todoIndex = updatedTodos.findIndex((t: Todo) => t.id === activeTodo.id);
-    if (isArchived) {
+    if (activeTodo.isArchived) {
       updatedTodos[todoIndex] = {
         ...updatedTodos[todoIndex],
         isArchived: false
@@ -66,7 +65,6 @@ const Demo = () => {
     }
     setActiveTodo(initTodo);
     setShowDetail(false);
-    setIsArchived(false);
     setBoard((prevState) => {
       return { ...prevState, todos: updatedTodos };
     });
@@ -93,16 +91,16 @@ const Demo = () => {
                   allStages={board.stages}
                   color={stage.color}
                   isDragging={isDragging}
+                  showDetail={(todo: Todo) => {
+                    setActiveTodo(todo);
+                    setShowDetail(true);
+                  }}
                   stage={stage.title}
                   stageNumber={stage.stageOrder}
                   todos={board.todos.filter(
                     (todo: Todo) => todo.stage === stage.title && !todo.isArchived
                   )}
-                  updateActiveDrag={(todo: Todo) => {
-                    setActiveTodo(todo);
-                    setShowDetail(true);
-                    setIsArchived(false);
-                  }}
+                  updateActiveDrag={(todo: Todo) => setActiveTodo(todo)}
                   updateActiveHoverColumn={(column: number) => setActiveHoverColumn(column)}
                   updateIsDragging={(dragging: boolean) => setIsDragging(dragging)}
                   updateBoardTodos={(updatedTodo: Todo) => updateTodos(updatedTodo)}
@@ -115,7 +113,6 @@ const Demo = () => {
               updateActiveTodo={(todo: Todo) => {
                 setActiveTodo(todo);
                 setShowDetail(true);
-                setIsArchived(true);
               }}
             />
           </>

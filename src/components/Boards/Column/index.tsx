@@ -15,6 +15,7 @@ type Props = {
   allStages: Stage[];
   color: string;
   isDragging: boolean;
+  showDetail: (todo: Todo) => void;
   stage: string;
   stageNumber: number;
   todos: Todo[];
@@ -31,6 +32,7 @@ const Column = ({
   allStages,
   color,
   isDragging,
+  showDetail,
   stage,
   stageNumber,
   todos,
@@ -100,7 +102,7 @@ const Column = ({
               <div className="m-3">
                 <TodoCard
                   color={color}
-                  clicked={(todo: Todo) => updateActiveDrag(todo)}
+                  clicked={(todo: Todo) => showDetail(todo)}
                   dragging={(_e: DraggableEvent, position: DraggableData) =>
                     handleDragging(position)
                   }
