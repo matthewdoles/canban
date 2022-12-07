@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { BsArchiveFill } from 'react-icons/bs';
 import { MdDelete, MdOutlineModeEditOutline } from 'react-icons/md';
 import Moment from 'react-moment';
-import { useAppSelector } from '../../../hooks';
 
+import TodoComment from '../TodoComment';
+import { useAppSelector } from '../../../hooks';
 import { Stage } from '../../../models/Stage.model';
 import { Todo } from '../../../models/Todo.model';
-import TodoComment from '../TodoComment';
+import { inputStyles } from '../../../const';
 
 type Props = {
   allStages: Stage[];
@@ -17,19 +18,16 @@ type Props = {
 };
 
 const TodoDetail = ({ allStages, todo, onArchive, onDelete, updateTodo }: Props) => {
-  const [todoStageNumber, setTodoStageNumber] = useState<number>(0);
-  const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [stageTitle, setStageTitle] = useState<string>('');
   const [editMode, setEditMode] = useState<boolean>(false);
   const [newComment, setNewComment] = useState<string>('');
+  const [stageTitle, setStageTitle] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
+  const [todoStageNumber, setTodoStageNumber] = useState<number>(0);
   const { profile } = useAppSelector((state) => state.profile);
 
-  const inputStyles =
-    '!outline-0 text-xl w-full my-2 border-x-transparent ' +
-    'border-t-transparent rounded-none border-b-2 mr-2 border-gray-200';
-
   useEffect(() => {
+    setEditMode(false);
     setFormData();
   }, [todo]);
 
@@ -37,15 +35,15 @@ const TodoDetail = ({ allStages, todo, onArchive, onDelete, updateTodo }: Props)
     updateTodo({
       ...todo,
       description: description,
-      title: title,
-      stage: stageTitle
+      stage: stageTitle,
+      title: title
     });
     setEditMode(false);
   };
 
   const onCancelClick = () => {
-    setFormData();
     setEditMode(false);
+    setFormData();
   };
 
   const setFormData = () => {
@@ -54,8 +52,8 @@ const TodoDetail = ({ allStages, todo, onArchive, onDelete, updateTodo }: Props)
       setTodoStageNumber(stage[0].stageOrder);
     }
     setDescription(todo.description);
-    setTitle(todo.title);
     setStageTitle(todo.stage);
+    setTitle(todo.title);
   };
 
   const onCommentSubmit = async () => {
@@ -67,6 +65,16 @@ const TodoDetail = ({ allStages, todo, onArchive, onDelete, updateTodo }: Props)
       ]
     });
     setNewComment('');
+  };
+
+  const handleStageChange = (title: string) => {
+    if (editMode) {
+      setStageTitle(title);
+      const stage = allStages.filter((stage) => stage.title === title);
+      if (stage.length > 0) {
+        setTodoStageNumber(stage[0].stageOrder);
+      }
+    }
   };
 
   return (
@@ -82,38 +90,32 @@ const TodoDetail = ({ allStages, todo, onArchive, onDelete, updateTodo }: Props)
         <div className="absolute right-3 top-14">
           <div className="tooltip tooltip-bottom font-bold" data-tip="Edit">
             <MdOutlineModeEditOutline
-              size={28}
               className="mr-2 cursor-pointer text-green-500"
               onClick={() => setEditMode(!editMode)}
+              size={28}
             />
           </div>
           <div
             className="tooltip tooltip-bottom font-bold"
             data-tip={todo.isArchived ? 'Restore' : 'Archive'}>
-            <label>
-              <BsArchiveFill
-                size={20}
-                className="mx-2 mb-1 cursor-pointer text-purple-500"
-                onClick={onArchive}
-              />
-            </label>
+            <BsArchiveFill
+              className="mx-2 mb-1 cursor-pointer text-purple-500"
+              onClick={onArchive}
+              size={20}
+            />
           </div>
           <div className="tooltip tooltip-bottom font-bold" data-tip="Delete">
-            <label onClick={onDelete}>
-              <MdDelete size={28} className="mx-2 cursor-pointer text-red-500" />
-            </label>
+            <MdDelete className="mx-2 cursor-pointer text-red-500" onClick={onDelete} size={28} />
           </div>
         </div>
       ) : (
         <div className="absolute right-6 top-16">
           <div className="tooltip tooltip-bottom font-bold" data-tip="Un-Archive">
-            <label>
-              <BsArchiveFill
-                size={20}
-                className="mx-2 mb-1 cursor-pointer text-purple-500"
-                onClick={onArchive}
-              />
-            </label>
+            <BsArchiveFill
+              className="mx-2 mb-1 cursor-pointer text-purple-500"
+              onClick={onArchive}
+              size={20}
+            />
           </div>
         </div>
       )}
@@ -122,8 +124,8 @@ const TodoDetail = ({ allStages, todo, onArchive, onDelete, updateTodo }: Props)
         {editMode ? (
           <input
             className={`input ${inputStyles}`}
-            value={title}
             onChange={(e) => setTitle(e.target.value)}
+            value={title}
           />
         ) : (
           <p className="text-xl">{title}</p>
@@ -134,9 +136,9 @@ const TodoDetail = ({ allStages, todo, onArchive, onDelete, updateTodo }: Props)
         {editMode ? (
           <textarea
             className={`textarea ${inputStyles}`}
-            value={description}
-            rows={5}
             onChange={(e) => setDescription(e.target.value)}
+            rows={5}
+            value={description}
           />
         ) : (
           <p className="text-xl">{description}</p>
@@ -157,15 +159,7 @@ const TodoDetail = ({ allStages, todo, onArchive, onDelete, updateTodo }: Props)
               className={`step ${stg.stageOrder <= todoStageNumber && 'step-filled'} ${
                 editMode && 'cursor-pointer'
               }`}
-              onClick={() => {
-                if (editMode) {
-                  setStageTitle(stg.title);
-                  const stage = allStages.filter((stage) => stage.title === stg.title);
-                  if (stage.length > 0) {
-                    setTodoStageNumber(stage[0].stageOrder);
-                  }
-                }
-              }}>
+              onClick={() => handleStageChange(stg.title)}>
               {stg.title}
             </li>
           ))}
@@ -203,13 +197,10 @@ const TodoDetail = ({ allStages, todo, onArchive, onDelete, updateTodo }: Props)
           <div className="mt-8">
             <p className="font-bold">New Comment</p>
             <textarea
-              className={
-                `textarea !outline-0 text-lg w-full mt-4 p-0 border-x-transparent ` +
-                `border-t-transparent rounded-none border-b-2 border-gray-200`
-              }
+              className={`textarea ${inputStyles}`}
+              onChange={(e) => setNewComment(e.target.value)}
               placeholder="Type here..."
               rows={3}
-              onChange={(e) => setNewComment(e.target.value)}
               value={newComment}
             />
             <div className="flex justify-end">

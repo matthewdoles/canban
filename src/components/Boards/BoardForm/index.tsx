@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { MdDelete, MdOutlineAddCircle } from 'react-icons/md';
-import { initStages } from '../../../const/initData';
+
+import ColorPicker from '../../ColorPicker';
 import { useAppDispatch } from '../../../hooks';
 import { Stage } from '../../../models/Stage.model';
 import { submitBoard } from '../../../store/reducers/boards';
-import ColorPicker from '../../ColorPicker';
+import { initStages } from '../../../const/initData';
+import { inputStyles, messages } from '../../../const';
 
-const BoardForm = () => {
+type Props = {
+  checked: boolean;
+  close: () => void;
+};
+
+const BoardForm = ({ checked, close }: Props) => {
   const [boardName, setBoardName] = useState<string>('');
-  const [stages, setStages] = useState<Stage[]>(initStages);
   const [error, setError] = useState<string>('');
+  const [stages, setStages] = useState<Stage[]>(initStages);
   const dispatch = useAppDispatch();
-
-  const inputStyles =
-    'input !outline-0 text-xl w-full max-w-sm my-4 border-x-transparent ' +
-    'border-t-transparent rounded-none border-b-2 mr-2 border-gray-200';
 
   const updateStageSetting = (stage: Stage, field: string, value: string) => {
     setError('');
@@ -118,29 +121,31 @@ const BoardForm = () => {
       return setError('Please enter a board name.');
     }
     dispatch(submitBoard(boardName, stages));
+    close();
   };
 
   const onCancelClick = () => {
+    setBoardName('');
+    setStages(initStages);
     setError('');
+    close();
   };
 
   return (
     <>
-      <input type="checkbox" id="board-form" className="modal-toggle" />
+      <input className="modal-toggle" checked={checked} readOnly type="checkbox" />
       <div className="modal">
-        <div className="modal-box p-0 !min-w-[650px]">
-          <div className="w-full relative justify-center bg-primary p-1 rounded-t-lg">
-            <p className="text-2xl text-white text-center font-bold">New Board</p>
-          </div>
+        <div className="modal-box !min-w-[650px] p-0">
+          <div className="w-full relative justify-center bg-primary rounded-t-lg p-1 "></div>
           <div className="flex flex-col w-full items-center p-4">
             <input
-              type="text"
-              placeholder="Board Name"
-              value={boardName}
+              className={`text-center max-w-sm p-2 ${inputStyles}`}
               onChange={(e) => setBoardName(e.target.value)}
-              className={`text-center ${inputStyles}`}
+              placeholder="Board Name"
+              type="text"
+              value={boardName}
             />
-            <p className="text-xl font-bold mt-2 uppercase">Stages</p>
+            <p className="text-xl font-bold uppercase mt-2">Stages</p>
             {stages.map((stage, i) => (
               <div key={stage.stageOrder} className="flex flex-row items-center w-full max-w-xl">
                 <ColorPicker
@@ -148,15 +153,15 @@ const BoardForm = () => {
                   updateColor={(color: string) => updateStageSetting(stage, 'color', color)}
                 />
                 <input
+                  className={`ml-4 p-2 ${inputStyles}`}
+                  onChange={(e) => updateStageSetting(stage, 'title', e.target.value)}
                   type="text"
                   value={stage.title}
-                  onChange={(e) => updateStageSetting(stage, 'title', e.target.value)}
-                  className={inputStyles}
                 />
                 <div className="tooltip font-bold" data-tip="Move Up">
                   <FaArrowUp
-                    size={36}
                     className="mx-2 cursor-pointer hover:text-primary"
+                    size={36}
                     onClick={() => {
                       if (i !== 0) {
                         switchStagesOrdering(stage);
@@ -166,8 +171,8 @@ const BoardForm = () => {
                 </div>
                 <div className="tooltip font-bold" data-tip="Move Down">
                   <FaArrowDown
-                    size={36}
                     className="mx-2 cursor-pointer hover:text-primary"
+                    size={36}
                     onClick={() => {
                       if (i + 1 !== stages.length) {
                         switchStagesOrdering(stages[i + 1]);
@@ -177,39 +182,31 @@ const BoardForm = () => {
                 </div>
                 <div className="tooltip font-bold" data-tip="Add Below">
                   <MdOutlineAddCircle
-                    size={36}
-                    className="mx-2 cursor-pointer text-green-500"
+                    className="cursor-pointer text-green-500 mx-2 "
                     onClick={() => addStage(stage)}
+                    size={36}
                   />
                 </div>
                 <div className="tooltip font-bold" data-tip="Delete">
                   <MdDelete
-                    size={36}
-                    className="mx-2 cursor-pointer text-red-500"
+                    className="cursor-pointer text-red-500 mx-2"
                     onClick={() => removeStage(stage)}
+                    size={36}
                   />
                 </div>
               </div>
             ))}
-            <p className="text-xl text-center mx-4 mt-4">
-              Please be mindful that at this time stage settings cannot be altered after creation.
-            </p>
-            {error.length > 0 && (
+            <p className="text-xl text-center mx-4 mt-4">{messages.newBoardMessage}</p>
+            {error.length > 0 ? (
               <div className="mt-4">
                 <p className="text-xl text-red-500 font-bold">{error}</p>
               </div>
-            )}
+            ) : null}
             <div className="modal-action">
-              <label
-                htmlFor="board-form"
-                className="btn bg-red-500 text-white w-20 border-none"
-                onClick={onCancelClick}>
+              <label className="btn bg-red-500 text-white w-20 border-none" onClick={onCancelClick}>
                 Cancel
               </label>
-              <label
-                htmlFor="board-form"
-                className="btn bg-green-500 text-white w-20 border-none"
-                onClick={onSaveClick}>
+              <label className="btn bg-green-500 text-white w-20 border-none" onClick={onSaveClick}>
                 Save
               </label>
             </div>

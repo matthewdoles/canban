@@ -3,8 +3,8 @@ import { MdAdd } from 'react-icons/md';
 import { BoardSettings } from '../../../models/BoardSettings.model';
 import { Stage } from '../../../models/Stage.model';
 
-import { Todo } from '../../../models/Todo.model';
 import TodoCard from '../TodoCard';
+import { Todo } from '../../../models/Todo.model';
 
 type Props = {
   archivedTodos: Todo[];
@@ -13,8 +13,8 @@ type Props = {
 };
 
 const ArchiveTodos = ({ archivedTodos, board, updateActiveTodo }: Props) => {
-  const [selectedStage, setSelectedStage] = useState<string>('');
   const [archivedCount, setArchivedCount] = useState<number>(0);
+  const [selectedStage, setSelectedStage] = useState<string>('');
 
   useEffect(() => {
     setArchivedCount(archivedTodos.length);
@@ -25,7 +25,7 @@ const ArchiveTodos = ({ archivedTodos, board, updateActiveTodo }: Props) => {
     <div className="collapse bg-accent m-2">
       <input type="checkbox" />
       <div className="collapse-title flex items-center">
-        <MdAdd size={28} color="white" />
+        <MdAdd color="white" size={28} />
         <p className="text-xl text-white font-bold mx-4">Archive</p>
         <p className="text-xl text-white font-bold opacity-60">({archivedCount})</p>
       </div>
@@ -34,10 +34,10 @@ const ArchiveTodos = ({ archivedTodos, board, updateActiveTodo }: Props) => {
           {board.stages.map((stage: Stage, i: number) => (
             <p
               key={i}
-              onClick={() => setSelectedStage(stage.title)}
               className={`text-lg text-white capitalize mx-2 cursor-pointer btn btn-sm border-none ${
                 selectedStage === stage.title ? `${stage.color} text-white` : 'btn-ghost'
-              }`}>
+              }`}
+              onClick={() => setSelectedStage(stage.title)}>
               {stage.title}
             </p>
           ))}

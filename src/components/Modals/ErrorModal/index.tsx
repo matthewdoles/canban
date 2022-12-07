@@ -15,10 +15,7 @@ const ErrorModal = ({ checked, error, onClose }: Props) => {
           <div className="bg-red-500 p-1" />
           <p className="text-lg my-4 px-8 break-word">{error}</p>
           <div className="modal-action mb-4 mr-4">
-            <label
-              htmlFor="profile-modal"
-              className="btn btn-sm border-none bg-red-500 text-white"
-              onClick={onClose}>
+            <label className="btn btn-sm border-none bg-red-500 text-white" onClick={onClose}>
               Close
             </label>
           </div>
