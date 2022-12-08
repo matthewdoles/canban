@@ -40,10 +40,19 @@ const BoardCard = ({ board, handleDeleteBoard, selectedBoardId, todos }: Props) 
               <div key={stage.stageOrder} className="flex flex-row items-center m-2">
                 <div className={`${stage.color} h-5 w-5 rounded-full mr-2`}></div>
                 <p className="text-xl">
-                  {todos?.filter((todo) => todo.stage === stage.title).length} {stage.title}
+                  {todos?.filter((todo) => todo.stage === stage.title && !todo.isArchived).length}
+                  &nbsp;
+                  {stage.title}
                 </p>
               </div>
             ))}
+            <div className="flex flex-row items-center m-2">
+              <div className="bg-gray-500 h-5 w-5 rounded-full mr-2"></div>
+              <p className="text-xl">
+                {todos?.filter((todo) => todo.isArchived).length}
+                &nbsp; Archived
+              </p>
+            </div>
           </div>
           <div className="flex">
             <div className="avatar placeholder justify-end">
