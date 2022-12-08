@@ -31,9 +31,8 @@ const Navigation = ({ isDemoNav }: Props) => {
         <p
           className="w-1/3 text-5xl text-center text-primary"
           style={{ fontFamily: fonts.lemonMilk }}>
-          {messages.title}
+          <Link to={'/'}>{messages.title}</Link>
         </p>
-
         <div className="w-1/3 ">
           {!isDemoNav ? (
             <>
